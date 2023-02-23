@@ -27,13 +27,30 @@ classdef VehicleParameters
     end
 
     %% Aero Properties
-
-    properties
-        
+    % Given
+    properties (Constant)
+        liftFactor = -6;
     end
 
     %% Alignment and Tuning
-
+    % Given
+    properties (Constant)
+        K_sF = 200;
+        K_sR = 250;
+        MRs_F = 0.5;
+        MRs_R = 0.5;
+        K_ARB_F = 0;
+        K_ARB_R = 0;
+        MR_ARB_F = 0.5;
+        MR_ARB_R = 0.5;
+        Ackermann = -0.2223;
+        frontToe = -0.5;
+        rearToe = 0;
+        frontCamber = 0;
+        rearCamber = 0;
+        frontTirePressure = 14;
+        rearTirePressure = 14;
+    end
 
     %% Functions
 
