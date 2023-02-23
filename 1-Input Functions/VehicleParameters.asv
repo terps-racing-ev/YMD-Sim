@@ -1,0 +1,49 @@
+classdef VehicleParameters
+    % This class holds general vehicle parameters that can be used
+    % in various calculations and simulations
+
+    %% Car Properties
+    % Given
+    properties (Constant)
+        TotalWeight = 650;
+        FrontPercent = 0.48;
+        % RearPercent = 0.52;
+        WheelBase = 61;
+        FrontTrackWidth = 48;
+        RearTrackWidth = 44;
+        CoGHeight = 9.84;
+        TireRadius = 8;
+        FrontAxleToCoG = 31.72;
+        CoGToRearAxle = 29.98;
+        FrontAxleH = 8;
+        RearAxleH = 8;
+        RollAxisF = 1.0159;
+        RollAxisR = 4.4544;
+    end
+    % Calculated
+    properties (Dependent)
+        RearPercent
+    end
+
+
+    %% Aero properties
+
+    properties
+        FrontStatic
+        RearStatic
+    end
+
+    methods
+
+        % Getters:
+        function value = get.
+
+        function output = staticWeights(obj)
+            % Defining FrontStatic and RearStatic
+            obj.FrontStatic = (obj.TotalWeight * obj.FrontPercent) / 2;
+            obj.RearStatic = (obj.TotalWeight * obj.RearPercent) / 2;
+            % Defining output
+            output = [obj.FrontStatic, obj.FrontStatic; obj.RearStatic, obj.RearStatic];
+        end
+    end
+end
