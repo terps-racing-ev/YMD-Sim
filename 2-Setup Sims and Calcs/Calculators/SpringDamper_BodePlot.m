@@ -9,11 +9,11 @@ clc
 
 % Adding Vehicle Parameters
 currentFolder = pwd;
-addpath(pwd + "\1-Input Functions");
+addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = VehicleParameters();
 
 % Adding StiffnessSim
-addpath(pwd + "\2-Setup Sims and Calcs\Simulators");
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
 %% Inputs
 
