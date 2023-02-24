@@ -51,7 +51,6 @@ classdef VehicleParameters
     %% Functions
 
     methods
-
         % Car Getters:
         function value = get.RearPercent(obj)
             value = 1 - obj.FrontPercent;
