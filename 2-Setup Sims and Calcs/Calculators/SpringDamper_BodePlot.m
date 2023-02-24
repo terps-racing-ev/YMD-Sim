@@ -8,8 +8,12 @@ clc
 %% Adding Paths
 
 % Adding Vehicle Parameters
-addpath("1-Input Functions/VehicleParameters");
+currentFolder = pwd;
+addpath(pwd + "\1-Input Functions");
 vehicleObj = VehicleParameters();
+
+% Adding StiffnessSim
+addpath(pwd + "\2-Setup Sims and Calcs\Simulators");
 
 %% Inputs
 
