@@ -1,4 +1,7 @@
+
 %% LLT Test
+
+clc
 
 %% Adding Paths
 
@@ -35,7 +38,20 @@ Ay = 1.5;
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
+% Load Transfer (lb)
 [LLT,LLT_D] = LLTSim(K_roll,Weight,Ay,TrackWidth,CoGhRA,Z_r,a,b,L);
 
+% Roll Sensitivity (rad/g or deg/g)
+Roll_S = -(Weight*CoGhRA)/(sum(K_roll));
+
+% Roll Angle (deg)
+Roll_Angle = Roll_S * Ay * (180/pi);
+
+disp('LLT =');
 disp(LLT);
+disp('LLT_D =');
 disp(LLT_D);
+disp('Roll Sensitivity =');
+disp(Roll_S);
+disp('Roll Angle =');
+disp(Roll_Angle);
