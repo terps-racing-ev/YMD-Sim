@@ -77,8 +77,9 @@ classdef VehicleParameters
             value = (obj.CoGHeight - obj.RollAxisR);
         end
         function value = get.CoGhRA(obj)
-            value = obj.CoGHeight - (obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.WheelBase)*obj.FrontAxleToCoG)) ;
+            value = obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.WheelBase)*obj.FrontAxleToCoG ;
         end
+        
 
         % Function Methods:
         function output = staticWeights(obj)
