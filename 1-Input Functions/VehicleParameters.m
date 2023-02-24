@@ -35,14 +35,10 @@ classdef VehicleParameters
     %% Alignment and Tuning
     % Given
     properties (Constant)
-        K_sF = 200;
-        K_sR = 250;
-        MRs_F = 0.5;
-        MRs_R = 0.5;
-        K_ARB_F = 0;
-        K_ARB_R = 0;
-        MR_ARB_F = 0.5;
-        MR_ARB_R = 0.5;
+        K_s = [200 200; 250 250]; %lbf/in
+        K_ARB = [600 0]; %lbf/in
+        MR_s = [0.5 0.5; 0.5 0.5];
+        MR_ARB = [0.5 0.5];
         Ackermann = -0.2223;
         frontToe = -0.5;
         rearToe = 0;

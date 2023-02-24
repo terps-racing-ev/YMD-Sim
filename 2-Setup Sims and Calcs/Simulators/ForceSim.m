@@ -1,3 +1,5 @@
+%% Force Simulator
+
 function [SUSPForces] = ForceSim(GeoPoints,Fx,Fy,Fz)
     % Load the raw geo points from Shark
     % Determine vectors for calculations

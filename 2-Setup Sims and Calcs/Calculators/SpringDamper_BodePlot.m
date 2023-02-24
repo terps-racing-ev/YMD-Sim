@@ -1,6 +1,6 @@
 %% Spring and Damper w/ Bode Plot Calc
 
-% This calculator uses the car's parameters to calculate various key
+% This calculator uses the vehicle's parameters to calculate various key
 % values to determine the vadility of a given spring/shock setup
 
 clc
@@ -17,8 +17,9 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 %% Inputs
 
-% Input Car Parameters (Matrix)
+% Input Car Parameters
 Weights = vehicleObj.staticWeights();
+TrackWidth = [vehicleObj.FrontTrackWidth(); vehicleObj.RearTrackWidth()];
 
 % Tire Stiffness for Fronts and Rears
 K_t = [548 548; 548 548];%lbf/in 
@@ -37,7 +38,7 @@ DampC_H = [8 8; 8 8]; %(lb-s)/in
 %% Calculations
 
 % Stiffnesses (lbf/in)
-[K_w,K_r] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB);
+[K_w,K_r] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
 % Natural Frequency (Hz)
 NF = 386.4.*[(1/(2*pi))*(sqrt(K_r(1,1)/Weights(1,1))),(1/(2*pi))*(sqrt(K_r(1,2)/Weights(1,2)));
