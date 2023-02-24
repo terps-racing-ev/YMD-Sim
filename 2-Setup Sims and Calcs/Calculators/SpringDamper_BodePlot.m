@@ -8,8 +8,7 @@ clc
 %% Adding Paths
 
 % Adding Vehicle Parameters
-addpath("D:\UMD OneNote\University of Maryland\OneDrive - University of Maryland\VD Softwares & Simulations\_Simulation\Purojekuto (YM) D\GitHub\YMD-Sim\1-Input Functions");
-%   Creating a VehicleParameters Object
+addpath("1-Input Functions/VehicleParameters");
 vehicleObj = VehicleParameters();
 
 %% Inputs
