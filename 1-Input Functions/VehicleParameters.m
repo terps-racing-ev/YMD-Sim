@@ -36,7 +36,7 @@ classdef VehicleParameters
     % Given
     properties (Constant)
         K_s = [200 200; 250 250]; %lbf/in
-        K_ARB = [600 0]; %lbf/in
+        K_ARB = [0 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
         MR_ARB = [0.5 0.5];
         Ackermann = -0.2223;
