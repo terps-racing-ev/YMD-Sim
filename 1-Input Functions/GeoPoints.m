@@ -101,7 +101,7 @@ classdef GeoPoints
             obj.p21F = obj.generatePoint(-747.824, 275.6476, 139.2736);
             obj.p99F = obj.generatePoint(-743.71, 609.6, 3.81);
 
-            % Rear Suspension Points
+            % RR Suspension Points
             obj.p1R = obj.generatePoint(572.5599, 188.26, 102.4402);
             obj.p2R = obj.generatePoint(880.2599, 209.26, 72.1202);
             obj.p3R = obj.generatePoint(807.26, 522.1, 109.44);
