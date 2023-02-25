@@ -2,7 +2,7 @@ classdef GeoPoints
     % Helps create points in 3D space, generating unit vectors and lengths
     % of A-Arms and Control Arms
 
-    %% Front Suspension Points
+    %% FR Suspension Points
     properties (SetAccess = private)
         % Point 1: Lower wishbone front pivot
         p1F
@@ -40,7 +40,7 @@ classdef GeoPoints
         p99F
     end
 
-    %% Rear Suspension Points
+    %% RR Suspension Points
     properties (SetAccess = private)
         % Finish This!
     end
@@ -49,7 +49,7 @@ classdef GeoPoints
     methods
         % Setting all points, look here for values
         function obj = GeoPoints()
-            % Front Suspension Points:
+            % FR Suspension Points:
             obj.p1F = obj.generatePoint(-898.68, 188.1, 63.5);
             obj.p2F = obj.generatePoint(-573.654, 213.0934, 73.2599);
             obj.p3F = obj.generatePoint(-760.59, 570.43, 117.46);
@@ -68,7 +68,7 @@ classdef GeoPoints
             obj.p21F = obj.generatePoint(-747.824, 275.6476, 139.2736);
             obj.p99F = obj.generatePoint(-743.71, 609.6, 3.81);
 
-            % Rear Suspension Points
+            % RR Suspension Points
         end
         % Generates 3D points as a column vector and converts mm to in
         function output = generatePoint(~, x, y, z)

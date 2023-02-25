@@ -19,17 +19,17 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 % Input Car Parameters
 Weights = vehicleObj.staticWeights();
-TrackWidth = [vehicleObj.FrontTrackWidth(); vehicleObj.RearTrackWidth()];
+TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
 K_t = [548 548; 548 548];%lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
 K_s = [200 200; 250 250]; %lbf/in
-K_ARB = [0 0]; %lbf/in
+K_ARB = [0; 0]; %lbf/in
 
 MR_s = [0.5 0.5; 0.5 0.5];
-MR_ARB = [0.5 0.5];
+MR_ARB = [0.5; 0.5];
 
 
 DampC_L = [8 8; 8 8]; %(lb-s)/in

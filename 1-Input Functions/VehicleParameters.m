@@ -7,7 +7,7 @@ classdef VehicleParameters
     properties (Constant)
         TotalWeight = 650;
         FrontPercent = 0.48;
-        WheelBase = 61;
+        Wheelbase = 61;
         FrontTrackWidth = 48;
         RearTrackWidth = 44;
         CoGHeight = 9.84;
@@ -39,16 +39,13 @@ classdef VehicleParameters
     % Given
     properties (Constant)
         K_s = [200 200; 250 250]; %lbf/in
-        K_ARB = [0 0]; %lbf/in
+        K_ARB = [0; 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
-        MR_ARB = [0.5 0.5];
-        Ackermann = -0.2223;
-        frontToe = -0.5;
-        rearToe = 0;
-        frontCamber = 0;
-        rearCamber = 0;
-        frontTirePressure = 14;
-        rearTirePressure = 14;
+        MR_ARB = [0.5; 0.5];
+        Ackermann = -0.2223; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+        Toe = [-0.5, -0.5; 0, 0];
+        Camber = [0, 0; 0, 0];
+        TirePressure = [14, 14; 14, 14];
     end
 
     %% Functions
@@ -59,10 +56,10 @@ classdef VehicleParameters
             value = 1 - obj.FrontPercent;
         end
         function value = get.FrontAxleToCoG(obj)
-            value = obj.WheelBase * obj.RearPercent;
+            value = obj.Wheelbase * obj.RearPercent;
         end
         function value = get.CoGToRearAxle(obj)
-            value = obj.WheelBase * obj.FrontPercent;
+            value = obj.Wheelbase * obj.FrontPercent;
         end
         function value = get.FrontStatic(obj)
             value = (obj.TotalWeight * obj.FrontPercent) / 2;
@@ -77,13 +74,17 @@ classdef VehicleParameters
             value = (obj.CoGHeight - obj.RollAxisR);
         end
         function value = get.CoGhRA(obj)
-            value = obj.CoGHeight - (obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.WheelBase)*obj.FrontAxleToCoG)) ;
+            value = obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.Wheelbase)*obj.FrontAxleToCoG) ;
         end
 
         % Function Methods:
         function output = staticWeights(obj)
             % Defining output
             output = [obj.FrontStatic, obj.FrontStatic; obj.RearStatic, obj.RearStatic];
+        end
+        function output = TrackWidth(obj)
+            % Defining output
+            output = [obj.FrontTrackWidth; obj.RearTrackWidth];
         end
         function output = CoGhZr(obj)
             % Defining output

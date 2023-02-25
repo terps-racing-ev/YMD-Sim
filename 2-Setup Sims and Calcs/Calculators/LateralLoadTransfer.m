@@ -1,5 +1,5 @@
 
-%% LLT Test
+%% Lateral Load Transfer Test
 
 clc
 
@@ -17,11 +17,13 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 % Input Car Parameters
 Weight = vehicleObj.TotalWeight();
-TrackWidth = [vehicleObj.FrontTrackWidth(); vehicleObj.RearTrackWidth()];
+TrackWidth = vehicleObj.TrackWidth();
 Z_r = [vehicleObj.RollAxisF();vehicleObj.RollAxisR()];
 a = vehicleObj.FrontAxleToCoG();
 b = vehicleObj.CoGToRearAxle();
-L = vehicleObj.WheelBase();
+L = vehicleObj.Wheelbase();
+CoGh_RA = vehicleObj.CoGhRA();
+
 
 K_s = vehicleObj.K_s();
 K_ARB = vehicleObj.K_ARB();
@@ -30,7 +32,6 @@ MR_ARB = vehicleObj.MR_ARB();
 
 K_t = [548 548; 548 548];%lbf/in 
 
-CoGhRA = 7.03608;
 Ay = 1.5;
 
 %% Calculations
@@ -39,13 +40,13 @@ Ay = 1.5;
 [K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
 % Load Transfer (lb)
-[LLT,LLT_D] = LLTSim(K_roll,Weight,Ay,TrackWidth,CoGhRA,Z_r,a,b,L);
+[LLT,LLT_D] = LLTSim(K_roll,Weight,Ay,TrackWidth,CoGh_RA,Z_r,a,b,L);
 
-% Roll Sensitivity (rad/g or deg/g)
-Roll_S = -(Weight*CoGhRA)/(sum(K_roll));
+% Roll Sensitivity (deg/g)
+Roll_S = -(Weight*CoGh_RA)/(sum(K_roll))* (180/pi);
 
 % Roll Angle (deg)
-Roll_Angle = Roll_S * Ay * (180/pi);
+Roll_Angle = Roll_S * Ay;
 
 disp('LLT =');
 disp(LLT);
