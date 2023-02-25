@@ -116,9 +116,7 @@ classdef GeoPoints
             obj.p17R = obj.generatePoint(801.45, 262.2, 335.05);
             obj.p18R = obj.generatePoint(805.69, 596.9, 207.01);
             obj.p19R = obj.generatePoint(805.69, 558.8, 207.01);
-            obj.p20R = obj.generatePoint(805.14, 260.45, 265.92);
-            obj.p21R = obj.generatePoint(785.91, 260.45, 267.59);
-            obj.p99R = obj.generatePoint(805.69, 558.8, 3.81);
+            obj.
         end
         % Generates 3D points as a column vector and converts mm to in
         function output = generatePoint(~, x, y, z)
