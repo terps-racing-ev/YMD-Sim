@@ -100,6 +100,14 @@ figure('Name','Bode Plot - Low Damper Settings');
 bode(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
+figure('Name','Unit Response Plot - Low Damper Settings');
+step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+
 figure('Name','Bode Plot - High Damper Settings');
 bode(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+
+figure('Name','Unit Response Plot - High Damper Settings');
+step(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
