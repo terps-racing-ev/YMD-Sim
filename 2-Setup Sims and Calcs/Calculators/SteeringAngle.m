@@ -33,8 +33,10 @@ hold on
 plot(SWAngle,SteerAngles(:,2),'-ro');
 hold on
 title('Steering Angle Sweep');
+xlim([-90 90]);
 legend(' FL',' FR','Location','eastoutside')
 
 figure('Name','Turrning Radius Sweep');
 plot(SWAngle,TurnRadius,'-b*');
 title('Turning Radius Sweep');
+xlim([-90 90]);
