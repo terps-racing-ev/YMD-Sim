@@ -25,15 +25,15 @@ TrackWidth = vehicleObj.TrackWidth;
 K_t = [548 548; 548 548];%lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [200 200; 250 250]; %lbf/in
+K_s = [450 450; 550 550]; %lbf/in
 K_ARB = [0; 0]; %lbf/in
 
 MR_s = [0.5 0.5; 0.5 0.5];
 MR_ARB = [0.5; 0.5];
 
 
-DampC_L = [8 8; 8 8]; %(lb-s)/in
-DampC_H = [8 8; 8 8]; %(lb-s)/in
+DampC_L = [10 10; 10 10]; %(lb-s)/in
+DampC_H = [10 10; 10 10]; %(lb-s)/in
 
 %% Calculations
 
@@ -41,8 +41,8 @@ DampC_H = [8 8; 8 8]; %(lb-s)/in
 [K_w,K_r] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
 % Natural Frequency (Hz)
-NF = 386.4.*[(1/(2*pi))*(sqrt(K_r(1,1)/Weights(1,1))),(1/(2*pi))*(sqrt(K_r(1,2)/Weights(1,2)));
-    (1/(2*pi))*(sqrt(K_r(2,1)/Weights(2,1))),(1/(2*pi))*(sqrt(K_r(2,2)/Weights(2,2)))];
+NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/Weights(1,1))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/Weights(1,2)));
+    (1/(2*pi))*(sqrt((K_r(2,1)*386.4)/Weights(2,1))),(1/(2*pi))*(sqrt((K_r(2,2)*386.4)/Weights(2,2)))];
 disp('Natural Frequency (Hz) = ');
 disp(NF);
 
@@ -59,10 +59,10 @@ disp('Damping Ratio - High = ');
 disp(DR_H);
 
 % Damped Natural Frequency (Hz)
-DNF_L = 386.4.*[(1/(2*pi))*sqrt(K_r(1,1)/Weights(1,1))*sqrt(1-DR_L(1,1)^2) (1/(2*pi))*sqrt(K_r(1,2)/Weights(1,2))*sqrt(1-DR_L(1,2)^2);
-    (1/(2*pi))*sqrt(K_r(2,1)/Weights(2,1))*sqrt(1-DR_L(2,1)^2) (1/(2*pi))*sqrt(K_r(2,2)/Weights(2,2))*sqrt(1-DR_L(2,2)^2)];
-DNF_H = 386.4.*[(1/(2*pi))*sqrt(K_r(1,1)/Weights(1,1))*sqrt(1-DR_H(1,1)^2) (1/(2*pi))*sqrt(K_r(1,2)/Weights(1,2))*sqrt(1-DR_H(1,2)^2);
-    (1/(2*pi))*sqrt(K_r(2,1)/Weights(2,1))*sqrt(1-DR_H(2,1)^2) (1/(2*pi))*sqrt(K_r(2,2)/Weights(2,2))*sqrt(1-DR_H(2,2)^2)];
+DNF_L = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/Weights(1,1))*sqrt(1-DR_L(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/Weights(1,2))*sqrt(1-DR_L(1,2)^2);
+    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/Weights(2,1))*sqrt(1-DR_L(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/Weights(2,2))*sqrt(1-DR_L(2,2)^2)];
+DNF_H = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/Weights(1,1))*sqrt(1-DR_H(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/Weights(1,2))*sqrt(1-DR_H(1,2)^2);
+    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/Weights(2,1))*sqrt(1-DR_H(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/Weights(2,2))*sqrt(1-DR_H(2,2)^2)];
 disp('Damped Natural Frequency - Low (Hz)= ');
 disp(DNF_L);
 disp('Damped Natural Frequency - High (Hz)= ');
@@ -100,14 +100,14 @@ figure('Name','Bode Plot - Low Damper Settings');
 bode(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Unit Response Plot - Low Damper Settings');
-step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
+figure('Name','Impulse Response Plot - Low Damper Settings');
+impulse(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
 figure('Name','Bode Plot - High Damper Settings');
 bode(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Unit Response Plot - High Damper Settings');
-step(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
+figure('Name','Impulse Response Plot - High Damper Settings');
+impulse(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
