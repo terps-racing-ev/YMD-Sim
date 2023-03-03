@@ -1,11 +1,11 @@
-classdef Parameters
+classdef TREV2Parameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
 
     %% Car Properties
     % Given
     properties (Constant)
-        TotalWeight = 700;
+        TotalWeight = 650;
         FrontPercent = 0.48;
         Wheelbase = 61;
         FrontTrackWidth = 48;

@@ -1,4 +1,4 @@
-classdef Parameters
+classdef TREV1Parameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
 
@@ -9,13 +9,13 @@ classdef Parameters
         FrontPercent = 0.48;
         Wheelbase = 61;
         FrontTrackWidth = 48;
-        RearTrackWidth = 44;
+        RearTrackWidth = 48;
         CoGHeight = 9.84;
-        TireRadius = 8;
-        FrontAxleH = 8;
-        RearAxleH = 8;
-        RollAxisF = 1.0159;
-        RollAxisR = 4.4544;
+        TireRadius = 9;
+        FrontAxleH = 9;
+        RearAxleH = 9;
+        RollAxisF = 1.5834;
+        RollAxisR = 6.0487;
     end
     % Calculated
     properties (Dependent)
@@ -32,7 +32,7 @@ classdef Parameters
     %% Aero Properties
     % Given
     properties (Constant)
-        liftFactor = -6;
+        liftFactor = -1.70355;
     end
 
     %% Alignment and Tuning
@@ -42,7 +42,7 @@ classdef Parameters
         K_ARB = [0; 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
         MR_ARB = [0.5; 0.5];
-        Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+        Ackermann = -0.2223; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
         Camber = [0, 0; 0, 0];
         TirePressure = [14, 14; 14, 14];
