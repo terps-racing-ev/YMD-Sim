@@ -1,4 +1,4 @@
-classdef Parameters
+classdef VehicleParameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
 

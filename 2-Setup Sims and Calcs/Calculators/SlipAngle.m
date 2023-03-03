@@ -25,7 +25,6 @@ a = vehicleObj.FrontAxleToCoG();
 b = vehicleObj.CoGToRearAxle();
 CoGh_RA = vehicleObj.CoGhRA();
 
-
 K_s = vehicleObj.K_s();
 K_ARB = vehicleObj.K_ARB();
 MR_s = vehicleObj.MR_s();

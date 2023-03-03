@@ -7,7 +7,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = VehicleParameters();
+vehicleObj = TREV2Parameters();
 
 % Adding StiffnessSim & LLTSim
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
@@ -16,6 +16,7 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 % Input Car Parameters
 Weight = vehicleObj.TotalWeight();
+StaticWeights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth();
 Z_r = [vehicleObj.RollAxisF();vehicleObj.RollAxisR()];
 a = vehicleObj.FrontAxleToCoG();
@@ -43,6 +44,9 @@ Ay = 1.5;
 % Load Transfer (lb)
 [LLT,LLT_D] = LLTSim(K_roll,Weight,Ay,TrackWidth,CoGh_RA,Z_r,a,b,L);
 
+Weights = [StaticWeights(1,1)+LLT(1,:), StaticWeights(1,2)-LLT(1,:);
+    StaticWeights(2,1)+LLT(2,:), StaticWeights(2,2)-LLT(2,:)];
+
 % Roll Sensitivity (deg/g)
 Roll_S = -(Weight*CoGh_RA)/(sum(K_roll))* (180/pi);
 
@@ -65,7 +69,7 @@ for i = 1:2
 end
 
 disp('LLT =');
-disp(LLT);
+disp(Weights);
 disp('LLT_D =');
 disp(LLT_D);
 disp('Roll Sensitivity =');

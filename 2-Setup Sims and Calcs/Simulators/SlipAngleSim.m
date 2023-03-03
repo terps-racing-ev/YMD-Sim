@@ -20,8 +20,8 @@ function [SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Ra
     SlipAnglesF = [(-((LateralVelo + (YawVelo*SlipCarParameters(1,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(3,:)/2))))+SteerAnglesrad(1,1)), 
         (-((LateralVelo + (YawVelo*SlipCarParameters(1,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(3,:)/2))))+SteerAnglesrad(1,2))];
             
-    SlipAnglesR = [((LateralVelo - (YawVelo*SlipCarParameters(2,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(4,:)/2))))+SteerAnglesrad(1,1),
-        ((LateralVelo - (YawVelo*SlipCarParameters(2,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(4,:)/2))))+SteerAnglesrad(1,2)];
+    SlipAnglesR = [(((LateralVelo - (YawVelo*SlipCarParameters(2,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(4,:)/2))))+SteerAnglesrad(1,1)),
+        (((LateralVelo - (YawVelo*SlipCarParameters(2,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(4,:)/2))))+SteerAnglesrad(1,2))];
             
     SlipAngles = [SlipAnglesF; SlipAnglesR]*(180/pi);
     disp(SlipAnglesF);
