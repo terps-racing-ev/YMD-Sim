@@ -53,9 +53,9 @@ Roll_S = -(Weight*CoGh_RA)/(sum(K_roll))* (180/pi);
 % Roll Angle (deg)
 Roll_Angle = Roll_S * Ay;
 
-% Wheel Displacement (in) (neg -> unloaded (droop), pos -> loaded (bump))
-Z = [-(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2)), (tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2));
-    -(tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2)), (tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2))];
+% Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
+Z = [(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2));
+    (tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2))];
 
 for i = 1:2
     for j = 1:2
