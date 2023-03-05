@@ -1,4 +1,4 @@
-%% Steering Angle Test
+%% Steering Angle Sweep
 
 clc
 %% Adding Paths

@@ -1,7 +1,6 @@
-%% Slip Angle Test
+%% Optimal Steering Angle
 
 clc
-
 %% Adding Paths
 
 % Adding Vehicle Parameters
@@ -37,12 +36,16 @@ SWAngle = 0; %deg (L = neg, R = pos)
 % Input Test Cornering Parameters
 Velocity = 27.1656; %mph
 Radius = 348; %in
-Beta = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
+Beta = linspace(-4.8094,4.8094,25); %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
     
 %% Code
 
 SteerAngles = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,Ackermann,FToe);
-[SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters)
 
+i = 1;
+for j = 1:2:50
+    [SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta(:,j),Velocity,Radius,SlipCarParameters)
+    OptSA(25,25) = [(Wheelbase/Radius) + SlipAngles(j,i) - SlipAngles(j+1,i), (Wheelbase/Radius) + SlipAngles(j,i+1) - SlipAngles(j+1,i+1)]
+end

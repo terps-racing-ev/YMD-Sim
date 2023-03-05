@@ -12,7 +12,7 @@ currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV2Parameters();
 
-% Adding StiffnessSim
+% Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
 %% Inputs
@@ -31,7 +31,7 @@ K_ARB = [0; 0]; %lbf/in
 MR_s = [0.5 0.5; 0.5 0.5];
 MR_ARB = [0.5; 0.5];
 
-DampC_L = [10 10; 10 10]; %(lb-s)/in
+DampC_L = [6 6; 6 6]; %(lb-s)/in
 DampC_H = [10 10; 10 10]; %(lb-s)/in
 
 %% Calculations
