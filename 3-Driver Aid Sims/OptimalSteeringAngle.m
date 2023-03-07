@@ -1,6 +1,7 @@
 %% Optimal Steering Angle
 
 clc
+
 %% Adding Paths
 
 % Adding Vehicle Parameters
@@ -33,6 +34,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Steering Wheel Angle
 SWAngle = 0; %deg (L = neg, R = pos)
+
 % Input Test Cornering Parameters
 Velocity = 27.1656; %mph
 Radius = 348; %in
@@ -44,8 +46,18 @@ SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
 
 SteerAngles = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,Ackermann,FToe);
 
+% figure('Name','Optimal Steering Angle');
+% plot(SWAngle,SteerAngles(:,1),'-r*');
+% hold on
+% plot(SWAngle,SteerAngles(:,2),'-ro');
+% hold on
+% title('Steering Angle Sweep');
+% xlim([-90 90]);
+% legend(' FL',' FR','Location','eastoutside')
+
 i = 1;
+count = 1:1:25;
 for j = 1:2:50
-    [SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta(:,j),Velocity,Radius,SlipCarParameters)
-    OptSA(25,25) = [(Wheelbase/Radius) + SlipAngles(j,i) - SlipAngles(j+1,i), (Wheelbase/Radius) + SlipAngles(j,i+1) - SlipAngles(j+1,i+1)]
+    [SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta(:,count),Velocity,Radius,SlipCarParameters);
+    OptSA = [(Wheelbase/Radius) + SlipAngles(i,j) - SlipAngles(i,j+1), (Wheelbase/Radius) + SlipAngles(i+1,j) - SlipAngles(i+1,j+1)]
 end

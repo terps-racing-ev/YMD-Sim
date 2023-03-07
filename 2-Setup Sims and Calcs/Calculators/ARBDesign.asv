@@ -35,7 +35,4 @@ LeverL_R = 2; %in
 
 %% Calculations
 
-KARB_F = (pi*(OuterD_F^4-InnerD_F^4)*ShearMod(1,:))/(32*TorsionL_F*LeverL_F^2);
-KARB_R = (pi*(OuterD_R^4-InnerD_R^4)*ShearMod(1,:))/(32*TorsionL_R*LeverL_R^2);
-
-KARB = [KARB_F; KARB_R]
+KARB_F = (pi*(OuterD_F^4-InnerD_F^4)*ShearMod(1,:))/(32*TorsionL_F*LeverL_F^2)

@@ -37,9 +37,13 @@ plot(SWAngle,SteerAngles(:,2),'-ro');
 hold on
 title('Steering Angle Sweep');
 xlim([-90 90]);
+xlabel('Steering Wheel Angle (deg)');
+ylabel('Steer Angles (deg)');
 legend(' FL',' FR','Location','eastoutside')
 
 figure('Name','Turning Radius Sweep');
 plot(SWAngle,TurnRadius,'-b*');
 title('Turning Radius Sweep');
 xlim([-90 90]);
+xlabel('Steering Wheel Angle (deg)');
+ylabel('Turning Radius (ft)');

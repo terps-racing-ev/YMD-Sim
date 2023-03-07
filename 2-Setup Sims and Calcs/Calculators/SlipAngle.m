@@ -34,6 +34,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Steering Wheel Angle
 SWAngle = 0; %deg (L = neg, R = pos)
+
 % Input Test Cornering Parameters
 Velocity = 27.1656; %mph
 Radius = 348; %in
