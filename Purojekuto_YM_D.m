@@ -4,7 +4,7 @@ clc
 clf
 
 %% Inputs
-% 1) Car, Aero, Alignment + Tuning Parameters
+% 1) Car, Aero, Alignment + Tuning Parameters-c
 % 2) Input Tire Files and Train Tire Model - Credit: CAPT Hamilton
 
 %% Part 1: Lap Time Simulator

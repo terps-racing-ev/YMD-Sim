@@ -1,0 +1,9 @@
+%% Longitudinal Load Transfer Simulator
+
+function [LoLT,Axmax] = LoLTSim(VehicleWeight,mu_x,LongAccel,Wheelbase,CoGh,a)
+    % LoLT
+    LoLT = LongAccel*((VehicleWeight*CoGh)/Wheelbase);
+    
+    % Ax_max
+    Accemax = mu_x*(a/(Wheelbase-(CoGh*mu_x)));
+end
