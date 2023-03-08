@@ -37,8 +37,8 @@ SWAngle = 0; %deg (L = neg, R = pos)
 
 % Input Test Cornering Parameters
 Velocity = 27.1656; %mph
-Radius = 348; %in
-Beta = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
+Radius = 348; %in (neg -> Left, pos -> Right)
+Beta = -4.8094; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
     

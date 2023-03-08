@@ -1,6 +1,7 @@
 %% Steering Angle Sweep
 
 clc
+
 %% Adding Paths
 
 % Adding Vehicle Parameters

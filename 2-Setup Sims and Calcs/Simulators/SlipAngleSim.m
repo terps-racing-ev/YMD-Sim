@@ -9,7 +9,7 @@ function [SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Ra
     LateralVelo = Velocityin_s*(Beta*(pi/180)); %(in-rad)/s
     
     % CoG Slip Angle Calculations
-    Betamax = (-AccelG/abs(AccelG))*(atan(SlipCarParameters(2,:)/Radius))*(180/pi); %deg
+    Betamax = (-AccelG/AccelG)*(atan(SlipCarParameters(2,:)/Radius))*(180/pi); %deg
     % neg -> Right, pos -> Left
     
     % Steer Angle Conversion (rad)
