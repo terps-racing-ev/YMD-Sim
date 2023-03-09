@@ -45,5 +45,5 @@ SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
 %% Code
 
 SteerAngles = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,Ackermann,FToe);
-[SlipAngles,AccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters)
+[SlipAngles,LatAccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters)
 
