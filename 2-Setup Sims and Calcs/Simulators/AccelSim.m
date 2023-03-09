@@ -13,6 +13,8 @@ function [Fx,Ax] = AccelSim(ThrottleInput,Velocity,VehicleWeight,StaticWeights,T
     finalTorque = GR * torque; %ft lbs
     Fx = finalTorque/wheelRadius; %lbs
     
+    % Ax
+    
     fDrag = 0.5 * (Velocity)^2 * 0.00237 * 5.080705e-01 * 0.946;
     fNet = Fx-fRR-fDrag; % lbs
     Ax = (fNet / mass)*32.2; % g's
