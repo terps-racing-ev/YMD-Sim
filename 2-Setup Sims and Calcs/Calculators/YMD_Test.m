@@ -18,6 +18,34 @@ addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling'])
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
+%% Tire Modeling
+
+%Input tire filenames
+filename.FrontTire = 'A1965run17.mat';
+filename.RearTire = 'A1965run17.mat';
+[trainingDataFront,tire.IDfront] = createLatTrngData2(filename.FrontTire);
+[trainingDataRear,tire.IDrear] = createLatTrngData2(filename.RearTire);
+
+% Front tires
+disp([tire.IDfront, ', Front Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxFront, validationRMSE.FxFront] = trainFx(trainingDataFront);
+[model.FyFront, validationRMSE.FyFront] = trainFy(trainingDataFront);
+[model.MzFront, validationRMSE.MzFront] = trainMz(trainingDataFront);
+toc(t1)
+
+disp('Training completed')
+
+% Rear tires
+disp([tire.IDrear, ', Rear Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxRear, validationRMSE.FxRear] = trainFx(trainingDataRear);
+[model.FyRear, validationRMSE.FyRear] = trainFy(trainingDataRear);
+[model.MzRear, validationRMSE.MzRear] = trainMz(trainingDataRear);
+toc(t1)
+
+disp('Training completed')
+
 %% Inputs
 
 % Input Car Parameters
@@ -61,34 +89,6 @@ SWAngle = 0; %deg (L = neg, R = pos)
 Beta = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
-    
-%% Tire Modeling
-
-%Input tire filenames
-filename.FrontTire = 'A1965run17.mat';
-filename.RearTire = 'A1965run17.mat';
-[trainingDataFront,tire.IDfront] = createLatTrngData2(filename.FrontTire);
-[trainingDataRear,tire.IDrear] = createLatTrngData2(filename.RearTire);
-
-% Front tires
-disp([tire.IDfront, ', Front Tire Model is being trained.  Standby...'])
-t1 = tic;
-[model.FxFront, validationRMSE.FxFront] = trainFx(trainingDataFront);
-[model.FyFront, validationRMSE.FyFront] = trainFy(trainingDataFront);
-[model.MzFront, validationRMSE.MzFront] = trainMz(trainingDataFront);
-toc(t1)
-
-disp('Training completed')
-
-% Rear tires
-disp([tire.IDrear, ', Rear Tire Model is being trained.  Standby...'])
-t1 = tic;
-[model.FxRear, validationRMSE.FxRear] = trainFx(trainingDataRear);
-[model.FyRear, validationRMSE.FyRear] = trainFy(trainingDataRear);
-[model.MzRear, validationRMSE.MzRear] = trainMz(trainingDataRear);
-toc(t1)
-
-disp('Training completed')
  
 %% Code
 
