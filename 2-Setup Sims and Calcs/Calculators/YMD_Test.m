@@ -29,9 +29,9 @@ filename.RearTire = 'A1965run17.mat';
 % Front tires
 disp([tire.IDfront, ', Front Tire Model is being trained.  Standby...'])
 t1 = tic;
-[model.FxFront, validationRMSE.FxFront] = trainFx(trainingDataFront);
-[model.FyFront, validationRMSE.FyFront] = trainFy(trainingDataFront);
-[model.MzFront, validationRMSE.MzFront] = trainMz(trainingDataFront);
+[model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainingDataFront);
+[model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainingDataFront);
+[model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainingDataFront);
 toc(t1)
 
 disp('Training completed')
@@ -39,9 +39,9 @@ disp('Training completed')
 % Rear tires
 disp([tire.IDrear, ', Rear Tire Model is being trained.  Standby...'])
 t1 = tic;
-[model.FxRear, validationRMSE.FxRear] = trainFx(trainingDataRear);
-[model.FyRear, validationRMSE.FyRear] = trainFy(trainingDataRear);
-[model.MzRear, validationRMSE.MzRear] = trainMz(trainingDataRear);
+[model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainingDataRear);
+[model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainingDataRear);
+[model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainingDataRear);
 toc(t1)
 
 disp('Training completed')
