@@ -1,4 +1,5 @@
 %% YMD Test
+% Credit - LJ Hamilton
 
 close all
 clearvars
@@ -53,7 +54,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = 20; %linspace(0,35,70); %mph
+Velocity = linspace(0,35,70); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -77,7 +78,7 @@ t1 = tic;
 [model.MzFront, validationRMSE.MzFront] = trainMz(trainingDataFront);
 toc(t1)
 
- disp('Training completed')
+disp('Training completed')
 
 % Rear tires
 disp([tire.IDrear, ', Rear Tire Model is being trained.  Standby...'])
@@ -87,7 +88,7 @@ t1 = tic;
 [model.MzRear, validationRMSE.MzRear] = trainMz(trainingDataRear);
 toc(t1)
 
- disp('Training completed')
+disp('Training completed')
  
 %% Code
 
@@ -98,36 +99,42 @@ toc(t1)
 SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe);
 
 % Slip Angles (deg) & Load Transfer (lb)
-% for i = 1:70
-    [SlipAngles,LatAccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters);
+for i = 1:70
+    [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles,Beta,Velocity(:,i),Radius,SlipCarParameters);
     
-    [Fz,LLT,LLT_D,R_g,Roll_Angle] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG,TrackWidth,CoGh_RA,Z_r,a,b,L);
+    [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i)] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG(:,:,i),TrackWidth,CoGh_RA,Z_r,a,b,L);
     
     % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
-    Z = [(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2));
-        (tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2))];
+    Z(:,:,i) = [(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(1,:)/2));
+        (tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(2,:)/2)), -(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(2,:)/2))];
 
     for j = 1:2
         for k = 1:2
-            if(Z(j,k) < -1)
-                Z(j,k) = -1;
+            if(Z(j,k,i) < -1)
+                Z(j,k,i) = -1;
             end
-            if(Z(j,k) > 1)
-                Z(j,k) = 1;
+            if(Z(j,k,i) > 1)
+                Z(j,k,i) = 1;
             end
         end
     end
-
+    
+    disp('Velocity: ');
+    disp(Velocity(:,i));
     disp('Gs: ');
-    disp(LatAccelG);
-    disp('Slip Angles: ');
-    disp(SlipAngles);
+    disp(LatAccelG(:,:,i));
     disp('Roll Angle: ');
-    disp(Roll_Angle);
+    disp(Roll_Angle(:,:,i));
     disp('Wheel Displacement: ');
-    disp(Z);
+    disp(Z(:,:,i));
+    disp('Slip Angles: ');
+    disp(SlipAngles(:,:,i));
+    disp('Camber: ');
+    disp(Camber);
     disp('Fz: ');
-    disp(Fz);
-% end
+    disp(Fz(:,:,i));
+    disp('Tire Pressure: ');
+    disp(TirePressure);
+end
 
-% [Fx,Fy,Mz] = findTireFM(model,tire)
+%[Fx,Fy,Mz] = findTireFM(model,tire)

@@ -53,7 +53,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = linspace(0,35,70); %mph
+Velocity = 20; %linspace(0,35,70); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -98,8 +98,8 @@ toc(t1)
 SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe);
 
 % Slip Angles (deg) & Load Transfer (lb)
-for i = 1:70
-    [SlipAngles,LatAccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity(:,i),Radius,SlipCarParameters);
+% for i = 1:70
+    [SlipAngles,LatAccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters);
     
     [Fz,LLT,LLT_D,R_g,Roll_Angle] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG,TrackWidth,CoGh_RA,Z_r,a,b,L);
     
@@ -118,16 +118,20 @@ for i = 1:70
         end
     end
 
-    disp('Fz: ');
-    disp(Fz);
-    disp('LLT_D: ');
-    disp(LLT_D);
-    disp('Roll Sensitivity: ');
-    disp(R_g);
+    disp('Gs: ');
+    disp(LatAccelG);
     disp('Roll Angle: ');
     disp(Roll_Angle);
     disp('Wheel Displacement: ');
     disp(Z);
-end
+    disp('Slip Angles: ');
+    disp(SlipAngles);
+    disp('Camber: ');
+    disp(Camber);
+    disp('Fz: ');
+    disp(Fz);
+    disp('Tire Pressure: ');
+    disp(TirePressure);
+% end
 
 % [Fx,Fy,Mz] = findTireFM(model,tire)
