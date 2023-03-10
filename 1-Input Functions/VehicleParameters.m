@@ -90,6 +90,10 @@ classdef VehicleParameters
             % Defining output
             output = [obj.CoGhZrF; obj.CoGhZrR];
         end
+        function output = Zr(obj)
+            % Defining output
+            output = [obj.RollAxisF();obj.RollAxisR()];
+        end
         
     end
 end

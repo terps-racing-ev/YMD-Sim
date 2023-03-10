@@ -22,6 +22,8 @@ clf
 %% Part 2: YMD
 % Christina Integration - Credit: CAPT Hamilton
 
+% V Sweep given a set R to find Ay sweep
+
 %% Setup Sims and Calcs
 % 1) Geo Points + Forces Sim
 % - Tire Load Cases -> SUSP Forces Calcs

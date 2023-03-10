@@ -1,5 +1,7 @@
 %% Lateral Load Transfer Test
 
+close all
+clearvars
 clc
 
 %% Adding Paths
@@ -18,12 +20,11 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 Weight = vehicleObj.TotalWeight();
 StaticWeights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth();
-Z_r = [vehicleObj.RollAxisF();vehicleObj.RollAxisR()];
+Z_r = vehicleObj.Zr;
 a = vehicleObj.FrontAxleToCoG();
 b = vehicleObj.CoGToRearAxle();
 L = vehicleObj.Wheelbase();
 CoGh_RA = vehicleObj.CoGhRA();
-
 
 K_s = vehicleObj.K_s();
 K_ARB = vehicleObj.K_ARB();
@@ -42,16 +43,7 @@ Ay = 1.5;
 [K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
 % Load Transfer (lb)
-[LLT,LLT_D,R_g] = LLTSim(K_roll,Weight,Ay,TrackWidth,CoGh_RA,Z_r,a,b,L);
-
-Fz = [StaticWeights(1,1)+LLT(1,:), StaticWeights(1,2)-LLT(1,:);
-    StaticWeights(2,1)+LLT(2,:), StaticWeights(2,2)-LLT(2,:)];
-
-% Roll Sensitivity (deg/g)
-Roll_S = R_g;
-
-% Roll Angle (deg)
-Roll_Angle = Roll_S * Ay;
+[Fz,LLT,LLT_D,R_g,Roll_Angle] = LLTSim(K_roll,Weight,StaticWeights,Ay,TrackWidth,CoGh_RA,Z_r,a,b,L);
 
 % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 Z = [(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2));
@@ -73,7 +65,7 @@ disp(Fz);
 disp('LLT_D: ');
 disp(LLT_D);
 disp('Roll Sensitivity: ');
-disp(Roll_S);
+disp(R_g);
 disp('Roll Angle: ');
 disp(Roll_Angle);
 disp('Wheel Displacement: ');

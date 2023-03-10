@@ -1,5 +1,7 @@
 %% Slip Angle Test
 
+close all
+clearvars
 clc
 
 %% Adding Paths
@@ -46,4 +48,3 @@ SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
 
 SteerAngles = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,Ackermann,FToe);
 [SlipAngles,LatAccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters)
-

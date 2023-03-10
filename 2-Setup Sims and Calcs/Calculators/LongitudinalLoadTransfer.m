@@ -1,5 +1,7 @@
 %% Longitudinal Load Transfer Test
 
+close all
+clearvars
 clc
 
 %% Adding Paths

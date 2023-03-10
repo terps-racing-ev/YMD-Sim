@@ -3,6 +3,8 @@
 % This calculator uses the vehicle's parameters to calculate various key
 % values to determine the vadility of a given spring/shock setup
 
+close all
+clearvars
 clc
 
 %% Adding Paths

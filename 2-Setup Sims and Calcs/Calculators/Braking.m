@@ -1,5 +1,7 @@
 %% Braking Test
 
+close all
+clearvars
 clc
 
 %% Adding Paths

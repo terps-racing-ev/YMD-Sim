@@ -3,6 +3,8 @@
 % This calculator helps in the design of the ARB, finding the K_ARB of a
 % test design
 
+close all
+clearvars
 clc
 
 %% Inputs

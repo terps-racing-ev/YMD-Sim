@@ -1,5 +1,7 @@
 %% Steering Angle Sweep
 
+close all
+clearvars
 clc
 
 %% Adding Paths

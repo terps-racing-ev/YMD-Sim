@@ -11,6 +11,8 @@
 % - Cone Strike (5g Bump)
 % - Tilt Test (1.7 g's cornering)
 
+close all
+clearvars
 clc
 
 %% Inputs
