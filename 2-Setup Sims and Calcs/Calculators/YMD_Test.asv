@@ -45,7 +45,7 @@ t1 = tic;
 [model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainingDataRear);
 [model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainingDataRear);
 [model.muxRear, validation.RMSE_muxRear] = Trainer_mux(trainingDataRear);
-[model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainingDataFront);
+[model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainingDataRear);
 toc(t1)
 
 disp('Training completed')
@@ -79,6 +79,7 @@ MR_ARB = vehicleObj.MR_ARB();
 Ackermann = vehicleObj.Ackermann();
 Toe = vehicleObj.Toe();
 FToe = Toe(1,:);
+RToe = Toe(2,:);
 Camber = vehicleObj.Camber();
 TirePressure = vehicleObj.TirePressure();
 
@@ -86,7 +87,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = linspace(0,35,70); %mph
+Velocity = 20; %linspace(0,35,70); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -100,15 +101,14 @@ SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
 [K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
 % Steering Angles (deg)
-SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe);
+SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe,RToe);
 
-% Slip Angles (deg) & Load Transfer (lb)
-for i = 1:70
+% Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
+for i = 1:length(Velocity)
     [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles,Beta,Velocity(:,i),Radius,SlipCarParameters);
     
     [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i)] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG(:,:,i),TrackWidth,CoGh_RA,Z_r,a,b,L);
     
-    % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
     Z(:,:,i) = [(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(1,:)/2));
         (tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(2,:)/2)), -(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(2,:)/2))];
 
@@ -139,6 +139,15 @@ for i = 1:70
     disp(Fz(:,:,i));
     disp('Tire Pressure: ');
     disp(TirePressure);
+    
+    tire.anglesD(:,:,i) = [SteerAngles(1,1,i); SteerAngles(1,2,i); SteerAngles(2,1,i); SteerAngles(2,2,i)];
+    tire.angles(:,:,i) = tire.anglesD*(pi/180);
+    tire.alphasD(:,:,i) = [SlipAngles(1,:,i) SlipAngles(2,:,i)];
+    tire.alphas(:,:,i) = tire.alphasD*(pi/180);
+    tire.gammas(:,:,i) = [Camber(1,:) Camber(2,:)];
+    tire.FZ(:,:,i) = [Fz(1,:,i) Fz(2,:,i)];
+    tire.P(:,:,i) = [TirePressure(1,:) TirePressure(2,:)];
+    
+    
+    [tire.Fx(:,:,i),tire.Fy(:,:,i),tire.Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
 end
-
-%[Fx,Fy,Mz] = findTireFM(model,tire)

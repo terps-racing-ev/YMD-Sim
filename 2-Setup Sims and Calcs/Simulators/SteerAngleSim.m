@@ -1,7 +1,7 @@
 %% Steering Angle Simulator
 % Credit: CAPT Hamilton
 
-function [SteerAngles,TurnRadius] = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,Ackermann,FToe)
+function [SteerAngles,TurnRadius] = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,Ackermann,FToe,RToe)
     % Unit Conversions
     Wheelbaseft = Wheelbase/12; %ft
     FTrackWidthft = FTrackWidth/12; %ft
@@ -21,5 +21,5 @@ function [SteerAngles,TurnRadius] = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,
     SteerAngleR = SWAngle + Ackermann*DiffL - FToe(1,2);
     SteerAngleL = SWAngle - Ackermann*DiffR + FToe(1,1);
     
-    SteerAngles = [SteerAngleL, SteerAngleR];
+    SteerAngles = [SteerAngleL, SteerAngleR; RToe(:,1) RToe(:,2)];
 end

@@ -1,4 +1,4 @@
-function [Fxf,Fyf,Mzf] = findTireFM(model,tire)
+function [Fx,Fy,Mz] = findTireFM(model,tire)
 % Credit: LJ Hamilton
 %   Inputs: alpha, inclination angle, Fz, P
 %   Outputs: Fx, Fy, Mz
@@ -33,6 +33,7 @@ end
 %     Mzi(m) = model.MzRear.predictFcn([SlipAngles(m),Camber(m),Fz(m),TirePressure(m)]);
 % end
 % 
-Fxf = [Fx(1,1) Fx(1,2); Fx(1,3) Fx(1,4)];
-Fyf = [Fy(1,1) Fy(1,2); Fy(1,3) Fy(1,4)];
-Mzf = [Mz(1,1) Mz(1,2); Mz(1,3) Mz(1,4)];
+% Fxf = [Fx(1,1) Fx(1,2); Fx(1,3) Fx(1,4)];
+% Fyf = [Fy(1,1) Fy(1,2); Fy(1,3) Fy(1,4)];
+% Mzf = [Mz(1,1) Mz(1,2); Mz(1,3) Mz(1,4)];
+end

@@ -79,6 +79,7 @@ MR_ARB = vehicleObj.MR_ARB();
 Ackermann = vehicleObj.Ackermann();
 Toe = vehicleObj.Toe();
 FToe = Toe(1,:);
+RToe = Toe(2,:);
 Camber = vehicleObj.Camber();
 TirePressure = vehicleObj.TirePressure();
 
@@ -86,7 +87,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = linspace(0,35,70); %mph
+Velocity = 20; %linspace(0,35,70); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -100,7 +101,7 @@ SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
 [K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
 
 % Steering Angles (deg)
-SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe);
+SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe,RToe);
 
 % Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 for i = 1:length(Velocity)
@@ -139,10 +140,14 @@ for i = 1:length(Velocity)
     disp('Tire Pressure: ');
     disp(TirePressure);
     
+    tire.anglesD(:,:,i) = [SteerAngles(1,1,i); SteerAngles(1,2,i); SteerAngles(2,1,i); SteerAngles(2,2,i)];
+    tire.angles(:,:,i) = tire.anglesD*(pi/180);
     tire.alphasD(:,:,i) = [SlipAngles(1,:,i) SlipAngles(2,:,i)];
+    tire.alphas(:,:,i) = tire.alphasD*(pi/180);
     tire.gammas(:,:,i) = [Camber(1,:) Camber(2,:)];
     tire.FZ(:,:,i) = [Fz(1,:,i) Fz(2,:,i)];
     tire.P(:,:,i) = [TirePressure(1,:) TirePressure(2,:)];
     
-    %[Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
+    
+    %[tire.Fx(:,:,i),tire.Fy(:,:,i),tire.Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
 end
