@@ -87,7 +87,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = 20; %linspace(0,35,70); %mph
+Velocity = 30; %linspace(0,35,70); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -140,14 +140,13 @@ for i = 1:length(Velocity)
     disp('Tire Pressure: ');
     disp(TirePressure);
     
-    tire.anglesD(:,:,i) = [SteerAngles(1,1,i); SteerAngles(1,2,i); SteerAngles(2,1,i); SteerAngles(2,2,i)];
-    tire.angles(:,:,i) = tire.anglesD*(pi/180);
-    tire.alphasD(:,:,i) = [SlipAngles(1,:,i) SlipAngles(2,:,i)];
-    tire.alphas(:,:,i) = tire.alphasD*(pi/180);
-    tire.gammas(:,:,i) = [Camber(1,:) Camber(2,:)];
-    tire.FZ(:,:,i) = [Fz(1,:,i) Fz(2,:,i)];
-    tire.P(:,:,i) = [TirePressure(1,:) TirePressure(2,:)];
+%     tire.anglesD(:,:,i) = [SteerAngles(1,1,i); SteerAngles(1,2,i); SteerAngles(2,1,i); SteerAngles(2,2,i)];
+%     tire.angles(:,:,i) = tire.anglesD*(pi/180);
+%     tire.alphasD(:,:,i) = [SlipAngles(1,:,i) SlipAngles(2,:,i)];
+%     tire.alphas(:,:,i) = tire.alphasD*(pi/180);
+%     tire.gammas(:,:,i) = [Camber(1,:) Camber(2,:)];
+%     tire.FZ(:,:,i) = [Fz(1,:,i) Fz(2,:,i)];
+%     tire.P(:,:,i) = [TirePressure(1,:) TirePressure(2,:)];
     
-    
-    [tire.Fx(:,:,i),tire.Fy(:,:,i),tire.Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
+    %[tire.Fx(:,:,i),tire.Fy(:,:,i),tire.Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
 end
