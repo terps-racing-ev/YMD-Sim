@@ -14,6 +14,11 @@ currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV2Parameters();
 
+%% TEMP CODE BRO
+testObj = VehicleParameters();
+disp("Test")
+disp(testObj.RollCFR(3))
+
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 

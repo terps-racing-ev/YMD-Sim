@@ -101,29 +101,15 @@ classdef VehicleParameters
             Y = [-0.1004 -0.0654 -0.0379 -0.0177 -0.0048 0.0010 0 -0.0078 -0.0221 -0.0429 -0.0700 -0.1031 -0.1422];
             
             % 4th order polynomial
-            p = polyfit(X, Y, 4);
+            % p = polyfit(X, Y, 4);
+            p = polyfit(X, Y, 2);
             
             % Constructing our function
-            f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
+            % f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
+            f = @(x) p(1)*x.^2 + p(2)*x + p(3);
             
             y = f(x);
             output = y;
         end
-
-        function output = RollCFL(~, x)
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
-            
-            % 4th order polynomial
-            p = polyfit(X, Y, 4);
-            
-            % Constructing our function
-            f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
-            
-            y = f(x);
-            output = y;
-        end
-
     end
 end
