@@ -2,7 +2,6 @@
 
 function [IA] = CamberSim(Camber,RollAngle,SWAngle,RollGainC,SteerGainC)
     % Calculating the camber change given Steering Wheel Angle and Roll Angle
-    
     RollGain = [RollAngle*RollGainC(1,1), RollAngle*RollGainC(1,2);
         RollAngle*RollGainC(2,1), RollAngle*RollGainC(2,2)];
     

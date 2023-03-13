@@ -107,21 +107,16 @@ SteerAngles = SteerAngleSim(SWAngle,L,FTrackWidth,Ackermann,FToe,RToe);
 for i = 1:length(Velocity)
     [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles,Beta,Velocity(:,i),Radius,SlipCarParameters);
     
-    [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i)] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG(:,:,i),TrackWidth,CoGh_RA,Z_r,a,b,L);
+    [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i),Z(:,:,i)] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG(:,:,i),TrackWidth,CoGh_RA,Z_r,a,b,L);
     
-    Z(:,:,i) = [(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(1,:)/2));
-        (tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(2,:)/2)), -(tan(deg2rad(Roll_Angle(:,:,i))).*(TrackWidth(2,:)/2))];
-
-    for j = 1:2
-        for k = 1:2
-            if(Z(j,k,i) < -1)
-                Z(j,k,i) = -1;
-            end
-            if(Z(j,k,i) > 1)
-                Z(j,k,i) = 1;
-            end
-        end
-    end
+    tire.alphasD(:,:,i) = SlipAngles(:,:,i);
+    tire.gammas(:,:,i) = Camber(:,:,i);
+    tire.FZ(:,:,i) = Fz(:,:,i);
+    tire.P(:,:,i) = TirePressure(:,:,i);
+    
+    [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,tire(:,:,i));
+    
+    [YM,Accel] = YMSim(SteerAngles(:,:,i),VehicleWeight,Fx(:,:,i),Fy(:,:,i),Mz(:,:,i),a,b,TrackWidth);
     
     disp('Velocity: ');
     disp(Velocity(:,i));
@@ -129,24 +124,24 @@ for i = 1:length(Velocity)
     disp(LatAccelG(:,:,i));
     disp('Roll Angle: ');
     disp(Roll_Angle(:,:,i));
-    disp('Wheel Displacement: ');
-    disp(Z(:,:,i));
     disp('Slip Angles: ');
     disp(SlipAngles(:,:,i));
-    disp('Camber: ');
-    disp(Camber);
+    disp('Fx: ');
+    disp(Fx(:,:,i));
+    disp('Fy: ');
+    disp(Fy(:,:,i));
     disp('Fz: ');
     disp(Fz(:,:,i));
+    disp('Mz: ');
+    disp(Mz(:,:,i));
+    disp('Yaw Moment: ');
+    disp(YM(:,:,i));
+    disp('Acceleration: ');
+    disp(Accel(:,:,i));
+    disp('Camber: ');
+    disp(Camber);
+    disp('Wheel Displacement: ');
+    disp(Z(:,:,i));
     disp('Tire Pressure: ');
     disp(TirePressure);
-    
-%     tire.anglesD(:,:,i) = [SteerAngles(1,1,i); SteerAngles(1,2,i); SteerAngles(2,1,i); SteerAngles(2,2,i)];
-%     tire.angles(:,:,i) = tire.anglesD*(pi/180);
-%     tire.alphasD(:,:,i) = [SlipAngles (1,:,i) SlipAngles(2,:,i)];
-%     tire.alphas(:,:,i) = tire.alphasD*(pi/180);
-%     tire.gammas(:,:,i) = [Camber(1,:) Camber(2,:)];
-%     tire.FZ(:,:,i) = [Fz(1,:,i) Fz(2,:,i)];
-%     tire.P(:,:,i) = [TirePressure(1,:) TirePressure(2,:)];
-    
-    %[tire.Fx(:,:,i),tire.Fy(:,:,i),tire.Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
 end

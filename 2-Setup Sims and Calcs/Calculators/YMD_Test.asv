@@ -87,7 +87,7 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = 30; %linspace(0,35,70); %mph
+Velocity = linspace(0,35,70); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -123,30 +123,39 @@ for i = 1:length(Velocity)
         end
     end
     
+    tire.alphasD(:,:,i) = SlipAngles(:,:,i);
+    tire.gammas(:,:,i) = Camber(:,:,i);
+    tire.FZ(:,:,i) = Fz(:,:,i);
+    tire.P(:,:,i) = TirePressure(:,:,i);
+    
+    [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,tire(:,:,i));
+    
+    [YM(:,:,i),Accel(:,:,i)] = YMSim(SteerAngles(:,:,i),VehicleWeight,Fx(:,:,i),Fy(:,:,i),Mz(:,:,i),a,b,TrackWidth);
+    
     disp('Velocity: ');
     disp(Velocity(:,i));
     disp('Gs: ');
     disp(LatAccelG(:,:,i));
     disp('Roll Angle: ');
     disp(Roll_Angle(:,:,i));
-    disp('Wheel Displacement: ');
-    disp(Z(:,:,i));
     disp('Slip Angles: ');
     disp(SlipAngles(:,:,i));
-    disp('Camber: ');
-    disp(Camber);
+    disp('Fx: ');
+    disp(Fx(:,:,i));
+    disp('Fy: ');
+    disp(Fy(:,:,i));
     disp('Fz: ');
     disp(Fz(:,:,i));
+    disp('Mz: ');
+    disp(Mz(:,:,i));
+    disp('Yaw Moment: ');
+    disp(YM(:,:,i));
+    disp('Acceleration: ');
+    disp(Accel(:,:,i));
+    disp('Camber: ');
+    disp(Camber);
+    disp('Wheel Displacement: ');
+    disp(Z(:,:,i));
     disp('Tire Pressure: ');
     disp(TirePressure);
-    
-%     tire.anglesD(:,:,i) = [SteerAngles(1,1,i); SteerAngles(1,2,i); SteerAngles(2,1,i); SteerAngles(2,2,i)];
-%     tire.angles(:,:,i) = tire.anglesD*(pi/180);
-%     tire.alphasD(:,:,i) = [SlipAngles(1,:,i) SlipAngles(2,:,i)];
-%     tire.alphas(:,:,i) = tire.alphasD*(pi/180);
-%     tire.gammas(:,:,i) = [Camber(1,:) Camber(2,:)];
-%     tire.FZ(:,:,i) = [Fz(1,:,i) Fz(2,:,i)];
-%     tire.P(:,:,i) = [TirePressure(1,:) TirePressure(2,:)];
-    
-    %[tire.Fx(:,:,i),tire.Fy(:,:,i),tire.Mz(:,:,i)] = findTireFM(model,tire(:,:,i))
 end

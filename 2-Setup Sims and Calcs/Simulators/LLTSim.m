@@ -1,6 +1,6 @@
 %% Lateral Load Transfer Simulator
 
-function [Fz,LLT,LLTD,R_g,Roll_Angle] = LLTSim(Kroll,VehicleWeight,StaticWeights,LatAccel,Track,CoGhRA,Zr,a,b,L)
+function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,VehicleWeight,StaticWeights,LatAccel,Track,CoGhRA,Zr,a,b,L)
     % Roll Gradient (deg/g)
     R_g = (VehicleWeight*CoGhRA)./(Kroll(1,:)+Kroll(2,:))*(180/pi);
     
@@ -26,4 +26,20 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle] = LLTSim(Kroll,VehicleWeight,StaticWeights
     
     % Roll Angle (deg)
     Roll_Angle = R_g * LatAccel;
+    
+    % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
+    Z = -[(tan(deg2rad(Roll_Angle.*(Track(1,:)/2)))), -(tan(deg2rad(Roll_Angle.*(Track(1,:)/2))));
+        (tan(deg2rad(Roll_Angle.*(Track(2,:)/2)))), -(tan(deg2rad(Roll_Angle.*(Track(2,:)/2))))];
+
+    for j = 1:2
+        for k = 1:2
+            if(Z(j,k) < -1)
+                Z(j,k) = -1;
+            end
+            if(Z(j,k) > 1)
+                Z(j,k) = 1;
+            end
+        end
+    end
+
 end
