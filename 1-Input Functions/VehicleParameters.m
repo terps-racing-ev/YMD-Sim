@@ -95,21 +95,6 @@ classdef VehicleParameters
             output = [obj.RollAxisF();obj.RollAxisR()];
         end
 
-        function output = RollCFR(~, x)
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1004 -0.0654 -0.0379 -0.0177 -0.0048 0.0010 0 -0.0078 -0.0221 -0.0429 -0.0700 -0.1031 -0.1422];
-            
-            % 4th order polynomial
-            p = polyfit(X, Y, 4);
-            
-            % Constructing our function
-            f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
-            
-            y = f(x);
-            output = y;
-        end
-
         function output = RollCFL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -125,5 +110,104 @@ classdef VehicleParameters
             output = y;
         end
 
+        function output = RollCFR(~, x)
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [-0.1004 -0.0654 -0.0379 -0.0177 -0.0048 0.0010 0 -0.0078 -0.0221 -0.0429 -0.0700 -0.1031 -0.1422];
+            
+            % 4th order polynomial
+            p = polyfit(X, Y, 4);
+            
+            % Constructing our function
+            f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
+            
+            y = f(x);
+            output = y;
+        end
+
+        function output = RollCRL(~, x)
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [-0.2835  -0.2222  -0.1663  -0.1161  -0.0715  -0.0328   0.0000   0.0268   0.0475   0.0620   0.0702   0.0719   0.0672];
+            
+            % 4th order polynomial
+            p = polyfit(X, Y, 4);
+            
+            % Constructing our function
+            f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
+            
+            y = f(x);
+            output = y;
+        end
+
+        function output = RollCRR(~, x)
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [0.0672 0.0719 0.0702 0.0620 0.0475 0.0268 0 -0.0328 -0.0715 -0.1161 -0.1663 -0.2222 -0.2835];
+            
+            % 4th order polynomial
+            p = polyfit(X, Y, 4);
+            
+            % Constructing our function
+            f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
+            
+            y = f(x);
+            output = y;
+        end
+
+        function graphRolls(~)
+            % Create a 2x2 grid of subplots
+            subplot(2, 2, 1);
+            VehicleParameters.RollCFL_plot();
+            title('Roll vs. Camber Front Left');
+
+            subplot(2, 2, 2);
+            VehicleParameters.RollCFR_plot();
+            title('Roll vs. Camber Front Right');
+            
+            subplot(2, 2, 3);
+            VehicleParameters.RollCRL_plot();
+            title('Roll vs. Camber Rear Left');
+
+            subplot(2, 2, 4);
+            VehicleParameters.RollCRR_plot();
+            title('Roll vs. Camber Rear Right');
+        end
+
+    end
+
+
+    methods (Static)
+        function output = RollCFL_plot(~)
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
+
+            output = plot(X, Y);
+        end
+
+        function output = RollCFR_plot(~)
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [-0.1004 -0.0654 -0.0379 -0.0177 -0.0048 0.0010 0 -0.0078 -0.0221 -0.0429 -0.0700 -0.1031 -0.1422];
+            
+            output = plot(X, Y);
+        end
+
+        function output = RollCRL_plot()
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [-0.2835  -0.2222  -0.1663  -0.1161  -0.0715  -0.0328   0.0000   0.0268   0.0475   0.0620   0.0702   0.0719   0.0672];
+            
+            output = plot(X, Y);
+        end
+
+        function output = RollCRR_plot()
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [0.0672 0.0719 0.0702 0.0620 0.0475 0.0268 0 -0.0328 -0.0715 -0.1161 -0.1663 -0.2222 -0.2835];
+            
+            output = plot(X, Y);
+        end
     end
 end
