@@ -85,9 +85,11 @@ TirePressure = vehicleObj.TirePressure();
 
 K_t = [548 548; 548 548];%lbf/in 
 
+% Number of Iterations
+
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = 30; %linspace(0,35,70); %mph
+Velocity = linspace(0,35,4); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %deg (L = neg, R = pos)
@@ -109,14 +111,17 @@ for i = 1:length(Velocity)
     
     [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i),Z(:,:,i)] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG(:,:,i),TrackWidth,CoGh_RA,Z_r,a,b,L);
     
-    tire.alphasD(:,:,i) = SlipAngles(:,:,i);
-    tire.gammas(:,:,i) = Camber(:,:,i);
-    tire.FZ(:,:,i) = Fz(:,:,i);
-    tire.P(:,:,i) = TirePressure(:,:,i);
+    [IA(:,:,i)] = CamberSim(Camber,Roll_Angle(:,:,i),SWAngle,vehicleObj);
     
-    [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,tire(:,:,i));
+    [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,SlipAngles(:,:,i),IA(:,:,i),Fz(:,:,i),TirePressure);
     
-    [YM,Accel] = YMSim(SteerAngles(:,:,i),VehicleWeight,Fx(:,:,i),Fy(:,:,i),Mz(:,:,i),a,b,TrackWidth);
+    if(Velocity(:,i) == 0)
+        Fx = [0 0; 0 0];
+        Fy = [0 0; 0 0];
+        Mz = [0 0; 0 0];
+    end
+
+    [YM(:,:,i),Accel(:,:,i)] = YMSim(SteerAngles,VehicleWeight,Fx(:,:,i),Fy(:,:,i),Mz(:,:,i),a,b,TrackWidth);
     
     disp('Velocity: ');
     disp(Velocity(:,i));
@@ -139,7 +144,7 @@ for i = 1:length(Velocity)
     disp('Acceleration: ');
     disp(Accel(:,:,i));
     disp('Camber: ');
-    disp(Camber);
+    disp(IA(:,:,i));
     disp('Wheel Displacement: ');
     disp(Z(:,:,i));
     disp('Tire Pressure: ');

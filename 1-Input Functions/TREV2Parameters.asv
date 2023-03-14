@@ -1,11 +1,11 @@
-classdef VehicleParameters
+classdef TREV2Parameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
 
     %% Car Properties
     % Given
     properties (Constant)
-        TotalWeight = 700;
+        TotalWeight = 650;
         FrontPercent = 0.48;
         Wheelbase = 61;
         FrontTrackWidth = 48;
@@ -42,7 +42,7 @@ classdef VehicleParameters
         K_ARB = [0; 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
         MR_ARB = [0.5; 0.5];
-        Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+        Ackermann = -0.22655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
         Camber = [0, 0; 0, 0];
         TirePressure = [14, 14; 14, 14];
@@ -94,7 +94,6 @@ classdef VehicleParameters
             % Defining output
             output = [obj.RollAxisF();obj.RollAxisR()];
         end
-
         function output = RollCFL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -128,7 +127,7 @@ classdef VehicleParameters
         function output = RollCRL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [];
+            Y = [-0.2835  -0.2222  -0.1663  -0.1161  -0.0715  -0.0328   0.0000   0.0268   0.0475   0.0620   0.0702   0.0719   0.0672];
             
             % 4th order polynomial
             p = polyfit(X, Y, 4);
@@ -157,21 +156,35 @@ classdef VehicleParameters
 
         function graphRolls(~)
             % Create a 2x2 grid of subplots
-            subplot(1, 2, 1);
+            subplot(2, 2, 1);
             VehicleParameters.RollCFL_plot();
-            title('Function 2: RollCFL');
+            title('Roll vs. Camber Front Left');
 
-            subplot(1, 2, 2);
+            subplot(2, 2, 2);
             VehicleParameters.RollCFR_plot();
-            title('Function 1: RollCFR');
+            title('Roll vs. Camber Front Right');
             
-            
+            subplot(2, 2, 3);
+            VehicleParameters.RollCRL_plot();
+            title('Roll vs. Camber Rear Left');
+
+            subplot(2, 2, 4);
+            VehicleParameters.RollCRR_plot();
+            title('Roll vs. Camber Rear Right');
         end
 
     end
 
 
     methods (Static)
+        function output = RollCFL_plot(~)
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
+
+            output = plot(X, Y);
+        end
+
         function output = RollCFR_plot(~)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -180,11 +193,19 @@ classdef VehicleParameters
             output = plot(X, Y);
         end
 
-        function output = RollCFL_plot(~)
+        function output = RollCRL_plot()
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
+            Y = [-0.2835  -0.2222  -0.1663  -0.1161  -0.0715  -0.0328   0.0000   0.0268   0.0475   0.0620   0.0702   0.0719   0.0672];
+            
+            output = plot(X, Y);
+        end
 
+        function output = RollCRR_plot()
+            % X and Y coordinates in matrix form 
+            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
+            Y = [0.0672 0.0719 0.0702 0.0620 0.0475 0.0268 0 -0.0328 -0.0715 -0.1161 -0.1663 -0.2222 -0.2835];
+            
             output = plot(X, Y);
         end
     end

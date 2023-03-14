@@ -47,28 +47,13 @@ BrakeParameters = [1.45;1;3.131;0.3;4;1.45;1;1.5708;0.3;2;0.9375;0.69029;7;4.13;
 [Fx,Ax,BF] = BrakingSim(DriverForce,Weight,StaticWeights,mux,L,CoGh,TireRadius,BrakeParameters);
 
 % Load Transfer (lb)
-[Fz,LoLT,Accelmax] = LoLTSim(Weight,StaticWeights,mux,Ax,L,CoGh,a);
+[Fz,LoLT,Accelmax,Z] = LoLTSim(Weight,StaticWeights,mux,Ax,L,CoGh,a,K_r);
 
 % Tire Limit (g's)
 TL_F = [((BF(1,:)/2)/(Fz(1,1))) ((BF(1,:)/2)/(Fz(1,2)))];
 TL_R = [((BF(2,:)/2)/(Fz(2,1))) ((BF(2,:)/2)/(Fz(2,2)))];
     
 TL = [TL_F;TL_R];
-
-% Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
-Z = [K_r(1,1)*(LoLT/2), K_r(1,2)*(LoLT/2);
-    -K_r(2,1)*(LoLT/2), -K_r(2,2)*(LoLT/2)];
-
-for i = 1:2
-    for j = 1:2
-        if(Z(i,j) < -1)
-            Z(i,j) = -1;
-        end
-        if(Z(i,j) > 1)
-            Z(i,j) = 1;
-        end
-    end
-end
 
 disp('Fx: ');
 disp(Fx);
