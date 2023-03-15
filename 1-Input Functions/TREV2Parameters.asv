@@ -42,7 +42,7 @@ classdef TREV2Parameters
         K_ARB = [0; 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
         MR_ARB = [0.5; 0.5];
-        Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+        Ackermann = -0.22655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
         Camber = [0, 0; 0, 0];
         TirePressure = [14, 14; 14, 14];

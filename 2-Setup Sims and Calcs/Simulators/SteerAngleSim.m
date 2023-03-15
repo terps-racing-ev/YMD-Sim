@@ -7,7 +7,7 @@ function [SteerAngles,TurnRadius] = SteerAngleSim(SWAngle,Wheelbase,FTrackWidth,
     FTrackWidthft = FTrackWidth/12; %ft
 
     % Turning Radius (ft)
-    TurnRadius = Wheelbaseft/tand(SWAngle);
+    TurnRadius = Wheelbaseft./tand(SWAngle);
     
     % R&L Steering Angle for 100% Ackermann 
     AckSteerAngleR = atand(Wheelbaseft/(TurnRadius - FTrackWidthft/2));
