@@ -89,11 +89,11 @@ K_t = [548 548; 548 548];%lbf/in
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = linspace(0,35,4); %mph
+Velocity = 10; %linspace(0,35,4); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
-SWAngle = linspace(-90,90,5); %deg (L = neg, R = pos)
-Beta = linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
+SWAngle = 0; %linspace(-90,90,5); %deg (L = neg, R = pos)
+Beta = 0; %linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
  
