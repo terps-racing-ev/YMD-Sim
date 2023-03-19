@@ -52,40 +52,10 @@ disp('Training completed')
 
 %% Inputs
 
-% Input Car Parameters
-VehicleWeight = vehicleObj.TotalWeight();
-StaticWeights = vehicleObj.staticWeights();
-FrontPercent = vehicleObj.FrontPercent();
-RearPercent = vehicleObj.RearPercent();
-a = vehicleObj.FrontAxleToCoG();
-b = vehicleObj.CoGToRearAxle();
-L = vehicleObj.Wheelbase();
-TrackWidth = vehicleObj.TrackWidth();
-FTrackWidth = TrackWidth(1,:);
-CoGh = vehicleObj.CoGHeight();
-TireRadius = vehicleObj.TireRadius();
-Z_r = vehicleObj.Zr;
-CoGhZr = vehicleObj.CoGhZr();
-CoGh_RA = vehicleObj.CoGhRA();
-
-% Input Aero Parameters
-liftFactor = vehicleObj.liftFactor();
-
-% Input Alignment and Tuning Parameters
-K_s = vehicleObj.K_s();
-K_ARB = vehicleObj.K_ARB();
-MR_s = vehicleObj.MR_s();
-MR_ARB = vehicleObj.MR_ARB();
-Ackermann = vehicleObj.Ackermann();
-Toe = vehicleObj.Toe();
-FToe = Toe(1,:);
-RToe = Toe(2,:);
-Camber = vehicleObj.Camber();
-TirePressure = vehicleObj.TirePressure();
-
 K_t = [548 548; 548 548];%lbf/in 
 
 % Number of Iterations
+n = 1;
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
@@ -95,27 +65,25 @@ Velocity = 10; %linspace(0,35,4); %mph
 SWAngle = 0; %linspace(-90,90,5); %deg (L = neg, R = pos)
 Beta = 0; %linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
-SlipCarParameters = [a; b; TrackWidth(1,:); TrackWidth(2,:)];
- 
 %% Code
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
+[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
 
 % Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 for j = 1:length(SWAngle)
     for k = 1:length(Beta)
         for i = 1:length(Velocity)
             
-            SteerAngles(:,:,j) = SteerAngleSim(SWAngle(:,j),L,FTrackWidth,Ackermann,FToe,RToe);
+            SteerAngles(:,:,j) = SteerAngleSim(SWAngle(:,j),vehicleObj);
             
-            [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles(:,:,j),Beta(:,k),Velocity(:,i),Radius,SlipCarParameters);
+            [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles(:,:,j),Beta(:,k),Velocity(:,i),Radius,vehicleObj);
             
-            [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i),Z(:,:,i)] = LLTSim(K_roll,VehicleWeight,StaticWeights,LatAccelG(:,:,i),TrackWidth,CoGh_RA,Z_r,a,b,L);
+            [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i),Z(:,:,i)] = LLTSim(K_roll,LatAccelG(:,:,i),vehicleObj);
             
-            [IA(:,:,i)] = CamberSim(Camber,Roll_Angle(:,:,i),SWAngle,vehicleObj);
+            [IA(:,:,i)] = CamberSim(Roll_Angle(:,:,i),SWAngle,vehicleObj);
             
-            [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,SlipAngles(:,:,i),IA(:,:,i),Fz(:,:,i),TirePressure);
+            [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,SlipAngles(:,:,i),IA(:,:,i),Fz(:,:,i),vehicleObj.TirePressure);
             
             if(Velocity(:,i) == 0)
                 Fx = [0 0; 0 0];
@@ -123,7 +91,7 @@ for j = 1:length(SWAngle)
                 Mz = [0 0; 0 0];
             end
             
-            [YM(:,:,i),Accel(:,:,i)] = YMSim(SteerAngles(:,:,j),VehicleWeight,Fx(:,:,i),Fy(:,:,i),Mz(:,:,i),a,b,TrackWidth);
+            [YM(:,:,i),Accel(:,:,i)] = YMSim(SteerAngles(:,:,j),Fx(:,:,i),Fy(:,:,i),Mz(:,:,i),vehicleObj);
             
             disp('Velocity: ');
             disp(Velocity(:,i));
@@ -154,7 +122,7 @@ for j = 1:length(SWAngle)
             disp('Wheel Displacement: ');
             disp(Z(:,:,i));
             disp('Tire Pressure: ');
-            disp(TirePressure);
+            disp(vehicleObj.TirePressure);
         end
     end
 end

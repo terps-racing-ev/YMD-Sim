@@ -108,7 +108,6 @@ classdef TREV2Parameters
             y = f(x);
             output = y;
         end
-
         function output = RollCFR(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -123,7 +122,6 @@ classdef TREV2Parameters
             y = f(x);
             output = y;
         end
-
         function output = RollCRL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -138,7 +136,6 @@ classdef TREV2Parameters
             y = f(x);
             output = y;
         end
-
         function output = RollCRR(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -153,7 +150,6 @@ classdef TREV2Parameters
             y = f(x);
             output = y;
         end
-
         function graphRolls(~)
             % Create a 2x2 grid of subplots
             subplot(2, 2, 1);

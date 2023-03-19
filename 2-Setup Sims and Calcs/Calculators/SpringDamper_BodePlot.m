@@ -39,7 +39,13 @@ DampC_H = [15 15; 15 15]; %(lb-s)/in
 %% Calculations
 
 % Stiffnesses (lbf/in)
-[K_w,K_r] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
+%Kw
+K_w = [(K_s(1,1)*(MR_s(1,1))^2)+(K_ARB(1,:)*(MR_ARB(1,:))^2),(K_s(1,2)*(MR_s(1,2))^2)+(K_ARB(1,:)*(MR_ARB(1,:))^2);
+    (K_s(2,1)*(MR_s(2,1))^2)+(K_ARB(2,:)*(MR_ARB(2,:))^2),(K_s(2,2)*(MR_s(2,2))^2)+(K_ARB(2,:)*(K_ARB(2,:))^2)];
+
+%Kr
+K_r = [(K_t(1,1)*K_w(1,1))/(K_t(1,1)+K_w(1,1)) (K_t(1,2)*K_w(1,2))/(K_t(1,2)+K_w(1,2));
+    (K_t(2,1)*K_w(2,1))/(K_t(2,1)+K_w(2,1)) (K_t(2,2)*K_w(2,2))/(K_t(2,2)+K_w(2,2))];
 
 % Natural Frequency (Hz)
 NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/Weights(1,1))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/Weights(1,2)));

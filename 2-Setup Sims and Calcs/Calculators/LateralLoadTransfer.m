@@ -40,25 +40,10 @@ Ay = 1.5;
 %% Calculations
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_s,K_ARB,K_t,MR_s,MR_ARB,TrackWidth);
+[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
 
 % Load Transfer (lb)
-[Fz,LLT,LLT_D,R_g,Roll_Angle] = LLTSim(K_roll,Weight,StaticWeights,Ay,TrackWidth,CoGh_RA,Z_r,a,b,L);
-
-% Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
-Z = [(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(1,:)/2));
-    (tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2)), -(tan(deg2rad(Roll_Angle))*(TrackWidth(2,:)/2))];
-
-for i = 1:2
-    for j = 1:2
-        if(Z(i,j) < -1)
-            Z(i,j) = -1;
-        end
-        if(Z(i,j) > 1)
-            Z(i,j) = 1;
-        end
-    end
-end
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Ay,vehicleObj);
 
 disp('Fz: ');
 disp(Fz);

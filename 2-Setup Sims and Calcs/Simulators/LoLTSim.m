@@ -1,15 +1,15 @@
 %% Longitudinal Load Transfer Simulator
 
-function [Fz,LoLT,Accelmax,Z] = LoLTSim(VehicleWeight,StaticWeights,mu_x,LongAccel,Wheelbase,CoGh,a,K_r)
+function [Fz,LoLT,Accelmax,Z] = LoLTSim(mu_x,LongAccel,K_r,vehicle)
     % LoLT
-    LoLT = LongAccel*((VehicleWeight*CoGh)/Wheelbase);
+    LoLT = LongAccel*((vehicle.TotalWeight*vehicle.CoGHeight)/vehicle.Wheelbase);
     
     % Fz
-    Fz = [StaticWeights(1,1)-(LoLT/2), StaticWeights(1,2)-(LoLT/2);
-    StaticWeights(2,1)+(LoLT/2), StaticWeights(2,2)+(LoLT/2)];
+    Fz = [vehicle.FrontStatic-(LoLT/2), vehicle.FrontStatic-(LoLT/2);
+    vehicle.RearStatic+(LoLT/2), vehicle.RearStatic+(LoLT/2)];
     
     % Ax_max
-    Accelmax = mu_x*(a/(Wheelbase-(CoGh*mu_x)));
+    Accelmax = mu_x*(vehicle.FrontAxleToCoG/(vehicle.Wheelbase-(vehicle.CoGHeight*mu_x)));
     
     % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
     Z = [K_r(1,1)*(LoLT/2), K_r(1,2)*(LoLT/2);

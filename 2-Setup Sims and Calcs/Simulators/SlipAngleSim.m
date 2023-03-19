@@ -1,6 +1,6 @@
 %% Slip Angle Simulator
 
-function [SlipAngles,AccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,SlipCarParameters)
+function [SlipAngles,AccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,vehicle)
     % Velocity Calculations
     Velocityin_s = Velocity * 17.6; %in/s
     Accel = -Velocityin_s.^2/Radius; %in/s^2
@@ -9,15 +9,15 @@ function [SlipAngles,AccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAng
     LateralVelo = Velocityin_s*(Beta*(pi/180)); %(in-rad)/s
     
     % CoG Slip Angle Calculations
-    Betamax = (-AccelG/AccelG)*(atan(SlipCarParameters(2,:)/Radius))*(180/pi); %deg
+    Betamax = (-AccelG/AccelG)*(atan(vehicle.CoGToRearAxle/Radius))*(180/pi); %deg
     % neg -> Right, pos -> Left
     
     % Steer Angle Conversion (rad)
     SteerAnglesrad = deg2rad(SteerAngles);
     
     % Slip Angle Calculations
-    SlipAnglesF = [(-(((LateralVelo + (YawVelo*SlipCarParameters(1,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(3,:)/2))))-SteerAnglesrad(1,1))),(-(((LateralVelo + (YawVelo*SlipCarParameters(1,:)))/(Velocityin_s+(YawVelo*(SlipCarParameters(3,:)/2))))-SteerAnglesrad(1,2)))];
-    SlipAnglesR = [(-(((LateralVelo - (YawVelo*SlipCarParameters(2,:)))/(Velocityin_s-(YawVelo*(SlipCarParameters(4,:)/2)))))-SteerAnglesrad(2,1)),(-(((LateralVelo - (YawVelo*SlipCarParameters(2,:)))/(Velocityin_s+(YawVelo*(SlipCarParameters(4,:)/2))))-SteerAnglesrad(2,1)))];
+    SlipAnglesF = [(-(((LateralVelo + (YawVelo*vehicle.FrontAxleToCoG))/(Velocityin_s-(YawVelo*(vehicle.FrontTrackWidth/2))))-SteerAnglesrad(1,1))),(-(((LateralVelo + (YawVelo*vehicle.FrontAxleToCoG))/(Velocityin_s+(YawVelo*(vehicle.FrontTrackWidth/2))))-SteerAnglesrad(1,2)))];
+    SlipAnglesR = [(-(((LateralVelo - (YawVelo*vehicle.CoGToRearAxle))/(Velocityin_s-(YawVelo*(vehicle.RearTrackWidth/2)))))-SteerAnglesrad(2,1)),(-(((LateralVelo - (YawVelo*vehicle.CoGToRearAxle))/(Velocityin_s+(YawVelo*(vehicle.RearTrackWidth/2))))-SteerAnglesrad(2,1)))];
             
     SlipAngles = [SlipAnglesF; SlipAnglesR]*(180/pi);
     

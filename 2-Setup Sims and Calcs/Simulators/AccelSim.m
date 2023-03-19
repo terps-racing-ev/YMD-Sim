@@ -1,14 +1,14 @@
 %% Acceleration Forces Sim
 
-function [Fx,Ax] = AccelSim(ThrottleInput,Velocity,VehicleWeight,StaticWeights,TireRadius,GR)
+function [Fx,Ax] = AccelSim(ThrottleInput,Velocity,GR,vehicle)
     rr = 0.015;
-    fRR = rr * VehicleWeight; %lbs
+    fRR = rr * vehicle.TotalWeight; %lbs
     
     % Linear Map of Throttle Input to Motor Torque
     
     % Motor Torque -> Torque at Wheels -> Fx
 
-    MotorSpeed = Velocity*GR / (2*pi*TireRadius);
+    MotorSpeed = Velocity*GR / (2*pi*vehicle.TireRadius);
     torque = 0.7376*MotorTorque(MotorSpeed*60); %ft lbs
     finalTorque = GR * torque; %ft lbs
     Fx = finalTorque/wheelRadius; %lbs

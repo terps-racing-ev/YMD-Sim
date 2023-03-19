@@ -1,18 +1,18 @@
 %% Lateral Load Transfer Simulator
 
-function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,VehicleWeight,StaticWeights,LatAccel,Track,CoGhRA,Zr,a,b,L)
+function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     % Roll Gradient (deg/g)
-    R_g = (VehicleWeight*CoGhRA)./(Kroll(1,:)+Kroll(2,:))*(180/pi);
+    R_g = (vehicle.TotalWeight*vehicle.CoGhRA)./(Kroll(1,:)+Kroll(2,:))*(180/pi);
     
     % LLT (lb)
-    DeltaWF = (VehicleWeight/Track(1,:))*(((CoGhRA*Kroll(1,:))/(Kroll(1,:)+Kroll(2,:)))+((b/L)*Zr(1,:)))*LatAccel;
-    DeltaWR = (VehicleWeight/Track(2,:))*(((CoGhRA*Kroll(2,:))/(Kroll(1,:)+Kroll(2,:)))+((a/L)*Zr(2,:)))*LatAccel;
+    DeltaWF = (vehicle.TotalWeight/vehicle.FrontTrackWidth)*(((vehicle.CoGhRA*Kroll(1,:))/(Kroll(1,:)+Kroll(2,:)))+((vehicle.CoGToRearAxle/vehicle.Wheelbase)*vehicle.RollAxisF))*LatAccel;
+    DeltaWR = (vehicle.TotalWeight/vehicle.RearTrackWidth)*(((vehicle.CoGhRA*Kroll(2,:))/(Kroll(1,:)+Kroll(2,:)))+((vehicle.FrontAxleToCoG/vehicle.Wheelbase)*vehicle.RollAxisR))*LatAccel;
     
     LLT = [DeltaWF; DeltaWR];
     
     % Fz (lb)
-    Fz = -[StaticWeights(1,1)+LLT(1,:), StaticWeights(1,2)-LLT(1,:);
-    StaticWeights(2,1)+LLT(2,:), StaticWeights(2,2)-LLT(2,:)];
+    Fz = -[vehicle.FrontStatic+LLT(1,:), vehicle.FrontStatic-LLT(1,:);
+    vehicle.RearStatic+LLT(2,:), vehicle.RearStatic-LLT(2,:)];
     
     % LLTD
     LLTDF = DeltaWF / (DeltaWF + DeltaWR);
@@ -28,8 +28,8 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,VehicleWeight,StaticWeigh
     Roll_Angle = R_g * LatAccel;
     
     % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
-    Z = [-(tan(deg2rad(Roll_Angle).*(Track(1,:)/2))), (tan(deg2rad(Roll_Angle).*(Track(1,:)/2)));
-        -(tan(deg2rad(Roll_Angle).*(Track(2,:)/2))), (tan(deg2rad(Roll_Angle).*(Track(2,:)/2)))];
+    Z = [-(tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2))), (tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2)));
+        -(tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2))), (tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2)))];
 
     for j = 1:2
         for k = 1:2

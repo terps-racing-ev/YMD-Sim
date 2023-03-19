@@ -16,27 +16,21 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 %% Inputs
 
-% Input Car Parameters
-Wheelbase = vehicleObj.Wheelbase();
-TrackWidth = vehicleObj.TrackWidth();
-FTrackWidth = TrackWidth(1,:);
-Ackermann = vehicleObj.Ackermann();
-Toe = vehicleObj.Toe();
-FToe = Toe(1,:);
-
 % Steering Wheel Angle Sweep
 SWAngle = linspace(-90,90,37); %deg (L = neg, R = pos)
 
 %% Code
 for i = 1:37
-    [SteerAngles(i,:),TurnRadius(i,:)] = SteerAngleSim(SWAngle(:,i),Wheelbase,FTrackWidth,Ackermann,FToe);
+    [SteerAngles(:,:,i),TurnRadius(:,i)] = SteerAngleSim(SWAngle(:,i),vehicleObj);
 end
 
 %% Plots
 figure('Name','Steering Angle Sweep');
-plot(SWAngle,SteerAngles(:,1),'-r*');
+SteerAnglesL = squeeze(SteerAngles(1,1,:));
+plot(SWAngle,SteerAnglesL,'-r*');
 hold on
-plot(SWAngle,SteerAngles(:,2),'-ro');
+SteerAnglesR = squeeze(SteerAngles(1,2,:));
+plot(SWAngle,SteerAnglesR,'-ro');
 hold on
 title('Steering Angle Sweep');
 xlim([-90 90]);
