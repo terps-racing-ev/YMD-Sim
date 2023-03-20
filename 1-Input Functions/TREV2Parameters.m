@@ -33,6 +33,8 @@ classdef TREV2Parameters
     % Given
     properties (Constant)
         liftFactor = -6;
+        Cd = 0;
+        Af = 0;
     end
 
     %% Alignment and Tuning

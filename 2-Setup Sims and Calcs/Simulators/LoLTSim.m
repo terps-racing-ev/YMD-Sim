@@ -4,6 +4,8 @@ function [Fz,LoLT,Accelmax,Z] = LoLTSim(mu_x,LongAccel,K_r,vehicle)
     % LoLT
     LoLT = LongAccel*((vehicle.TotalWeight*vehicle.CoGHeight)/vehicle.Wheelbase);
     
+    % Aero Effects
+    
     % Fz
     Fz = [vehicle.FrontStatic-(LoLT/2), vehicle.FrontStatic-(LoLT/2);
     vehicle.RearStatic+(LoLT/2), vehicle.RearStatic+(LoLT/2)];

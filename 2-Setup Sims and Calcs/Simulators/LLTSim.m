@@ -10,6 +10,8 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     
     LLT = [DeltaWF; DeltaWR];
     
+    % Aero Effects
+    
     % Fz (lb)
     Fz = -[vehicle.FrontStatic+LLT(1,:), vehicle.FrontStatic-LLT(1,:);
     vehicle.RearStatic+LLT(2,:), vehicle.RearStatic-LLT(2,:)];
