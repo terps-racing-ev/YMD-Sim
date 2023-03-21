@@ -42,7 +42,7 @@ classdef TREV2Parameters
     properties (Constant)
         K_s = [200 200; 250 250]; %lbf/in
         K_ARB = [0; 0]; %lbf/in
-        MR_s = [0.5 0.5; 0.5 0.5];
+        MR_s = [1 1; 1 1];
         MR_ARB = [0.5; 0.5];
         Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];

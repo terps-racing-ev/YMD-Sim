@@ -16,26 +16,10 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 %% Inputs
 
-% Input Car Parameters
-Weight = vehicleObj.TotalWeight();
-StaticWeights = vehicleObj.staticWeights();
-TrackWidth = vehicleObj.TrackWidth();
-Z_r = vehicleObj.Zr;
-a = vehicleObj.FrontAxleToCoG();
-b = vehicleObj.CoGToRearAxle();
-L = vehicleObj.Wheelbase();
-CoGh_RA = vehicleObj.CoGhRA();
-
-K_s = vehicleObj.K_s();
-K_ARB = vehicleObj.K_ARB();
-MR_s = vehicleObj.MR_s();
-MR_ARB = vehicleObj.MR_ARB();
-
 K_t = [548 548; 548 548];%lbf/in 
 
 % Input test G's Pulled (neg -> Left, pos -> Right)
-
-Ay = 1.5;
+Ay = 1.7;
 
 %% Calculations
 

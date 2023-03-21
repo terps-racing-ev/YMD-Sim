@@ -2,7 +2,7 @@
 
 function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     % Roll Gradient (deg/g)
-    R_g = (vehicle.TotalWeight*vehicle.CoGhRA)./(Kroll(1,:)+Kroll(2,:))*(180/pi);
+    R_g = (vehicle.TotalWeight*vehicle.CoGhRA)./(Kroll(1,:)+Kroll(2,:));
     
     % LLT (lb)
     DeltaWF = (vehicle.TotalWeight/vehicle.FrontTrackWidth)*(((vehicle.CoGhRA*Kroll(1,:))/(Kroll(1,:)+Kroll(2,:)))+((vehicle.CoGToRearAxle/vehicle.Wheelbase)*vehicle.RollAxisF))*LatAccel;

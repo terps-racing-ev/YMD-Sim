@@ -40,7 +40,7 @@ classdef TREV1Parameters
     %% Alignment and Tuning
     % Given
     properties (Constant)
-        K_s = [200 200; 250 250]; %lbf/in
+        K_s = [500 500; 550 550]; %lbf/in
         K_ARB = [0; 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
         MR_ARB = [0.5; 0.5];

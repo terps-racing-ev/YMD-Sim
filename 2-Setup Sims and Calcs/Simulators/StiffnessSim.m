@@ -11,6 +11,6 @@ function [Kw,Kr,Kroll] = StiffnessSim(Kt,vehicle)
     (Kt(2,1)*Kw(2,1))/(Kt(2,1)+Kw(2,1)) (Kt(2,2)*Kw(2,2))/(Kt(2,2)+Kw(2,2))];
     
     %Kroll: lbf-in/deg    
-    Kroll = [(mean(Kr(1,:))*((vehicle.FrontTrackWidth^2)/2)); (mean(Kr(2,:))*((vehicle.RearTrackWidth^2)/2))];
+    Kroll = [(mean(Kr(1,:))*((vehicle.FrontTrackWidth^2)/2)); (mean(Kr(2,:))*((vehicle.RearTrackWidth^2)/2))]/57.3;
     
 end
