@@ -1,0 +1,15 @@
+% Adding Vehicle Parameters
+currentFolder = pwd;
+addpath([currentFolder, filesep, '1-Input Functions']);
+vehicleObj = TREV2Parameters();
+
+% fprintf("Tesst for initial condition: ")
+% vehicleObj.RollCFL(1)
+% 
+% fprintf("Test for not initial condition: ")
+% vehicleObj.RollCFL(-3.5)
+% 
+% fprintf("Tesst for initial condition: ")
+% vehicleObj.RollCRL(0)
+
+vehicleObj.steerCamber(0)

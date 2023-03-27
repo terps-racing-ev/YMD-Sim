@@ -186,11 +186,11 @@ classdef TREV2Parameters
                 i = X == x;
                 output = Y(i);
             else
-                % 5th order polynomial
-                p = polyfit(X, Y, 5);
+                % 4th order polynomial
+                p = polyfit(X, Y, 3);
             
                 % Constructing our function
-                f = @(x) p(1)*x.^5 + p(2)*x.^4 + p(3)*x.^3 + p(4)*x.^2 + p(5)*x + p(6);
+                f = @(x) p(1)*x.^3 + p(2)*x.^2 + p(3)*x + p(4);
             
                 y = f(x);
                 output = y;
@@ -206,41 +206,33 @@ classdef TREV2Parameters
                 i = X == x;
                 output = Y(i);
             else
-                % 5th order polynomial
-                p = polyfit(X, Y, 5);
+                % 4th order polynomial
+                p = polyfit(X, Y, 3);
             
                 % Constructing our function
-                f = @(x) p(1)*x.^5 + p(2)*x.^4 + p(3)*x.^3 + p(4)*x.^2 + p(5)*x + p(6);
+                f = @(x) p(1)*x.^3 + p(2)*x.^2 + p(3)*x + p(4);
             
                 y = f(x);
                 output = y;
             end 
         end
         function graphRolls(~)
-            % Create a 3x2 grid of subplots
-            subplot(3, 2, 1);
+            % Create a 2x2 grid of subplots
+            subplot(2, 2, 1);
             TREV2Parameters.RollCFL_plot();
             title('Roll vs. Camber Front Left');
 
-            subplot(3, 2, 2);
+            subplot(2, 2, 2);
             TREV2Parameters.RollCFR_plot();
             title('Roll vs. Camber Front Right');
             
-            subplot(3, 2, 3);
+            subplot(2, 2, 3);
             TREV2Parameters.RollCRL_plot();
             title('Roll vs. Camber Rear Left');
 
-            subplot(3, 2, 4);
+            subplot(2, 2, 4);
             TREV2Parameters.RollCRR_plot();
             title('Roll vs. Camber Rear Right');
-
-            subplot(3, 2, 5);
-            TREV2Parameters.steerCamberLHS_plot();
-            title("Steer vs. Camber LHS")
-
-            subplot(3, 2, 6);
-            TREV2Parameters.steerCamberRHS_plot();
-            title("Steer vs. Camber RHS")
         end
 
     end
@@ -283,22 +275,7 @@ classdef TREV2Parameters
             output = plot(X, Y);
         end
 
-        function output = steerCamberLHS_plot()
-            % X and Y coordinates in matrix form 
-            % Added -90 and 90 for the graph - for visual completeness puproses 
-            X = [-90 TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30) 90];
-            Y = [9.0338 5.01 3.78 2.79 1.95 1.22 0.58 0 -0.54 -1.05 -1.54 -2.03 -2.54 -3.09 -4.7438];
-
-            output = plot(X, Y);
-        end
-
-        function output = steerCamberRHS_plot()
-            % X and Y coordinates in matrix form 
-            % Added -90 and 90 for the graph - for visual completeness puproses 
-            X = [-90 TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30) 90];
-            Y = [-4.7438 -3.09 -2.54 -2.03 -1.54 -1.05 -0.54 0 0.58 1.22 1.95 2.79 3.78 5.01 9.0338];
-
-            output = plot(X, Y);
+        function output = steerCamberLHS()
         end
 
     end
