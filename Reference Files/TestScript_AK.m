@@ -1,9 +1,12 @@
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
+% vehicleObj = TREV2Parameters();
+vehicleObj = GeoPoints();
 
 %% Uncomment when want to use (command + T or ctrl + T)
+
+A = vehicleObj.M1_FR_UAAA
 
 % fprintf("Steer Camber LHS initial conditions test: ")
 % vehicleObj.steerCamberLHS(0)

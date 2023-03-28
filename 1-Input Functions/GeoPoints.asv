@@ -244,7 +244,7 @@ classdef GeoPoints
             obj.M1_FR_LAAA = [((obj.U_LAA_A_FR(3) * obj.R_FR_LAAA(2)) - (obj.U_LAA_A_FR(2) * obj.R_FR_LAAA(3))) ((obj.U_LAA_A_FR(3) * obj.R_FR_LAAA(1)) - (obj.U_LAA_A_FR(1) * obj.R_FR_LAAA(3))) ((obj.U_LAA_A_FR(2) * obj.R_FR_LAAA(1)) - (obj.U_LAA_A_FR(1) * obj.R_FR_LAAA(2)))];
             obj.M1_FR_UAAF = [((obj.U_UAA_F_FR(3) * obj.R_FR_UAAF(2)) - (obj.U_UAA_F_FR(2) * obj.R_FR_UAAF(3))) ((obj.U_UAA_F_FR(3) * obj.R_FR_UAAF(1)) - (obj.U_UAA_F_FR(1) * obj.R_FR_UAAF(3))) ((obj.U_UAA_F_FR(2) * obj.R_FR_UAAF(1)) - (obj.U_UAA_F_FR(1) * obj.R_FR_UAAF(2)))];
             obj.M1_FR_UAAA = [((obj.U_UAA_A_FR(3) * obj.R_FR_UAAA(2)) - (obj.U_UAA_A_FR(2) * obj.R_FR_UAAA(3))) ((obj.U_UAA_A_FR(3) * obj.R_FR_UAAA(1)) - (obj.U_UAA_A_FR(1) * obj.R_FR_UAAA(3))) ((obj.U_UAA_A_FR(2) * obj.R_FR_UAAA(1)) - (obj.U_UAA_A_FR(1) * obj.R_FR_UAAA(2)))];
-            obj.M1_FR_PR = [((obj.U_PR_FR(3) * obj.R_FR_PR(2)) - (obj.U_PR_FR(2) * obj.R_FR_PR(3))) ((obj.U_PR_FR(3) * obj.R_FR_PR(1)) - (obj.U_PR_FR(1) * obj.R_FR_PR(3))) ((obj.U_PR_FR(2) * obj.R_FR_PR(1)) - (obj.U_PR_FR(1) * obj.R_FR_PR(2)))];
+            obj.M1_FR_TR = [((obj.U_TR_FR(3) * obj.R_FR_TR(2)) - (obj.U_TR_FR(2) * obj.R_FR_TR(3))) ((obj.U_TR_FR(3) * obj.R_FR_TR(1)) - (obj.U_TR_FR(1) * obj.R_FR_TR(3))) ((obj.U_TR_FR(2) * obj.R_FR_TR(1)) - (obj.U_TR_FR(1) * obj.R_FR_TR(2)))];
             
 
         end
