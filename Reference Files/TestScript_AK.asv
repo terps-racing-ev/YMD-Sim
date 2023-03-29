@@ -6,7 +6,7 @@ vehicleObj = GeoPoints();
 
 %% Uncomment when want to use (command + T or ctrl + T)
 
-A = vehicleObj.M1_RL_PR
+A = vehicleObj.R_RL_UAAA
 
 % fprintf("Steer Camber LHS initial conditions test: ")
 % vehicleObj.steerCamberLHS(0)
