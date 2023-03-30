@@ -175,6 +175,23 @@ classdef GeoPoints
         M1_RL_PR
     end
 
+    %% A matrix and A^-1 matrix
+    properties (SetAccess = private)
+        A_FL
+        A_FR
+        A_RL
+        A_RR
+
+        % Inverses
+        A_I_FL
+        A_I_FR
+        A_I_RL
+        A_I_RR
+
+        masterInverseMatrix
+        R
+    end
+       
     %% Methods
 
     methods
@@ -320,6 +337,56 @@ classdef GeoPoints
             obj.M1_RL_UAAA = [((obj.U_UAA_A_RL(3) * obj.R_RL_UAAA(2)) - (obj.U_UAA_A_RL(2) * obj.R_RL_UAAA(3))) ((obj.U_UAA_A_RL(3) * obj.R_RL_UAAA(1)) - (obj.U_UAA_A_RL(1) * obj.R_RL_UAAA(3))) ((obj.U_UAA_A_RL(2) * obj.R_RL_UAAA(1)) - (obj.U_UAA_A_RL(1) * obj.R_RL_UAAA(2)))];
             obj.M1_RL_PR = [((obj.U_PR_RL(3) * obj.R_RL_PR(2)) - (obj.U_PR_RL(2) * obj.R_RL_PR(3))) ((obj.U_PR_RL(3) * obj.R_RL_PR(1)) - (obj.U_PR_RL(1) * obj.R_RL_PR(3))) ((obj.U_PR_RL(2) * obj.R_RL_PR(1)) - (obj.U_PR_RL(1) * obj.R_RL_PR(2)))];
 
+            % A matrices
+
+            % FL
+            obj.A_FL = [obj.U_TR_FL(1) obj.U_LAA_F_FL(1) obj.U_LAA_A_FL(1) obj.U_UAA_F_FL(1) obj.U_UAA_A_FL(1) obj.U_PR_FL(1); 
+                        obj.U_TR_FL(2) obj.U_LAA_F_FL(2) obj.U_LAA_A_FL(2) obj.U_UAA_F_FL(2) obj.U_UAA_A_FL(2) obj.U_PR_FL(2); 
+                        obj.U_TR_FL(3) obj.U_LAA_F_FL(3) obj.U_LAA_A_FL(3) obj.U_UAA_F_FL(3) obj.U_UAA_A_FL(3) obj.U_PR_FL(3)
+                        obj.M1_FL_TR(1) obj.M1_FL_LAAF(1) obj.M1_FL_LAAA(1) obj.M1_FL_UAAF(1) obj.M1_FL_UAAA(1) obj.M1_FL_PR(1)
+                        obj.M1_FL_TR(2) obj.M1_FL_LAAF(2) obj.M1_FL_LAAA(2) obj.M1_FL_UAAF(2) obj.M1_FL_UAAA(2) obj.M1_FL_PR(2)
+                        obj.M1_FL_TR(3) obj.M1_FL_LAAF(3) obj.M1_FL_LAAA(3) obj.M1_FL_UAAF(3) obj.M1_FL_UAAA(3) obj.M1_FL_PR(3)];
+
+            % FR
+            obj.A_FR = [obj.U_TR_FR(1) obj.U_LAA_F_FR(1) obj.U_LAA_A_FR(1) obj.U_UAA_F_FR(1) obj.U_UAA_A_FR(1) obj.U_PR_FR(1); 
+                        obj.U_TR_FR(2) obj.U_LAA_F_FR(2) obj.U_LAA_A_FR(2) obj.U_UAA_F_FR(2) obj.U_UAA_A_FR(2) obj.U_PR_FR(2); 
+                        obj.U_TR_FR(3) obj.U_LAA_F_FR(3) obj.U_LAA_A_FR(3) obj.U_UAA_F_FR(3) obj.U_UAA_A_FR(3) obj.U_PR_FR(3); 
+                        obj.M1_FR_TR(1) obj.M1_FR_LAAF(1) obj.M1_FR_LAAA(1) obj.M1_FR_UAAF(1) obj.M1_FR_UAAA(1) obj.M1_FR_PR(1); 
+                        obj.M1_FR_TR(2) obj.M1_FR_LAAF(2) obj.M1_FR_LAAA(2) obj.M1_FR_UAAF(2) obj.M1_FR_UAAA(2) obj.M1_FR_PR(2); 
+                        obj.M1_FR_TR(3) obj.M1_FR_LAAF(3) obj.M1_FR_LAAA(3) obj.M1_FR_UAAF(3) obj.M1_FR_UAAA(3) obj.M1_FR_PR(3)];
+
+            % RL
+            obj.A_RL = [obj.U_TR_RL(1) obj.U_LAA_F_RL(1) obj.U_LAA_A_RL(1) obj.U_UAA_F_RL(1) obj.U_UAA_A_RL(1) obj.U_PR_RL(1); 
+                        obj.U_TR_RL(2) obj.U_LAA_F_RL(2) obj.U_LAA_A_RL(2) obj.U_UAA_F_RL(2) obj.U_UAA_A_RL(2) obj.U_PR_RL(2); 
+                        obj.U_TR_RL(3) obj.U_LAA_F_RL(3) obj.U_LAA_A_RL(3) obj.U_UAA_F_RL(3) obj.U_UAA_A_RL(3) obj.U_PR_RL(3); 
+                        obj.M1_RL_TR(1) obj.M1_RL_LAAF(1) obj.M1_RL_LAAA(1) obj.M1_RL_UAAF(1) obj.M1_RL_UAAA(1) obj.M1_RL_PR(1); 
+                        obj.M1_RL_TR(2) obj.M1_RL_LAAF(2) obj.M1_RL_LAAA(2) obj.M1_RL_UAAF(2) obj.M1_RL_UAAA(2) obj.M1_RL_PR(2); 
+                        obj.M1_RL_TR(3) obj.M1_RL_LAAF(3) obj.M1_RL_LAAA(3) obj.M1_RL_UAAF(3) obj.M1_RL_UAAA(3) obj.M1_RL_PR(3)];
+
+            % RR
+            obj.A_RR = [obj.U_TR_RR(1) obj.U_LAA_F_RR(1) obj.U_LAA_A_RR(1) obj.U_UAA_F_RR(1) obj.U_UAA_A_RR(1) obj.U_PR_RR(1); 
+                        obj.U_TR_RR(2) obj.U_LAA_F_RR(2) obj.U_LAA_A_RR(2) obj.U_UAA_F_RR(2) obj.U_UAA_A_RR(2) obj.U_PR_RR(2); 
+                        obj.U_TR_RR(3) obj.U_LAA_F_RR(3) obj.U_LAA_A_RR(3) obj.U_UAA_F_RR(3) obj.U_UAA_A_RR(3) obj.U_PR_RR(3); 
+                        obj.M1_RR_TR(1) obj.M1_RR_LAAF(1) obj.M1_RR_LAAA(1) obj.M1_RR_UAAF(1) obj.M1_RR_UAAA(1) obj.M1_RR_PR(1); 
+                        obj.M1_RR_TR(2) obj.M1_RR_LAAF(2) obj.M1_RR_LAAA(2) obj.M1_RR_UAAF(2) obj.M1_RR_UAAA(2) obj.M1_RR_PR(2); 
+                        obj.M1_RR_TR(3) obj.M1_RR_LAAF(3) obj.M1_RR_LAAA(3) obj.M1_RR_UAAF(3) obj.M1_RR_UAAA(3) obj.M1_RR_PR(3)];
+
+            % A Inverse Matrices
+
+            % FL
+            obj.A_I_FL = inv(obj.A_FL);
+
+            % FR
+            obj.A_I_FR = inv(obj.A_FR);
+
+            % RL
+            obj.A_I_RL = inv(obj.A_RL);
+
+            % RR
+            obj.A_I_RR = inv(obj.A_RR);
+
+            obj.masterInverseMatrix = [obj.A_I_FL obj.A_I_FR; obj.A_I_RL obj.A_I_RR];
+            obj.R = [0 0 8];
 
         end
 
