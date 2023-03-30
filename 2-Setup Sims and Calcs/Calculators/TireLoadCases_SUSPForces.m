@@ -1,4 +1,4 @@
-    %% Tire Load Cases -> SUSP Forces Calcs
+%% Tire Load Cases -> SUSP Forces Calcs
 
 % This calculator uses the SUSP Force Sim (ForceSim.m) to determine the
 % SUSP forces for given tire load cases
@@ -40,12 +40,9 @@ Fz = [780 780; 845 845];
 
 %% Calculations
 
-% Adding Vehicle Parameters
-currentFolder = pwd;
-addpath([currentFolder, filesep, '1-Input Functions']);
-    vObj = GeoPoints();
-
 % output:
+
+% Note for me -akarsh, double check
 FL = ForceSim().Forces_FL(Fx, Fy, Fz)
 FR = ForceSim().Forces_FR(Fx, Fy, Fz)
 RL = ForceSim().Forces_RL(Fx, Fy, Fz)
