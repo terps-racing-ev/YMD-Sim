@@ -1,12 +1,12 @@
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-% vehicleObj = TREV2Parameters();
-vehicleObj = GeoPoints();
+vehicleObj = TREV2Parameters();
+% vehicleObj = GeoPoints();
 
 %% Uncomment when want to use (command + T or ctrl + T)
 
-A = vehicleObj.A_RR
+% A = vehicleObj.A_RR
 
 % fprintf("Steer Camber LHS initial conditions test: ")
 % vehicleObj.steerCamberLHS(0)
@@ -19,5 +19,9 @@ A = vehicleObj.A_RR
 % 
 % fprintf("Steer Camber RHS extrapolate conditions test: ")
 % vehicleObj.steerCamberRHS(90)
-% 
-% vehicleObj.graphRolls()
+
+%%
+
+% To run the graphs:
+
+vehicleObj.graphRolls()
