@@ -24,16 +24,16 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
-K_t = [548 548; 548 548];%lbf/in 
+K_t = [548 548; 548 548]; %lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [225 225; 250 250]; %lbf/in
+K_s = [200 200; 250 250]; %lbf/in
 K_ARB = [0; 0]; %lbf/in
 
-MR_s = [1 1; 1 1];
+MR_s = [1.2 1.2; 1.2 1.2];
 MR_ARB = [0.5; 0.5];
 
-DampC_L = [15 15; 15 15]; %(lb-s)/in
+DampC_L = [10 10; 10 10];  %(lb-s)/in
 DampC_H = [15 15; 15 15]; %(lb-s)/in
 
 %% Calculations
