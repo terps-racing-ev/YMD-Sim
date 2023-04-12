@@ -103,18 +103,32 @@ Gs_RLHigh = tf([1],[1 2*DR_H(2,1)*NF(2,1) NF(2,1)^2]);
 Gs_RRLow = tf([1],[1 2*DR_L(2,2)*NF(2,2) NF(2,2)^2]);
 Gs_RRHigh = tf([1],[1 2*DR_H(2,2)*NF(2,2) NF(2,2)^2]);
 
+FStepConfig = stepDataOptions('StepAmplitude',(5*Weights(1,1))/386.4);
+RStepConfig = stepDataOptions('StepAmplitude',(5*Weights(2,1))/386.4);
+
+% FImpulseConfig = RespConfig('Amplitude',(5*Weights(1,1)));
+% RImpulseConfig = RespConfig('Amplitude',(5*Weights(2,1)));
+
 figure('Name','Bode Plot - Low Damper Settings');
 bode(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Impulse Response Plot - Low Damper Settings');
-impulse(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
-legend(' FL',' FR',' RL',' RR','Location','eastoutside')
-
 figure('Name','Bode Plot - High Damper Settings');
-bode(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
+bode(Gs_FLHigh,'r-x',Gs_FRHigh,'r-+',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Impulse Response Plot - High Damper Settings');
-impulse(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
-legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+figure('Name','Impulse Response Plot - Front Damper Settings');
+impulse(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_FLHigh,'r-x',Gs_FRHigh,'r-+');
+legend(' FL_Low',' FR_Low',' FL_High',' FR_High','Location','eastoutside')
+
+figure('Name','Impulse Response Plot - Rear Damper Settings');
+impulse(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
+legend(' RL_Low',' RR_Low',' RL_High',' RR_High','Location','eastoutside')
+
+figure('Name','Step Response Plot - Front Damper Settings');
+step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_FLHigh,'r-x',Gs_FRHigh,'r-+',FStepConfig);
+legend(' FL_Low',' FR_Low',' FL_High',' FR_High','Location','eastoutside')
+
+figure('Name','Step Response Plot - Rear Damper Settings');
+step(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+',RStepConfig);
+legend(' RL_Low',' RR_Low',' RL_High',' RR_High','Location','eastoutside')

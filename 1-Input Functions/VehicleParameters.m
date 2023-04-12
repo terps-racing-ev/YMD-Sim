@@ -44,6 +44,8 @@ classdef VehicleParameters
         K_ARB = [0; 0]; %lbf/in
         MR_s = [0.5 0.5; 0.5 0.5];
         MR_ARB = [0.5; 0.5];
+        DampC_Low = [10 10; 10 10];
+        DampC_High = [15 15; 15 15];
         Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
         Camber = [0, 0; 0, 0];

@@ -20,7 +20,7 @@ K_t = [548 548; 548 548]; %lbf/in
 mux = 1.5;
 
 % Input Test Braking Force (lbf)
-DriverForce = 120;
+DriverForce = 110;
 
 BrakeParameters = [1.45;1;3.131;0.3;4;1.45;1;1.5708;0.3;2;0.9375;0.69029;7;4.13;0.5];
 
