@@ -34,18 +34,18 @@ DampC_FHigh = [vehicleObj.DampC_High(1,1) vehicleObj.DampC_High(1,2)];
 K_t = [548 548; 548 548];
 
 % TMD Spring Rates (lbf/in)
-K_top = 50;
-K_bottom = 50;
+K_top = 10;
+K_bottom = 10;
 K_sTMDeq = K_top + K_bottom;
 
 % TMD Mass (lb)
-TMD_Weight = 25;
+TMD_Weight = 8;
 
 % Damping Coefficient (lb-s)/in
 mu_c = 22*0.00155; %in^2/s
 r = 8; %in
 A = pi*r^2; %in^2
-h = 5; %in
+h = 8; %in
 
 DampC_TMD = (mu_c*A)/h;
 

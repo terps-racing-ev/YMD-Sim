@@ -2,7 +2,7 @@
 
 function [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicle)
     
-    SteerAnglesrad = SteerAngles*(180/pi);
+    SteerAnglesrad = SteerAngles*(pi/180);
     car_Fx = Fx.*cos(SteerAnglesrad) + Fy.*sin(SteerAnglesrad); %tire forces in car coordinate system
     car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad); %tire forces in car coordinate system
     car_totalFx = sum(sum(car_Fx));
@@ -17,5 +17,5 @@ function [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicle)
     YM = ((Fx(1,1)*(vehicle.FrontTrackWidth/24))+(Fx(2,1)*(vehicle.RearTrackWidth/24)))-((Fx(1,2)*(vehicle.FrontTrackWidth/24))+(Fx(2,2)*(vehicle.RearTrackWidth/24)))+ ((Fy(1,1)+Fy(1,2))*vehicle.FrontAxleToCoG)-((Fy(2,1)+Fy(2,2))*vehicle.CoGToRearAxle)-Mz(1,1)-Mz(1,2)-Mz(2,1)-Mz(2,2);
     
     % Acceleration (g's)
-    Accel = [car_totalFx car_totalFy]/vehicle.TotalWeight;
+    Accel = ([car_totalFx car_totalFy]/vehicle.TotalWeight)/32.2;
 end
