@@ -12,7 +12,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV1Parameters();
 
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
@@ -24,13 +24,13 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
-K_t = [548 548; 548 548]; %lbf/in 
+K_t = [635 635; 635 635]; %lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [200 200; 250 250]; %lbf/in
+K_s = [400 400; 450 450]; %lbf/in
 K_ARB = [0; 0]; %lbf/in
 
-MR_s = [1.2 1.2; 1.2 1.2];
+MR_s = [0.5 0.5; 0.5 0.5];
 MR_ARB = [0.5; 0.5];
 
 DampC_L = [10 10; 10 10];  %(lb-s)/in
@@ -114,7 +114,7 @@ bode(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
 figure('Name','Bode Plot - High Damper Settings');
-bode(Gs_FLHigh,'r-x',Gs_FRHigh,'r-+',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
+bode(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
 figure('Name','Impulse Response Plot - Front Damper Settings');
@@ -126,9 +126,9 @@ impulse(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
 legend(' RL_Low',' RR_Low',' RL_High',' RR_High','Location','eastoutside')
 
 figure('Name','Step Response Plot - Front Damper Settings');
-step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_FLHigh,'r-x',Gs_FRHigh,'r-+',FStepConfig);
+step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_FLHigh,'r-x',Gs_FRHigh,'r-+');
 legend(' FL_Low',' FR_Low',' FL_High',' FR_High','Location','eastoutside')
 
 figure('Name','Step Response Plot - Rear Damper Settings');
-step(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+',RStepConfig);
+step(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
 legend(' RL_Low',' RR_Low',' RL_High',' RR_High','Location','eastoutside')

@@ -10,7 +10,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV1Parameters();
 
 % Adding Tire Models
 addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
@@ -21,8 +21,8 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 %% Tire Modeling
 
 %Input tire filenames
-filename.FrontTire = 'A1965run17.mat';
-filename.RearTire = 'A1965run17.mat';
+filename.FrontTire = 'A1654run20.mat';
+filename.RearTire = 'A1654run20.mat';
 [trainingDataFront,tire.IDfront] = createLatTrngData2(filename.FrontTire);
 [trainingDataRear,tire.IDrear] = createLatTrngData2(filename.RearTire);
 
@@ -52,14 +52,14 @@ disp('Training completed')
 
 %% Inputs
 
-K_t = [548 548; 548 548];%lbf/in 
+K_t = [635 635; 635 635];%lbf/in 
 
 % Number of Iterations
 n = 1;
 
 % Input Test Cornering Parameters
 Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = 10; %linspace(0,35,4); %mph
+Velocity = 20; %linspace(0,35,4); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = 0; %linspace(-90,90,5); %deg (L = neg, R = pos)
