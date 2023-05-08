@@ -6,7 +6,7 @@ classdef TREV2Parameters
     % Given
     properties (Constant)
         TotalWeight = 650;
-        FrontPercent = 0.48;
+        FrontPercent = 0.45;
         Wheelbase = 61;
         FrontTrackWidth = 48;
         RearTrackWidth = 44;
@@ -40,16 +40,16 @@ classdef TREV2Parameters
     %% Alignment and Tuning
     % Given
     properties (Constant)
-        K_s = [200 200; 250 250]; %lbf/in
+        K_s = [200 200; 450 450]; %lbf/in
         K_ARB = [0; 0]; %lbf/in
-        MR_s = [1.2 1.2; 1.2 1.2];
+        MR_s = [1 1; 0.8 0.8];
         MR_ARB = [0.5; 0.5];
-        DampC_Low = [10 10; 10 10];
-        DampC_High = [15 15; 15 15];
+        DampC_Low = [12 12; 12 12];
+        DampC_High = [12 12; 12 12];
         Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
         Camber = [0, 0; 0, 0];
-        TirePressure = [14, 14; 14, 14];
+        TirePressure = [12, 12; 12, 12];
     end
 
     %% Functions
