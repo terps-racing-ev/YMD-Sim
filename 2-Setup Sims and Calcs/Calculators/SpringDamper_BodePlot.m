@@ -12,7 +12,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV1Parameters();
+vehicleObj = TREV2Parameters();
 
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
@@ -24,24 +24,24 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
-K_t = [635 635; 635 635]; %lbf/in 
+K_t = [548 548; 548 548]; %lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [400 400; 450 450]; %lbf/in
+K_s = [200 200; 450 450]; %lbf/in
 K_ARB = [0; 0]; %lbf/in
 
-MR_s = [0.5 0.5; 0.5 0.5];
+MR_s = [1 1; 0.8 0.8];
 MR_ARB = [0.5; 0.5];
 
-DampC_L = [10 10; 10 10];  %(lb-s)/in
-DampC_H = [15 15; 15 15]; %(lb-s)/in
+DampC_L = [12 12; 12 12];  %(lb-s)/in
+DampC_H = [12 12; 12 12]; %(lb-s)/in
 
 %% Calculations
 
 % Stiffnesses (lbf/in)
 %Kw
 K_w = [(K_s(1,1)*(MR_s(1,1))^2)+(K_ARB(1,:)*(MR_ARB(1,:))^2),(K_s(1,2)*(MR_s(1,2))^2)+(K_ARB(1,:)*(MR_ARB(1,:))^2);
-    (K_s(2,1)*(MR_s(2,1))^2)+(K_ARB(2,:)*(MR_ARB(2,:))^2),(K_s(2,2)*(MR_s(2,2))^2)+(K_ARB(2,:)*(K_ARB(2,:))^2)];
+    (K_s(2,1)*(MR_s(2,1))^2)+(K_ARB(2,:)*(MR_ARB(2,:))^2),(K_s(2,2)*(MR_s(2,2))^2)+(K_ARB(2,:)*(MR_ARB(2,:))^2)];
 
 %Kr
 K_r = [(K_t(1,1)*K_w(1,1))/(K_t(1,1)+K_w(1,1)) (K_t(1,2)*K_w(1,2))/(K_t(1,2)+K_w(1,2));
@@ -85,50 +85,55 @@ disp('Rear Damped Natural Frequency F:20% L-H (Hz) = ');
 disp(NF20);
 
 
-%% Bode Plots
+%% Plots for Analysis
 
 %FL
-Gs_FLLow = tf([1],[1 2*DR_L(1,1)*NF(1,1) NF(1,1)^2]);
-Gs_FLHigh = tf([1],[1 2*DR_H(1,1)*NF(1,1) NF(1,1)^2]);
+Gs_FLLow = tf(NF(1,1)^2,[1 2*DR_L(1,1)*NF(1,1) NF(1,1)^2]);
+Gs_FLHigh = tf(NF(1,1)^2,[1 2*DR_H(1,1)*NF(1,1) NF(1,1)^2]);
 
 %FR
-Gs_FRLow = tf([1],[1 2*DR_L(1,2)*NF(1,2) NF(1,2)^2]);
-Gs_FRHigh = tf([1],[1 2*DR_H(1,2)*NF(1,2) NF(1,2)^2]);
+Gs_FRLow = tf(NF(1,2)^2,[1 2*DR_L(1,2)*NF(1,2) NF(1,2)^2]);
+Gs_FRHigh = tf(NF(1,2)^2,[1 2*DR_H(1,2)*NF(1,2) NF(1,2)^2]);
 
 %RL
-Gs_RLLow = tf([1],[1 2*DR_L(2,1)*NF(2,1) NF(2,1)^2]);
-Gs_RLHigh = tf([1],[1 2*DR_H(2,1)*NF(2,1) NF(2,1)^2]);
+Gs_RLLow = tf(NF(2,1)^2,[1 2*DR_L(2,1)*NF(2,1) NF(2,1)^2]);
+Gs_RLHigh = tf(NF(2,1)^2,[1 2*DR_H(2,1)*NF(2,1) NF(2,1)^2]);
 
 %RR
-Gs_RRLow = tf([1],[1 2*DR_L(2,2)*NF(2,2) NF(2,2)^2]);
-Gs_RRHigh = tf([1],[1 2*DR_H(2,2)*NF(2,2) NF(2,2)^2]);
+Gs_RRLow = tf(NF(2,2)^2,[1 2*DR_L(2,2)*NF(2,2) NF(2,2)^2]);
+Gs_RRHigh = tf(NF(2,2)^2,[1 2*DR_H(2,2)*NF(2,2) NF(2,2)^2]);
 
-FStepConfig = stepDataOptions('StepAmplitude',(5*Weights(1,1))/386.4);
-RStepConfig = stepDataOptions('StepAmplitude',(5*Weights(2,1))/386.4);
+figure('Name','Plots - Low Damper Settings');
+subplot(2,2,1);
+step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-% FImpulseConfig = RespConfig('Amplitude',(5*Weights(1,1)));
-% RImpulseConfig = RespConfig('Amplitude',(5*Weights(2,1)));
+subplot(2,2,2);
+impulse(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Bode Plot - Low Damper Settings');
+subplot(2,2,3);
+rlocus(Gs_FLLow,'r',Gs_FRLow,'r',Gs_RLLow,'b',Gs_RRLow,'b');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+
+subplot(2,2,4);
 bode(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_RLLow,'b-*',Gs_RRLow,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Bode Plot - High Damper Settings');
+figure('Name','Plots - High Damper Settings');
+subplot(2,2,1);
+step(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+
+subplot(2,2,2);
+impulse(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+
+subplot(2,2,3);
+rlocus(Gs_FLHigh,'r',Gs_FRHigh,'r',Gs_RLHigh,'b',Gs_RRHigh,'b');
+legend(' FL',' FR',' RL',' RR','Location','eastoutside')
+
+subplot(2,2,4);
 bode(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',Gs_RLHigh,'b-*',Gs_RRHigh,'b-o');
 legend(' FL',' FR',' RL',' RR','Location','eastoutside')
 
-figure('Name','Impulse Response Plot - Front Damper Settings');
-impulse(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_FLHigh,'r-x',Gs_FRHigh,'r-+');
-legend(' FL_Low',' FR_Low',' FL_High',' FR_High','Location','eastoutside')
-
-figure('Name','Impulse Response Plot - Rear Damper Settings');
-impulse(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
-legend(' RL_Low',' RR_Low',' RL_High',' RR_High','Location','eastoutside')
-
-figure('Name','Step Response Plot - Front Damper Settings');
-step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',Gs_FLHigh,'r-x',Gs_FRHigh,'r-+');
-legend(' FL_Low',' FR_Low',' FL_High',' FR_High','Location','eastoutside')
-
-figure('Name','Step Response Plot - Rear Damper Settings');
-step(Gs_RLLow,'b-*',Gs_RRLow,'b-o',Gs_RLHigh,'b-x',Gs_RRHigh,'b-+');
-legend(' RL_Low',' RR_Low',' RL_High',' RR_High','Location','eastoutside')

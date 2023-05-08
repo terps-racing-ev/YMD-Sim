@@ -34,12 +34,12 @@ DampC_FHigh = [vehicleObj.DampC_High(1,1) vehicleObj.DampC_High(1,2)];
 K_t = [548 548; 548 548];
 
 % TMD Spring Rates (lbf/in)
-K_top = 10;
-K_bottom = 10;
+K_top = 5;
+K_bottom = 5;
 K_sTMDeq = K_top + K_bottom;
 
 % TMD Mass (lb)
-TMD_Weight = 8;
+TMD_Weight = 22;
 
 % Damping Coefficient (lb-s)/in
 mu_c = 22*0.00155; %in^2/s
@@ -100,45 +100,92 @@ disp([DNF_FLLow DNF_FRLow]);
 disp('Damped Natural Frequency - High (Hz)= ');
 disp([DNF_FLHigh DNF_FRHigh]);
 
-%% Bode Plots
+%% Plots for Analysis
 
 %TMD
-Gs_TMD = tf([1],[1 2*DR_TMD(1,1)*NF_TMD(1,1) NF_TMD(1,1)^2]);
+Gs_TMD = tf(NF_TMD(1,1)^2,[1 2*DR_TMD(1,1)*NF_TMD(1,1) NF_TMD(1,1)^2]);
 %FL (Low)
-Gs_FLLow = tf([1],[1 2*DR_FLLow(1,1)*NF_FL(1,1) NF_FL(1,1)^2]);
+Gs_FLLow = tf(NF_FL(1,1)^2,[1 2*DR_FLLow(1,1)*NF_FL(1,1) NF_FL(1,1)^2]);
 %FL (High)
-Gs_FLHigh = tf([1],[1 2*DR_FLHigh(1,1)*NF_FL(1,1) NF_FL(1,1)^2]);
+Gs_FLHigh = tf(NF_FL(1,1)^2,[1 2*DR_FLHigh(1,1)*NF_FL(1,1) NF_FL(1,1)^2]);
 %FR (Low)
-Gs_FRLow = tf([1],[1 2*DR_FRLow(1,1)*NF_FR(1,1) NF_FR(1,1)^2]);
+Gs_FRLow = tf(NF_FR(1,1)^2,[1 2*DR_FRLow(1,1)*NF_FR(1,1) NF_FR(1,1)^2]);
 %FR (High)
-Gs_FRHigh = tf([1],[1 2*DR_FRHigh(1,1)*NF_FR(1,1) NF_FR(1,1)^2]);
+Gs_FRHigh = tf(NF_FR(1,1)^2,[1 2*DR_FRHigh(1,1)*NF_FR(1,1) NF_FR(1,1)^2]);
 
-FStepConfig = stepDataOptions('StepAmplitude',(5*Weights(1,1))/386.4);
 
-% Step Response
-% figure('Name','Step Response Plot - TMD Settings');
-% step(Gs_TMD,'r-.');
-figure('Name','Step Response Plot - Low Settings');
-step(Gs_FLLow,'r-*',Gs_FRLow,'r-o',FStepConfig);
-figure('Name','Step Response Plot - High Settings');
-step(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o',FStepConfig);
+% Without TMD
+
+% Low Damper Settings
+figure('Name','Plots - (Low) Settings');
+subplot(2,2,1);
+step(Gs_FLLow,'r-*',Gs_FRLow,'r-o');
 legend(' FL',' FR','Location','eastoutside')
 
-figure('Name','Step Response Plot - TMD Effects (Low) Settings');
-step(Gs_FLLow-Gs_TMD,'r-*',Gs_FRLow-Gs_TMD,'r-o',FStepConfig);
-figure('Name','Step Response Plot - TMD Effects (High) Settings');
-step(Gs_FLHigh-Gs_TMD,'r-*',Gs_FRHigh-Gs_TMD,'r-o',FStepConfig);
-legend(' FL',' FR','Location','eastoutside')
-
-% Impulse Response
-figure('Name','Impulse Response Plot - Low Settings');
+subplot(2,2,2);
 impulse(Gs_FLLow,'r-*',Gs_FRLow,'r-o');
-figure('Name','Impulse Response Plot - High Settings');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,3);
+rlocus(Gs_FLLow,'r',Gs_FRLow,'b');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,4);
+bode(Gs_FLLow,'r-*',Gs_FRLow,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+% High Damper Settings
+figure('Name','Plots - (High) Settings');
+subplot(2,2,1);
+step(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,2);
 impulse(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o');
 legend(' FL',' FR','Location','eastoutside')
 
-figure('Name','Impulse Response Plot - TMD Effects (Low) Settings');
+subplot(2,2,3);
+rlocus(Gs_FLHigh,'r',Gs_FRHigh,'b');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,4);
+bode(Gs_FLHigh,'r-*',Gs_FRHigh,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+% With TMD
+
+% Low Damper Settings
+figure('Name','Plots - TMD Effects (Low) Settings');
+subplot(2,2,1);
+step(Gs_FLLow-Gs_TMD,'r-*',Gs_FRLow-Gs_TMD,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,2);
 impulse(Gs_FLLow-Gs_TMD,'r-*',Gs_FRLow-Gs_TMD,'r-o');
-figure('Name','Impulse Response Plot - TMD Effects (High) Settings');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,3);
+rlocus(Gs_FLLow-Gs_TMD,'r',Gs_FRLow-Gs_TMD,'b');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,4);
+bode(Gs_FLLow-Gs_TMD,'r-*',Gs_FRLow-Gs_TMD,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+% High Damper Settings
+figure('Name','Plots - TMD Effects (High) Settings');
+subplot(2,2,1);
+step(Gs_FLHigh-Gs_TMD,'r-*',Gs_FRHigh-Gs_TMD,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,2);
 impulse(Gs_FLHigh-Gs_TMD,'r-*',Gs_FRHigh-Gs_TMD,'r-o');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,3);
+rlocus(Gs_FLHigh-Gs_TMD,'r',Gs_FRHigh-Gs_TMD,'b');
+legend(' FL',' FR','Location','eastoutside')
+
+subplot(2,2,4);
+bode(Gs_FLHigh-Gs_TMD,'r-*',Gs_FRHigh-Gs_TMD,'r-o');
 legend(' FL',' FR','Location','eastoutside')
