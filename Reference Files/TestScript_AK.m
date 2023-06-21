@@ -24,5 +24,5 @@ vehicleObj = TREV2Parameters();
 
 % To run the graphs:
 
-% :D
+% :)
 vehicleObj.graphRolls()
