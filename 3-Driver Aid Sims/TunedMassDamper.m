@@ -43,11 +43,15 @@ TMD_Weight = 22;
 
 % Damping Coefficient (lb-s)/in
 mu_c = 22*0.00155; %in^2/s
-r = 8; %in
+r = 10; %in
 A = pi*r^2; %in^2
 h = 8; %in
 
 DampC_TMD = (mu_c*A)/h;
+
+% TMD Effects
+% NF_TMD <= NF_Tire
+% ^^ DR_TMD (close to magic)
 
 %% Calculations
 
@@ -189,3 +193,22 @@ legend(' FL',' FR','Location','eastoutside')
 subplot(2,2,4);
 bode(Gs_FLHigh-Gs_TMD,'r-*',Gs_FRHigh-Gs_TMD,'r-o');
 legend(' FL',' FR','Location','eastoutside')
+
+%% TMD Plots
+
+figure('Name','TMD Plots');
+subplot(2,2,1);
+step(-Gs_TMD,'r-');
+legend(' TMD','Location','eastoutside')
+
+subplot(2,2,2);
+impulse(-Gs_TMD,'r-');
+legend(' TMD','Location','eastoutside')
+
+subplot(2,2,3);
+rlocus(Gs_TMD,'r');
+legend(' TMD','Location','eastoutside')
+
+subplot(2,2,4);
+bode(Gs_TMD,'r-');
+legend(' TMD','Location','eastoutside')

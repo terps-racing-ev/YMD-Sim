@@ -17,5 +17,5 @@ function [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicle)
     YM = ((Fx(1,1)*(vehicle.FrontTrackWidth/24))+(Fx(2,1)*(vehicle.RearTrackWidth/24)))-((Fx(1,2)*(vehicle.FrontTrackWidth/24))+(Fx(2,2)*(vehicle.RearTrackWidth/24)))+ ((Fy(1,1)+Fy(1,2))*vehicle.FrontAxleToCoG)-((Fy(2,1)+Fy(2,2))*vehicle.CoGToRearAxle)-Mz(1,1)-Mz(1,2)-Mz(2,1)-Mz(2,2);
     
     % Acceleration (g's)
-    Accel = ([car_totalFx car_totalFy]/vehicle.TotalWeight)/32.2;
+    Accel = ([car_totalFx car_totalFy]/vehicle.TotalWeight);
 end

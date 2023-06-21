@@ -9,14 +9,14 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV1Parameters();
+vehicleObj = TREV2Parameters();
 
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
 %% Inputs
 
-K_t = [671 671; 671 671];%lbf/in 
+K_t = [548 548; 548 548];%lbf/in 
 
 % Input test G's Pulled (neg -> Left, pos -> Right)
 Ay = 1.7;

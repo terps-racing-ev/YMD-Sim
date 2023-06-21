@@ -1,0 +1,171 @@
+ %% Cornering Analysis
+% Credit - LJ Hamilton
+
+close all
+clearvars
+clc
+
+%% Adding Paths
+
+% Adding Vehicle Parameters
+currentFolder = pwd;
+addpath([currentFolder, filesep, '1-Input Functions']);
+vehicleObj = TREV2Parameters();
+
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Sims
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+%% Tire Modeling
+
+%Input tire filenames
+filename.FrontTire = 'A1965run18.mat';
+filename.RearTire = 'A1965run18.mat';
+[trainingDataFront,tire.IDfront] = createLatTrngData2(filename.FrontTire);
+[trainingDataRear,tire.IDrear] = createLatTrngData2(filename.RearTire);
+
+% Front tires
+disp([tire.IDfront, ', Front Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainingDataFront);
+[model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainingDataFront);
+[model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainingDataFront);
+[model.muxFront, validation.RMSE_muxFront] = Trainer_mux(trainingDataFront);
+[model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainingDataFront);
+toc(t1)
+
+disp('Training completed')
+
+% Rear tires
+disp([tire.IDrear, ', Rear Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainingDataRear);
+[model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainingDataRear);
+[model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainingDataRear);
+[model.muxRear, validation.RMSE_muxRear] = Trainer_mux(trainingDataRear);
+[model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainingDataRear);
+toc(t1)
+
+disp('Training completed')
+
+%% Inputs
+
+K_t = [548 548; 548 548];%lbf/in 
+
+% Number of Iterations
+n = 1;
+
+% Input Test Cornering Parameters
+Radius = 348; %in (neg -> Left, pos -> Right)
+Velocity = 25; %linspace(0,35,4); %mph
+
+%% Entry Analysis
+
+% Input Steering Wheel Angle, CoG Slip Angle
+SWAngle = 0; %linspace(-90,90,5); %deg (L = neg, R = pos)
+BetaEntry = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
+
+% Stiffnesses (lbf/in)
+[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+
+% Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
+
+SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
+            
+[SlipAngles,LatAccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaEntry,Velocity,Radius,vehicleObj);
+
+LatAccelG = 0;
+             
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,LatAccelG,vehicleObj);
+
+[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
+
+[Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+
+SteerAnglesrad = SteerAngles*(pi/180);
+car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad);
+
+car_totalFy = sum(sum(car_Fy));
+Accel = -car_totalFy/vehicleObj.TotalWeight;
+
+disp('Velocity: ');
+disp(Velocity);
+disp('Gs: ');
+disp(Accel);
+disp('Steering Wheel Angle: ');
+disp(SWAngle);
+disp('Beta: ');
+disp(BetaEntry);
+disp('Slip Angles: ');
+disp(SlipAngles);
+disp('LLT_D: ');
+disp(LLT_D);
+disp('Fy: ');
+disp(Fy);
+disp('Fz: ');
+disp(Fz);
+disp('muy: ');
+disp(muy);
+disp('Roll Angle: ');
+disp(Roll_Angle);
+disp('Camber: ');
+disp(IA);
+disp('Wheel Displacement: ');
+disp(Z);
+disp('Tire Pressure: ');
+disp(vehicleObj.TirePressure);
+
+%% Apex Analysis - (beta delta w/ steering sweep)
+
+% Input Steering Wheel Angle, CoG Slip Angle
+SWAngle = 20; %linspace(-90,90,5); %deg (L = neg, R = pos)
+BetaApex = -0.05; %linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
+
+SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
+          
+[SlipAngles,LatAccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex,Velocity,Radius,vehicleObj);
+
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Accel,vehicleObj);
+
+[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
+
+[Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+
+SteerAnglesrad = SteerAngles*(pi/180);
+car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad);
+
+car_totalFy = sum(sum(car_Fy));
+Accel = -car_totalFy/vehicleObj.TotalWeight;
+
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Accel,vehicleObj);
+
+[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
+
+disp('Velocity: ');
+disp(Velocity);
+disp('Gs: ');
+disp(Accel);
+disp('Steering Wheel Angle: ');
+disp(SWAngle);
+disp('Beta: ');
+disp(BetaApex);
+disp('Slip Angles: ');
+disp(SlipAngles);
+disp('LLT_D: ');
+disp(LLT_D);
+disp('Fy: ');
+disp(Fy);
+disp('Fz: ');
+disp(Fz);
+disp('muy: ');
+disp(muy);
+disp('Roll Angle: ');
+disp(Roll_Angle);
+disp('Camber: ');
+disp(IA);
+disp('Wheel Displacement: ');
+disp(Z);
+disp('Tire Pressure: ');
+disp(vehicleObj.TirePressure);

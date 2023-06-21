@@ -22,16 +22,16 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     
     LLTD = [LLTDF; LLTDR];
     
-    if(LatAccel == 0)
-        LLTD = [0; 0];
-    end
-    
     % Roll Angle (deg)
     Roll_Angle = R_g * LatAccel;
     
-    % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
-    Z = [-(tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2))), (tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2)));
-        -(tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2))), (tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2)))];
+     if(LatAccel == 0)
+        LLTD = [0; 0];
+    end
+    
+    % Wheel Displacement (in) (pos -> loaded (bump), neg -> unloaded (droop))
+    Z = [(tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2))), -(tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2)));
+        (tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2))), -(tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2)))];
 
     for j = 1:2
         for k = 1:2

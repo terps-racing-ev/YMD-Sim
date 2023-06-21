@@ -12,7 +12,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV1Parameters();
 
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
@@ -24,17 +24,17 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
-K_t = [548 548; 548 548]; %lbf/in 
+K_t = [635 635; 635 635]; %lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
 K_s = [200 200; 450 450]; %lbf/in
-K_ARB = [0; 0]; %lbf/in
+K_ARB = [0; 667]; %lbf/in
 
-MR_s = [1 1; 0.8 0.8];
+MR_s = [0.9 0.9; 0.5 0.5];
 MR_ARB = [0.5; 0.5];
 
-DampC_L = [12 12; 12 12];  %(lb-s)/in
-DampC_H = [12 12; 12 12]; %(lb-s)/in
+DampC_L = [12 12; 14 14];  %(lb-s)/in
+DampC_H = [12 12; 14 14]; %(lb-s)/in
 
 %% Calculations
 

@@ -14,8 +14,8 @@ classdef TREV1Parameters
         TireRadius = 9;
         FrontAxleH = 9;
         RearAxleH = 9;
-        RollAxisF = 1.5834;
-        RollAxisR = 6.0487;
+        RollAxisF = 1.9610;
+        RollAxisR = 2.9134;
     end
     % Calculated
     properties (Dependent)
@@ -40,14 +40,14 @@ classdef TREV1Parameters
     %% Alignment and Tuning
     % Given
     properties (Constant)
-        K_s = [400 400; 450 450]; %lbf/in
-        K_ARB = [0; 0]; %lbf/in
-        MR_s = [0.5 0.5; 0.5 0.5];
+        K_s = [200 200; 450 450]; %lbf/in
+        K_ARB = [0; 667]; %lbf/in
+        MR_s = [0.9 0.9; 0.5 0.5];
         MR_ARB = [0.5; 0.5];
-        DampC_Low = [10 10; 10 10];
-        DampC_High = [15 15; 15 15];
-        Ackermann = -0.2223; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
-        Toe = [-0.5, -0.5; 0, 0];
+        DampC_Low = [12 12; 14 14];
+        DampC_High = [12 12; 14 14];
+        Ackermann = -0.2559; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+        Toe = [0, 0; 0, 0];
         Camber = [0, 0; 0, 0];
         TirePressure = [12, 12; 12, 12];
     end

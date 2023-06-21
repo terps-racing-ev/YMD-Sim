@@ -14,8 +14,8 @@ classdef TREV2Parameters
         TireRadius = 8;
         FrontAxleH = 8;
         RearAxleH = 8;
-        RollAxisF = 1.0159;
-        RollAxisR = 4.4544;
+        RollAxisF = 0.9374;
+        RollAxisR = 1.9547;
     end
     % Calculated
     properties (Dependent)
@@ -33,15 +33,15 @@ classdef TREV2Parameters
     % Given
     properties (Constant)
         liftFactor = -6;
-        Cd = 0;
-        Af = 0;
+        Cd = 0.904;
+        Af = 1019.902; %in^2
     end
 
     %% Alignment and Tuning
     % Given
     properties (Constant)
         K_s = [200 200; 450 450]; %lbf/in
-        K_ARB = [0; 0]; %lbf/in
+        K_ARB = [0; 1000]; %lbf/in
         MR_s = [1 1; 0.8 0.8];
         MR_ARB = [0.5; 0.5];
         DampC_Low = [12 12; 12 12];
