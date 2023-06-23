@@ -22,7 +22,6 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     
     LLTD = [LLTDF; LLTDR];
     
-<<<<<<< Updated upstream
     if(LatAccel == 0)
         LLTD = [0; 0];
     end
@@ -33,7 +32,7 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     % Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
     Z = [-(tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2))), (tan(deg2rad(Roll_Angle).*(vehicle.FrontTrackWidth/2)));
         -(tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2))), (tan(deg2rad(Roll_Angle).*(vehicle.RearTrackWidth/2)))];
-=======
+
     % Roll Angle (deg)
     Roll_Angle = R_g * -LatAccel;
     
@@ -44,7 +43,6 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,LatAccel,vehicle)
     % Wheel Displacement (in) (pos -> loaded (bump), neg -> unloaded (droop))
     Z = [-(tan(deg2rad(-Roll_Angle).*(vehicle.FrontTrackWidth/2))), (tan(deg2rad(-Roll_Angle).*(vehicle.FrontTrackWidth/2)));
         -(tan(deg2rad(-Roll_Angle).*(vehicle.RearTrackWidth/2))), (tan(deg2rad(-Roll_Angle).*(vehicle.RearTrackWidth/2)))];
->>>>>>> Stashed changes
 
     for j = 1:2
         for k = 1:2
