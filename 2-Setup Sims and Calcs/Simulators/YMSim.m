@@ -2,7 +2,7 @@
 
 function [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicle)
     
-    SteerAnglesrad = SteerAngles*(pi/180);
+    SteerAnglesrad = -SteerAngles*(pi/180);
     car_Fx = Fx.*cos(SteerAnglesrad) + Fy.*sin(SteerAnglesrad); %tire forces in car coordinate system
     car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad); %tire forces in car coordinate system
     car_totalFx = sum(sum(car_Fx));

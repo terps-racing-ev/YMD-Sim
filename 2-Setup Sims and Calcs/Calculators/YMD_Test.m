@@ -62,8 +62,13 @@ Radius = 348; %in (neg -> Left, pos -> Right)
 Velocity = 20; %linspace(0,35,4); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
+<<<<<<< Updated upstream
 SWAngle = 0; %linspace(-90,90,5); %deg (L = neg, R = pos)
 Beta = 0; %linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
+=======
+SWAngle = 1; %linspace(-90,90,5); %deg (L = neg, R = pos)
+Beta = -4.0107; %linspace(-10,10,5); %CoG slip angle (deg) (pos -> Right, neg -> Left)
+>>>>>>> Stashed changes
 
 %% Code
 
