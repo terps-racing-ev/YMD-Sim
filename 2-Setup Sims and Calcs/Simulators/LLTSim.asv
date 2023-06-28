@@ -11,11 +11,11 @@ function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,Velocity,LatAccel,vehicle
     LLT = [DeltaWF; DeltaWR];
     
     % Aero Effects
-    Fdown = (0.5*vehicle.air_density*vehicle.Cl*vehicle.Af*(Velocity*17.6).^2)/386.4;
+    Fdown = 0.5*vehicle.air_density*vehicle.Cl*vehicle.Af*(Velocity*17.6)^2;
     
     % Fz (lb)
-    Fz = -[vehicle.FrontStatic-LLT(1,:)+(-Fdown*vehicle.FrontAeroPercent), vehicle.FrontStatic+LLT(1,:)+(-Fdown*vehicle.FrontAeroPercent);
-    vehicle.RearStatic-LLT(2,:)+(-Fdown*vehicle.RearAeroPercent), vehicle.RearStatic+LLT(2,:)+(-Fdown*vehicle.RearAeroPercent)];
+    Fz = -[vehicle.FrontStatic-LLT(1,:)+(Fdown*vehicle.FrontAeroPercent), vehicle.FrontStatic+LLT(1,:)+(Fdown*vehicle.FrontAeroPercent);
+    vehicle.RearStatic-LLT(2,:)+(Fdown*vehicle.FroAeroPercent), vehicle.RearStatic+LLT(2,:)+(Fdown*vehicle.FrontAeroPercent)];
     
     % LLTD
     LLTDF = DeltaWF / (DeltaWF + DeltaWR);
