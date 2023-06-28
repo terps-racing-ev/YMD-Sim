@@ -32,9 +32,16 @@ classdef TREV1Parameters
     %% Aero Properties
     % Given
     properties (Constant)
-        liftFactor = -1.70355;
-        Cd = 0; %???
-        Af = 0; %???
+        liftFactor = -6;
+        Cl = -1.88;
+        Cd = 0.904;
+        Af = 1019.902; %in^2
+        air_density = 4.3e-5; %lb/in^3
+        FrontAeroPercent = 0.4;
+    end
+    % Calculated
+    properties (Dependent)
+        RearAeroPercent
     end
 
     %% Alignment and Tuning
@@ -59,6 +66,9 @@ classdef TREV1Parameters
         function value = get.RearPercent(obj)
             value = 1 - obj.FrontPercent;
         end
+        function value = get.RearAeroPercent(obj)
+            value = 1 - obj.FrontAeroPercent;
+        end        
         function value = get.FrontAxleToCoG(obj)
             value = obj.Wheelbase * obj.RearPercent;
         end

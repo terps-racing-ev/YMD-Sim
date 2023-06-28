@@ -33,8 +33,20 @@ classdef TREV2Parameters
     % Given
     properties (Constant)
         liftFactor = -6;
+<<<<<<< HEAD
         Cd = 0.904;
         Af = 1019.902; %in^2
+=======
+        Cl = -1.88;
+        Cd = 0.904;
+        Af = 1019.902; %in^2
+        air_density = 4.3e-5; %lb/in^3
+        FrontAeroPercent = 0.25;
+    end
+    % Calculated
+    properties (Dependent)
+        RearAeroPercent
+>>>>>>> Yash-Goswami
     end
 
     %% Alignment and Tuning
@@ -58,6 +70,9 @@ classdef TREV2Parameters
         % Car Getters:
         function value = get.RearPercent(obj)
             value = 1 - obj.FrontPercent;
+        end
+        function value = get.RearAeroPercent(obj)
+            value = 1 - obj.FrontAeroPercent;
         end
         function value = get.FrontAxleToCoG(obj)
             value = obj.Wheelbase * obj.RearPercent;
