@@ -55,18 +55,6 @@ disp('Training completed')
 K_t = [548 548; 548 548];%lbf/in 
 
 % Number of Iterations
-<<<<<<< HEAD
-n = 1;
-
-% Input Test Cornering Parameters
-Radius = 348; %in (neg -> Left, pos -> Right)
-Velocity = 25; %linspace(0,35,4); %mph
-
-%% Entry Analysis
-
-% Input Steering Wheel Angle, CoG Slip Angle
-SWAngle = 0; %linspace(-90,90,5); %deg (L = neg, R = pos)
-=======
 n = 6;
 
 % Input Test Cornering Parameters
@@ -77,7 +65,6 @@ Velocity = 25; %linspace(0,35,4); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
 SWAngle = -8; %linspace(-90,90,5); %deg (L = neg, R = pos)
->>>>>>> Yash-Goswami
 BetaEntry = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 % Stiffnesses (lbf/in)
@@ -86,40 +73,17 @@ BetaEntry = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 % Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 
 SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
-<<<<<<< HEAD
-            
-[SlipAngles,LatAccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaEntry,Velocity,Radius,vehicleObj);
-
-LatAccelG = 0;
-             
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,LatAccelG,vehicleObj);
-=======
-
-LatAccelG = 0;
             
 [SlipAngles,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaEntry,Velocity,Radius,vehicleObj);
              
 LatAccelG = 0;
 
 [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,LatAccelG,vehicleObj);
->>>>>>> Yash-Goswami
 
 [IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
 
 [Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
 
-<<<<<<< HEAD
-SteerAnglesrad = SteerAngles*(pi/180);
-car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad);
-
-car_totalFy = sum(sum(car_Fy));
-Accel = -car_totalFy/vehicleObj.TotalWeight;
-
-disp('Velocity: ');
-disp(Velocity);
-disp('Gs: ');
-disp(Accel);
-=======
 [YM,AccelEntry] = YMSim(SteerAngles,Fx,Fy,Mz,vehicleObj);
 
 [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,AccelEntry(1,2),vehicleObj);
@@ -139,7 +103,6 @@ else
 end
 disp('Gs: ');
 disp(AccelEntry);
->>>>>>> Yash-Goswami
 disp('Steering Wheel Angle: ');
 disp(SWAngle);
 disp('Beta: ');
@@ -148,24 +111,18 @@ disp('Slip Angles: ');
 disp(SlipAngles);
 disp('LLT_D: ');
 disp(LLT_D);
-<<<<<<< HEAD
-=======
 disp('Fx: ');
 disp(Fx);
->>>>>>> Yash-Goswami
 disp('Fy: ');
 disp(Fy);
 disp('Fz: ');
 disp(Fz);
-<<<<<<< HEAD
 disp('muy: ');
 disp(muy);
-=======
 disp('mu: ');
 disp(mu);
 %disp('mu_max: ');
 %disp(muy);
->>>>>>> Yash-Goswami
 disp('Roll Angle: ');
 disp(Roll_Angle);
 disp('Camber: ');
@@ -178,44 +135,7 @@ disp(vehicleObj.TirePressure);
 %% Apex Analysis - (beta delta w/ steering sweep)
 
 % Input Steering Wheel Angle, CoG Slip Angle
-<<<<<<< HEAD
-SWAngle = 10; %linspace(-90,90,5); %deg (L = neg, R = pos)
-BetaApex = -2; %linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
-
-SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
-          
-[SlipAngles,LatAccelG,Betamax,YawVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex,Velocity,Radius,vehicleObj);
-
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Accel,vehicleObj);
-
-[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
-
-[Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
-
-SteerAnglesrad = SteerAngles*(pi/180);
-car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad);
-
-car_totalFy = sum(sum(car_Fy));
-Accel = -car_totalFy/vehicleObj.TotalWeight;
-
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Accel,vehicleObj);
-
-[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
-
-disp('Velocity: ');
-disp(Velocity);
-disp('Gs: ');
-disp(Accel);
-disp('Steering Wheel Angle: ');
-disp(SWAngle);
-disp('Beta: ');
-disp(BetaApex);
-disp('Slip Angles: ');
-disp(SlipAngles);
-disp('LLT_D: ');
-disp(LLT_D);
-=======
-SWAngleApex = [-12, -25, -35, -20, -10, 0]; %deg (L = neg, R = pos)
+SWAngleApex = [-12, -25, -60, 10, 5, 0]; %deg (L = neg, R = pos)
 BetaApex = [(linspace(0,Betamax,n/2)),(linspace(Betamax-1,0,n/2))]; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 % Stiffnesses (lbf/in)
@@ -364,4 +284,3 @@ for k = 2:length(BetaApex)
     disp('----------------------');
 
 end
->>>>>>> Yash-Goswami

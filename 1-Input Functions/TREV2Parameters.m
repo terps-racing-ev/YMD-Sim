@@ -33,10 +33,6 @@ classdef TREV2Parameters
     % Given
     properties (Constant)
         liftFactor = -6;
-<<<<<<< HEAD
-        Cd = 0.904;
-        Af = 1019.902; %in^2
-=======
         Cl = -1.88;
         Cd = 0.904;
         Af = 1019.902; %in^2
@@ -46,7 +42,6 @@ classdef TREV2Parameters
     % Calculated
     properties (Dependent)
         RearAeroPercent
->>>>>>> Yash-Goswami
     end
 
     %% Alignment and Tuning

@@ -63,26 +63,14 @@ Radius = linspace(-1000,1000,10); %-348; %in (neg -> Left, pos -> Right)
 Velocity = 25; %linspace(0,35,10); %mph
 
 % Input Steering Wheel Angle, CoG Slip Angle
-<<<<<<< HEAD
-SWAngle = 1; %linspace(-90,90,5); %deg (L = neg, R = pos)
-Beta = -4.0107; %linspace(-10,10,5); %CoG slip angle (deg) (neg -> Right, pos -> Left)
-=======
 SWAngle = linspace(-90,90,m); %deg (L = neg, R = pos)
 Beta = 6; %linspace(6,-6,n); %CoG slip angle (deg) (pos -> Right, neg -> Left)
->>>>>>> Yash-Goswami
 
 %% Code
 
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
 
-<<<<<<< HEAD
-% Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (pos -> loaded (bump), neg -> unloaded (droop))
-for j = 1:length(SWAngle)
-    for k = 1:length(Beta)
-        for i = 1:length(Velocity)
-            
-=======
 % Entry Analysis
 Accel = [0 0];
 
@@ -91,7 +79,6 @@ for k = 1:length(Beta)
     for j = 1:length(SWAngle)
         for i = 1:length(Radius)
                            
->>>>>>> Yash-Goswami
             SteerAngles(:,:,j) = SteerAngleSim(SWAngle(:,j),vehicleObj);
             
             [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LongVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles(:,:,j),Beta(:,k),Velocity,Radius(:,i),vehicleObj);
@@ -102,13 +89,7 @@ for k = 1:length(Beta)
             
             [Fx(:,:,i),Fy(:,:,i),Mz(:,:,i)] = findTireFM(model,SlipAngles(:,:,i),IA(:,:,i),Fz(:,:,i),vehicleObj.TirePressure);
             
-<<<<<<< HEAD
-            [Calpha(:,:,i)] = CstiffSim(Fy(:,:,i));
-            
-            if(Velocity(:,i) == 0 || LatAccelG(:,:,i) == 0)
-=======
             if(Velocity == 0)
->>>>>>> Yash-Goswami
                 Fx = [0 0; 0 0];
                 Fy = [0 0; 0 0];
                 Mz = [0 0; 0 0];
@@ -120,24 +101,6 @@ for k = 1:length(Beta)
             disp(Radius(:,i));
             disp('Steering Wheel Angle: ');
             disp(SWAngle(:,j));
-<<<<<<< HEAD
-            disp('Beta: ');
-            disp(Beta(:,k));
-            disp('Roll Angle: ');
-            disp(Roll_Angle(:,:,i));
-            disp('Slip Angles: ');
-            disp(SlipAngles(:,:,i));
-            disp('LLT_D: ');
-            disp(LLT_D);
-            disp('Fx: ');
-            disp(Fx(:,:,i));
-            disp('Fy: ');
-            disp(Fy(:,:,i));
-            disp('Fz: ');
-            disp(Fz(:,:,i));
-            disp('Mz: ');
-            disp(Mz(:,:,i));
-=======
 %             disp('Beta: ');
 %             disp(Beta(:,k));
 %             disp('Roll Angle: ');
@@ -156,7 +119,6 @@ for k = 1:length(Beta)
             disp(Accel(:,:,i));
 %             disp('Acceleration: ');
 %             disp(LatAccelG(:,:,i));
->>>>>>> Yash-Goswami
             disp('Yaw Moment: ');
             disp(YM(:,:,i));
 %             disp('Camber: ');

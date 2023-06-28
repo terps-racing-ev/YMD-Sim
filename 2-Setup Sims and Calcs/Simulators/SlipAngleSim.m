@@ -16,13 +16,8 @@ function [SlipAngles,AccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim
     SteerAnglesrad = deg2rad(-SteerAngles);
     
     % Slip Angle Calculations
-<<<<<<< HEAD
-    SlipAnglesF = [(-(((LateralVelo + (YawVelo*vehicle.FrontAxleToCoG))/(Velocityin_s-(YawVelo*(vehicle.FrontTrackWidth/2))))-SteerAnglesrad(1,1))),(-(((LateralVelo + (YawVelo*vehicle.FrontAxleToCoG))/(Velocityin_s+(YawVelo*(vehicle.FrontTrackWidth/2))))-SteerAnglesrad(1,2)))];
-    SlipAnglesR = -[(-(((LateralVelo - (YawVelo*vehicle.CoGToRearAxle))/(Velocityin_s-(YawVelo*(vehicle.RearTrackWidth/2)))))-SteerAnglesrad(2,1)),(-(((LateralVelo - (YawVelo*vehicle.CoGToRearAxle))/(Velocityin_s+(YawVelo*(vehicle.RearTrackWidth/2))))-SteerAnglesrad(2,1)))];
-=======
     SlipAnglesF = [((((LateralVelo + (YawVelo*vehicle.FrontAxleToCoG))/(LongVelo-(YawVelo*(vehicle.FrontTrackWidth/2))))-SteerAnglesrad(1,1))),((((LateralVelo + (YawVelo*vehicle.FrontAxleToCoG))/(LongVelo+(YawVelo*(vehicle.FrontTrackWidth/2))))-SteerAnglesrad(1,2)))];
     SlipAnglesR = [((((LateralVelo - (YawVelo*vehicle.CoGToRearAxle))/(LongVelo-(YawVelo*(vehicle.RearTrackWidth/2)))))-SteerAnglesrad(2,1)),((((LateralVelo - (YawVelo*vehicle.CoGToRearAxle))/(LongVelo+(YawVelo*(vehicle.RearTrackWidth/2))))-SteerAnglesrad(2,2)))];
->>>>>>> Yash-Goswami
             
     if(Beta == 0)
         SlipAnglesF = [-SteerAnglesrad(1,1),-SteerAnglesrad(1,2)];
