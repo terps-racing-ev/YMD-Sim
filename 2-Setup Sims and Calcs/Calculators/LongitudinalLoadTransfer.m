@@ -20,7 +20,10 @@ K_t = [548 548; 548 548]; %lbf/in
 mux = 1.5;
 
 % Input test G's Pulled (neg -> Braking, pos -> Acceleration)
-Ax = 1.5;
+Ax = -1.5;
+
+% Test Velocity (0 mph = Tilt Test)
+Velocity = 25;
 
 %% Calculations
 
@@ -28,7 +31,7 @@ Ax = 1.5;
 [K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
 
 % Load Transfer (lb)
-[Fz,LoLT,Accelmax,Z] = LoLTSim(mux,Ax,K_r,vehicleObj);
+[Fz,LoLT,Accelmax,Z] = LoLTSim(mux,Velocity,Ax,K_r,vehicleObj);
 
 disp('Fz: ');
 disp(Fz);

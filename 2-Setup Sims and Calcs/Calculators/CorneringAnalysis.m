@@ -1,4 +1,4 @@
- %% Cornering Analysis
+%% Cornering Analysis
 % Credit - LJ Hamilton
 
 close all
@@ -55,7 +55,7 @@ disp('Training completed')
 K_t = [548 548; 548 548];%lbf/in 
 
 % Number of Iterations
-n = 6;
+n = 5;
 
 % Input Test Cornering Parameters
 Radius = -348; %in (neg -> Left, pos -> Right)
@@ -135,8 +135,8 @@ disp(vehicleObj.TirePressure);
 %% Apex Analysis - (beta delta w/ steering sweep)
 
 % Input Steering Wheel Angle, CoG Slip Angle
-SWAngleApex = [-12, -25, -60, 10, 5, 0]; %deg (L = neg, R = pos)
-BetaApex = [(linspace(0,Betamax,n/2)),(linspace(Betamax-1,0,n/2))]; %CoG slip angle (deg) (neg -> Right, pos -> Left)
+SWAngleApex = [-10, -30, -60, -55, -25]; %deg (L = neg, R = pos)
+BetaApex = [0,Betamax/2,Betamax,Betamax/2,0]; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
@@ -151,7 +151,7 @@ SteerAngles = SteerAngleSim(SWAngleApex(:,1),vehicleObj);
 
 LatAccelG = 0;
           
-[SlipAngles,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex(:,1),Velocity,Radius,vehicleObj);
+[SlipAnglesCurrent,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex(:,1),Velocity,Radius,vehicleObj);
 
 LatAccelG = 0;
 
@@ -159,7 +159,7 @@ LatAccelG = 0;
 
 [IA] = CamberSim(Roll_Angle,SWAngleApex(:,1),vehicleObj);
 
-[Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+[Fx,Fy,Mz,muy] = findTireFM(model,SlipAnglesCurrent,IA,Fz,vehicleObj.TirePressure);
 
 [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicleObj);
 
@@ -184,7 +184,7 @@ disp(SWAngleApex(:,1));
 disp('Beta: ');
 disp(BetaApex(:,1));
 disp('Slip Angles: ');
-disp(SlipAngles);
+disp(SlipAnglesCurrent);
 % disp('LLT_D: ');
 % disp(LLT_D);
 disp('Fx: ');
@@ -215,7 +215,11 @@ for k = 2:length(BetaApex)
 
     SteerAngles = SteerAngleSim(SWAngleApex(:,k),vehicleObj);
     
-    [SlipAngles,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex(:,k),Velocity,Radius,vehicleObj);
+    [SlipAnglesNew,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex(:,k),Velocity,Radius,vehicleObj);
+    
+    SlipAngles = SlipAnglesNew - SlipAnglesCurrent;
+    
+    SlipAnglesCurrent = SlipAngles;
     
     [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,Accel(1,2),vehicleObj);
     
