@@ -47,9 +47,9 @@ classdef TREV2Parameters
     %% Alignment and Tuning
     % Given
     properties (Constant)
-        K_s = [200 200; 450 450]; %lbf/in
-        K_ARB = [0; 1000]; %lbf/in
-        MR_s = [1 1; 0.8 0.8];
+        K_s = [350 350; 400 400]; %lbf/in
+        K_ARB = [0; 0]; %lbf/in
+        MR_s = [0.8 0.8; 0.9 0.9];
         MR_ARB = [0.5; 0.5];
         DampC_Low = [12 12; 12 12];
         DampC_High = [12 12; 12 12];

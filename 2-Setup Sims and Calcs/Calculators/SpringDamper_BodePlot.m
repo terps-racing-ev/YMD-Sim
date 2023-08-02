@@ -12,7 +12,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV1Parameters();
+vehicleObj = TREV2Parameters();
 
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
@@ -24,17 +24,17 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
-K_t = [635 635; 635 635]; %lbf/in 
+K_t = [548 548; 548 548]; %lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [200 200; 450 450]; %lbf/in
-K_ARB = [0; 667]; %lbf/in
+K_s = [350 350; 400 400]; %lbf/in
+K_ARB = [0; 0]; %lbf/in
 
-MR_s = [0.9 0.9; 0.5 0.5];
+MR_s = [0.8 0.8; 0.9 0.9];
 MR_ARB = [0.5; 0.5];
 
-DampC_L = [12 12; 14 14];  %(lb-s)/in
-DampC_H = [12 12; 14 14]; %(lb-s)/in
+DampC_L = [12 12; 12 12];  %(lb-s)/in
+DampC_H = [12 12; 12 12]; %(lb-s)/in
 
 %% Calculations
 
@@ -46,6 +46,9 @@ K_w = [(K_s(1,1)*(MR_s(1,1))^2)+(K_ARB(1,:)*(MR_ARB(1,:))^2),(K_s(1,2)*(MR_s(1,2
 %Kr
 K_r = [(K_t(1,1)*K_w(1,1))/(K_t(1,1)+K_w(1,1)) (K_t(1,2)*K_w(1,2))/(K_t(1,2)+K_w(1,2));
     (K_t(2,1)*K_w(2,1))/(K_t(2,1)+K_w(2,1)) (K_t(2,2)*K_w(2,2))/(K_t(2,2)+K_w(2,2))];
+
+%Kroll
+Kroll = [(mean(K_r(1,:))*((TrackWidth(1,:)^2)/2)); (mean(K_r(2,:))*((TrackWidth(2,:)^2)/2))]/57.3;
 
 % Natural Frequency (Hz)
 NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/Weights(1,1))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/Weights(1,2)));
