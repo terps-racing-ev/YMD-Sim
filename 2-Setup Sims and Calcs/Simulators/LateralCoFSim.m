@@ -129,7 +129,6 @@ function [polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2)
     CoF14 = [CoF14Max50, CoF14Max100, CoF14Max150, CoF14Max200, CoF14Max250];
 
     FzRange = [-50, -100, -150, -200, -250];
-
     
     poly8 = polyfit(FzRange,CoF8,4);
     poly10 = polyfit(FzRange,CoF10,4);

@@ -24,13 +24,13 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Stiffness for Fronts and Rears
-K_t = [548 548; 548 548]; %lbf/in 
+K_t = [442 442; 442 442]; %lbf/in 
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
 K_s = [350 350; 400 400]; %lbf/in
-K_ARB = [0; 0]; %lbf/in
+K_ARB = [1000; 0]; %lbf/in
 
-MR_s = [0.8 0.8; 0.9 0.9];
+MR_s = [0.9 0.9; 0.9 0.9];
 MR_ARB = [0.5; 0.5];
 
 DampC_L = [12 12; 12 12];  %(lb-s)/in
@@ -51,14 +51,14 @@ K_r = [(K_t(1,1)*K_w(1,1))/(K_t(1,1)+K_w(1,1)) (K_t(1,2)*K_w(1,2))/(K_t(1,2)+K_w
 Kroll = [(mean(K_r(1,:))*((TrackWidth(1,:)^2)/2)); (mean(K_r(2,:))*((TrackWidth(2,:)^2)/2))]/57.3;
 
 % Natural Frequency (Hz)
-NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/Weights(1,1))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/Weights(1,2)));
-    (1/(2*pi))*(sqrt((K_r(2,1)*386.4)/Weights(2,1))),(1/(2*pi))*(sqrt((K_r(2,2)*386.4)/Weights(2,2)))];
+NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/abs(Weights(1,1)))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/abs(Weights(1,2))));
+    (1/(2*pi))*(sqrt((K_r(2,1)*386.4)/abs(Weights(2,1)))),(1/(2*pi))*(sqrt((K_r(2,2)*386.4)/abs(Weights(2,2))))];
 disp('Natural Frequency (Hz) = ');
 disp(NF);
 
 % Critical Damping (lb-s)/in
-CD = [2*sqrt(K_r(1,1)*Weights(1,1)/386.4),2*sqrt(K_r(1,1)*Weights(1,2)/386.4);
-    2*sqrt(K_r(1,1)*Weights(2,1)/386.4),2*sqrt(K_r(1,1)*Weights(2,2)/386.4)];
+CD = [2*sqrt(K_r(1,1)*abs(Weights(1,1))/386.4),2*sqrt(K_r(1,1)*abs(Weights(1,2))/386.4);
+    2*sqrt(K_r(1,1)*abs(Weights(2,1))/386.4),2*sqrt(K_r(1,1)*abs(Weights(2,2))/386.4)];
 
 % Damping Ratio
 DR_L = [DampC_L(1,1)/CD(1,1) DampC_L(1,2)/CD(1,2); DampC_L(2,1)/CD(2,1) DampC_L(2,2)/CD(2,2)];
@@ -69,10 +69,10 @@ disp('Damping Ratio - High = ');
 disp(DR_H);
 
 % Damped Natural Frequency (Hz)
-DNF_L = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/Weights(1,1))*sqrt(1-DR_L(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/Weights(1,2))*sqrt(1-DR_L(1,2)^2);
-    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/Weights(2,1))*sqrt(1-DR_L(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/Weights(2,2))*sqrt(1-DR_L(2,2)^2)];
-DNF_H = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/Weights(1,1))*sqrt(1-DR_H(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/Weights(1,2))*sqrt(1-DR_H(1,2)^2);
-    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/Weights(2,1))*sqrt(1-DR_H(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/Weights(2,2))*sqrt(1-DR_H(2,2)^2)];
+DNF_L = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/abs(Weights(1,1)))*sqrt(1-DR_L(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/abs(Weights(1,2)))*sqrt(1-DR_L(1,2)^2);
+    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/abs(Weights(2,1)))*sqrt(1-DR_L(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/abs(Weights(2,2)))*sqrt(1-DR_L(2,2)^2)];
+DNF_H = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/abs(Weights(1,1)))*sqrt(1-DR_H(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/abs(Weights(1,2)))*sqrt(1-DR_H(1,2)^2);
+    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/abs(Weights(2,1)))*sqrt(1-DR_H(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/abs(Weights(2,2)))*sqrt(1-DR_H(2,2)^2)];
 disp('Damped Natural Frequency - Low (Hz)= ');
 disp(DNF_L);
 disp('Damped Natural Frequency - High (Hz)= ');

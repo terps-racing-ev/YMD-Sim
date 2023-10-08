@@ -13,5 +13,6 @@ corr = 0.625;%factor to compensate for road surface friction
     FZ = t.FZ'; %normal force (lbf)
     MZ = -corr*t.MZ'; %aligning torque (lbf-ft)
     MuY = corr*t.NFY'; %coefficient of lateral friction, muy
+    RL = t.RL'; %Loaded Tire Radius (in)
 
-latTrngData = [SA' IA' FZ' P' FY' MuY' MZ'];
+latTrngData = [SA' IA' FZ' P' FY' MuY' MZ' RL'];

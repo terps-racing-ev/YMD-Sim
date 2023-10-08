@@ -2,7 +2,7 @@
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV2Parameters();
-vehicle_obj_two = GeoPoints();
+% vehicleObj = GeoPoints();
 
 %% Uncomment when want to use (command + T or ctrl + T)
 
@@ -20,13 +20,10 @@ vehicle_obj_two = GeoPoints();
 % fprintf("Steer Camber RHS extrapolate conditions test: ")
 % vehicleObj.steerCamberRHS(90)
 
-%% To run the graphs:
+%%
 
-% :) Uncomment this: 
+% To run the graphs:
 
-% vehicleObj.graphRolls()
-
-%% Show MasterInverseMatrix from Geo Points
-
-vehicle_obj_two.masterInverseMatrix
-
+% :)
+% Change --
+vehicleObj.graphRolls()

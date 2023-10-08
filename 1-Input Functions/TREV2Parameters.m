@@ -31,13 +31,14 @@ classdef TREV2Parameters
 
     %% Aero Properties
     % Given
+    %Set Cl & Cd = 0 for no aero calculations
     properties (Constant)
         liftFactor = -6;
-        Cl = -1.88;
-        Cd = 0.904;
+        Cl = -4.1486;
+        Cd = 1.425;
         Af = 1019.902; %in^2
         air_density = 4.3e-5; %lb/in^3
-        FrontAeroPercent = 0.25;
+        FrontAeroPercent = 0.4;
     end
     % Calculated
     properties (Dependent)
@@ -49,13 +50,13 @@ classdef TREV2Parameters
     properties (Constant)
         K_s = [350 350; 400 400]; %lbf/in
         K_ARB = [0; 0]; %lbf/in
-        MR_s = [0.8 0.8; 0.9 0.9];
-        MR_ARB = [0.5; 0.5];
+        MR_s = [0.9 0.9; 0.9 0.9];
+        MR_ARB = [1; 1];
         DampC_Low = [12 12; 12 12];
         DampC_High = [12 12; 12 12];
         Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
-        Camber = [0, 0; 0, 0];
+        Camber = [0, 0; 0, 0]; % positive = top of tires toward chassis (normally neg camber)
         TirePressure = [12, 12; 12, 12];
     end
 
@@ -94,7 +95,7 @@ classdef TREV2Parameters
         % Function Methods:
         function output = staticWeights(obj)
             % Defining output
-            output = [obj.FrontStatic, obj.FrontStatic; obj.RearStatic, obj.RearStatic];
+            output = -[obj.FrontStatic, obj.FrontStatic; obj.RearStatic, obj.RearStatic];
         end
         function output = TrackWidth(obj)
             % Defining output
