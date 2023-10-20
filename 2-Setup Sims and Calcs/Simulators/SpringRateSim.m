@@ -1,6 +1,6 @@
 %% Spring Rate Simulator
 
-function [polyfits0I,polyfits2I,polyfits4I] = SpringRateSim(latTrainingData_P1,latTrainingData_P2)
+function [F_polyCalc,R_polyCalc] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicle)
 
     % "Traditional" Plots - Data Stratification
     
@@ -314,4 +314,107 @@ function [polyfits0I,polyfits2I,polyfits4I] = SpringRateSim(latTrainingData_P1,l
 
     polyfits4I = [poly8P4I(1,1); poly10P4I(1,1); poly12iP4I(1,1); poly12fP4I(1,1); poly14P4I(1,1)];
 
+    F_Tire_psi = vehicle.TirePressure(1,1);
+    R_Tire_psi = vehicle.TirePressure(2,1);
+
+    F_camber = vehicle.Camber(1,1);
+    R_camber = vehicle.Camber(2,1);
+
+    % Front Spring Rate Calculator
+    if (F_Tire_psi == 8 && F_camber == 0)
+        F_polyCalc = polyfits0I(1,:);
+    end
+
+    if (F_Tire_psi == 10 && F_camber == 0)
+        F_polyCalc = polyfits0I(2,:);
+    end
+
+    if (F_Tire_psi == 12 && F_camber == 0)
+        F_polyCalc = polyfits0I(3,:);
+    end
+
+    if (F_Tire_psi == 14 && F_camber == 0)
+        F_polyCalc = polyfits0I(5,:);
+    end
+
+    if (F_Tire_psi == 8 && F_camber == 2)
+        F_polyCalc = polyfits2I(1,:);
+    end
+
+    if (F_Tire_psi == 10 && F_camber == 2)
+        F_polyCalc = polyfits2I(2,:);
+    end
+
+    if (F_Tire_psi == 12 && F_camber == 2)
+        F_polyCalc = polyfits2I(3,:);
+    end
+
+    if (F_Tire_psi == 14 && F_camber == 2)
+        F_polyCalc = polyfits2I(5,:);
+    end
+
+    if (F_Tire_psi == 8 && F_camber == 4)
+        F_polyCalc = polyfits4I(1,:);
+    end
+
+    if (F_Tire_psi == 10 && F_camber == 4)
+        F_polyCalc = polyfits4I(2,:);
+    end
+
+    if (F_Tire_psi == 12 && F_camber == 4)
+        F_polyCalc = polyfits4I(3,:);
+    end
+
+    if (F_Tire_psi == 14 && F_camber == 4)
+        F_polyCalc = polyfits4I(5,:);
+    end
+
+    % Rear Spring Rate Calculator
+    if (R_Tire_psi == 8 && R_camber == 0)
+        R_polyCalc = polyfits0I(1,:);
+    end
+
+    if (R_Tire_psi == 10 && R_camber == 0)
+        R_polyCalc = polyfits0I(2,:);
+    end
+
+    if (R_Tire_psi == 12 && R_camber == 0)
+        R_polyCalc = polyfits0I(3,:);
+    end
+
+    if (R_Tire_psi == 14 && R_camber == 0)
+        R_polyCalc = polyfits0I(5,:);
+    end
+
+    if (R_Tire_psi == 8 && R_camber == 2)
+        R_polyCalc = polyfits2I(1,:);
+    end
+
+    if (R_Tire_psi == 10 && R_camber == 2)
+        R_polyCalc = polyfits2I(2,:);
+    end
+
+    if (R_Tire_psi == 12 && R_camber == 2)
+        R_polyCalc = polyfits2I(3,:);
+    end
+
+    if (R_Tire_psi == 14 && R_camber == 2)
+        R_polyCalc = polyfits2I(5,:);
+    end
+
+    if (R_Tire_psi == 8 && R_camber == 4)
+        R_polyCalc = polyfits4I(1,:);
+    end
+
+    if (R_Tire_psi == 10 && R_camber == 4)
+        F_polyCalc = polyfits4I(2,:);
+    end
+
+    if (R_Tire_psi == 12 && R_camber == 4)
+        F_polyCalc = polyfits4I(3,:);
+    end
+
+    if (R_Tire_psi == 14 && R_camber == 4)
+        R_polyCalc = polyfits4I(5,:);
+end
 end

@@ -2,7 +2,7 @@ classdef TREV2Parameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
 
-    %% Car Properties
+    %% Car Parameters
     % Given
     properties (Constant)
         TotalWeight = 650;
@@ -28,24 +28,8 @@ classdef TREV2Parameters
         CoGhZrR
         CoGhRA
     end
-
-    %% Aero Properties
-    % Given
-    %Set Cl & Cd = 0 for no aero calculations
-    properties (Constant)
-        liftFactor = -6;
-        Cl = -4.1486;
-        Cd = 1.425;
-        Af = 1019.902; %in^2
-        air_density = 4.3e-5; %lb/in^3
-        FrontAeroPercent = 0.4;
-    end
-    % Calculated
-    properties (Dependent)
-        RearAeroPercent
-    end
-
-    %% Alignment and Tuning
+    
+    %% Alignment and Tuning Parameters
     % Given
     properties (Constant)
         K_s = [350 350; 400 400]; %lbf/in
@@ -57,7 +41,34 @@ classdef TREV2Parameters
         Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
         Toe = [-0.5, -0.5; 0, 0];
         Camber = [0, 0; 0, 0]; % positive = top of tires toward chassis (normally neg camber)
-        TirePressure = [12, 12; 12, 12];
+        TirePressure = [8, 8; 8, 8];
+    end
+
+    %% Braking Parameters
+    % Given
+    properties (Constant)
+        
+    end
+
+    %% Aero Parameters
+    % Given
+    %Set Cl & Cd = 0 for no aero calculations
+    properties (Constant)
+        Cl = -4.1486;
+        Cd = 1.425;
+        Af = 1019.902; %in^2
+        air_density = 4.3e-5; %lb/in^3
+        FrontAeroPercent = 0.4;
+    end
+    % Calculated
+    properties (Dependent)
+        RearAeroPercent
+    end
+
+    %% Powertrain Parameters
+    % Given
+    properties (Constant)
+        FinalDrive = 3.857
     end
 
     %% Functions

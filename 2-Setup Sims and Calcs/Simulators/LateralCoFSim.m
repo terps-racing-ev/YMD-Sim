@@ -1,6 +1,6 @@
 %% Lateral CoF Simulator
 
-function [polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2)
+function [F_polyCalc,R_polyCalc] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2,vehicle)
 
     % "Traditional" Plots - Data Stratification
 
@@ -137,5 +137,40 @@ function [polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2)
     poly14 = polyfit(FzRange,CoF14,4);
     
     polyfits = [poly8; poly10; poly12i; poly12f; poly14];
+
+    F_Tire_psi = vehicle.TirePressure(1,1);
+    R_Tire_psi = vehicle.TirePressure(2,1);
+
+    if (F_Tire_psi == 8)
+        F_polyCalc = polyfits(1,:);
+    end
+
+    if (F_Tire_psi == 10)
+        F_polyCalc = polyfits(2,:);
+    end
+
+    if (F_Tire_psi == 12)
+        F_polyCalc = polyfits(3,:);
+    end
+
+    if (F_Tire_psi == 14)
+        F_polyCalc = polyfits(5,:);
+    end
+
+    if (R_Tire_psi == 8)
+        R_polyCalc = polyfits(1,:);
+    end
+
+    if (R_Tire_psi == 10)
+        R_polyCalc = polyfits(2,:);
+    end
+
+    if (R_Tire_psi == 12)
+        R_polyCalc = polyfits(3,:);
+    end
+
+    if (R_Tire_psi == 14)
+        R_polyCalc = polyfits(5,:);
+    end
 
 end

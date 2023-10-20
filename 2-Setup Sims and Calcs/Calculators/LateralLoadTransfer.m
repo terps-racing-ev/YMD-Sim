@@ -27,160 +27,25 @@ trainData = latTrainingData_P1;
 
 %% Inputs
 
-F_Tire_psi = vehicleObj.TirePressure(1,1);
-R_Tire_psi = vehicleObj.TirePressure(2,1);
-
-F_camber = vehicleObj.Camber(1,1);
-R_camber = vehicleObj.Camber(2,1);
-
-[polyfits0I,polyfits2I,polyfits4I] = SpringRateSim(latTrainingData_P1,latTrainingData_P2);
-
-% Front Spring Rate Calculator
-if (F_Tire_psi == 8 && F_camber == 0)
-    F_polyCalc = polyfits0I(1,:);
-end
-
-if (F_Tire_psi == 10 && F_camber == 0)
-    F_polyCalc = polyfits0I(2,:);
-end
-
-if (F_Tire_psi == 12 && F_camber == 0)
-    F_polyCalc = polyfits0I(3,:);
-end
-
-if (F_Tire_psi == 14 && F_camber == 0)
-    F_polyCalc = polyfits0I(5,:);
-end
-
-if (F_Tire_psi == 8 && F_camber == 2)
-    F_polyCalc = polyfits2I(1,:);
-end
-
-if (F_Tire_psi == 10 && F_camber == 2)
-    F_polyCalc = polyfits2I(2,:);
-end
-
-if (F_Tire_psi == 12 && F_camber == 2)
-    F_polyCalc = polyfits2I(3,:);
-end
-
-if (F_Tire_psi == 14 && F_camber == 2)
-    F_polyCalc = polyfits2I(5,:);
-end
-
-if (F_Tire_psi == 8 && F_camber == 4)
-    F_polyCalc = polyfits4I(1,:);
-end
-
-if (F_Tire_psi == 10 && F_camber == 4)
-    F_polyCalc = polyfits4I(2,:);
-end
-
-if (F_Tire_psi == 12 && F_camber == 4)
-    F_polyCalc = polyfits4I(3,:);
-end
-
-if (F_Tire_psi == 14 && F_camber == 4)
-    F_polyCalc = polyfits4I(5,:);
-end
-
-% Rear Spring Rate Calculator
-if (R_Tire_psi == 8 && R_camber == 0)
-    R_polyCalc = polyfits0I(1,:);
-end
-
-if (R_Tire_psi == 10 && R_camber == 0)
-    R_polyCalc = polyfits0I(2,:);
-end
-
-if (R_Tire_psi == 12 && R_camber == 0)
-    R_polyCalc = polyfits0I(3,:);
-end
-
-if (R_Tire_psi == 14 && R_camber == 0)
-    R_polyCalc = polyfits0I(5,:);
-end
-
-if (R_Tire_psi == 8 && R_camber == 2)
-    R_polyCalc = polyfits2I(1,:);
-end
-
-if (R_Tire_psi == 10 && R_camber == 2)
-    R_polyCalc = polyfits2I(2,:);
-end
-
-if (R_Tire_psi == 12 && R_camber == 2)
-    R_polyCalc = polyfits2I(3,:);
-end
-
-if (R_Tire_psi == 14 && R_camber == 2)
-    R_polyCalc = polyfits2I(5,:);
-end
-
-if (R_Tire_psi == 8 && R_camber == 4)
-    R_polyCalc = polyfits4I(1,:);
-end
-
-if (R_Tire_psi == 10 && R_camber == 4)
-    F_polyCalc = polyfits4I(2,:);
-end
-
-if (R_Tire_psi == 12 && R_camber == 4)
-    F_polyCalc = polyfits4I(3,:);
-end
-
-if (R_Tire_psi == 14 && R_camber == 4)
-    R_polyCalc = polyfits4I(5,:);
-end
-
-K_t = [F_polyCalc, F_polyCalc; R_polyCalc, R_polyCalc];
-
 % Right Turn = True, Left Turn = False
-RightTurn = true;
+RightTurn = false;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-Velocity = 25;
+Velocity = 29.5707;
 
 Radius = 348; %in
 
 %% Calculations
 
+% Tire Spring Rates (lbf/in)
+[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+
+K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
+
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
 
-[polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2);
-
-if (F_Tire_psi == 8)
-    F_polyCalc = polyfits(1,:);
-end
-
-if (F_Tire_psi == 10)
-    F_polyCalc = polyfits(2,:);
-end
-
-if (F_Tire_psi == 12)
-    F_polyCalc = polyfits(3,:);
-end
-
-if (F_Tire_psi == 14)
-    F_polyCalc = polyfits(5,:);
-end
-
-if (R_Tire_psi == 8)
-    R_polyCalc = polyfits(1,:);
-end
-
-if (R_Tire_psi == 10)
-    R_polyCalc = polyfits(2,:);
-end
-
-if (R_Tire_psi == 12)
-    R_polyCalc = polyfits(3,:);
-end
-
-if (R_Tire_psi == 14)
-    R_polyCalc = polyfits(5,:);
-end
+[F_polyCalc,R_polyCalc] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
 
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
 [Fz,LoLT,Accelmax,Z] = LoLTSim(0,Velocity,0,K_r,vehicleObj);
