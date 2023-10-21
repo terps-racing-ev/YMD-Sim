@@ -1,7 +1,7 @@
 %% Steering Angle Simulator
 % Credit: CAPT Hamilton
 
-function [SteerAngles,TurnRadius] = SteerAngleSim(SWAngle,vehicle)
+function [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle,vehicle)
     % Unit Conversions
     Wheelbaseft = vehicle.Wheelbase/12; %ft
     FTrackWidthft = vehicle.FrontTrackWidth/12; %ft

@@ -1,6 +1,6 @@
 %% Acceleration Forces Sim
 
-function [Fx,Ax] = AccelSim(ThrottleInput,Velocity,GR,vehicle)
+function [Fx,Ax] = AccelCalc(ThrottleInput,Velocity,GR,vehicle)
     rr = 0.015;
     fRR = rr * vehicle.TotalWeight; %lbs
     

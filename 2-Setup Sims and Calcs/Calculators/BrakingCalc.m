@@ -1,6 +1,6 @@
 %% Braking Forces Sim
 
-function [Fx,Ax,BF] = BrakingSim(DriverForce,mu_x,BrakeParameters,vehicle)
+function [Fx,Ax,BF] = BrakingCalc(DriverForce,mu_x,BrakeParameters,vehicle)
     % Brake Forces (lbf)
     BF_F = (2*DriverForce*BrakeParameters(14,:))*(BrakeParameters(3,:)*(BrakeParameters(4,:)/BrakeParameters(12,:)))*(BrakeParameters(5,:)/mu_x)*(BrakeParameters(13,:)/(2*vehicle.TireRadius))*BrakeParameters(15,:);
     BF_R = (2*DriverForce*BrakeParameters(14,:))*(BrakeParameters(8,:)*(BrakeParameters(9,:)/BrakeParameters(12,:)))*(BrakeParameters(10,:)/mu_x)*(BrakeParameters(13,:)/(2*vehicle.TireRadius))*(1-BrakeParameters(15,:));

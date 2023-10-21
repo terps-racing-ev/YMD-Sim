@@ -1,6 +1,6 @@
 %% Camber Simulator
 
-function [IA] = CamberSim(RollAngle,SWAngle,vehicle)
+function [IA] = CamberCalc(RollAngle,SWAngle,vehicle)
     % Calculating the camber change given Steering Wheel Angle and Roll Angle
     RollGain = [vehicle.RollCFL(RollAngle),vehicle.RollCFR(RollAngle);
         vehicle.RollCRL(RollAngle), vehicle.RollCRR(RollAngle)];

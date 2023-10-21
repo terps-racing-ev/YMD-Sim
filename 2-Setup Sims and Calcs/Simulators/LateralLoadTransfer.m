@@ -17,10 +17,10 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 %% Tire Modeling
 
 filename_P1 = 'A2356run8.mat';
-[latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
 
 filename_P2 = 'A2356run9.mat';
-[latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
 
 totData = cat(1,latTrainingData_P1,latTrainingData_P2);
 trainData = latTrainingData_P1;
@@ -33,7 +33,7 @@ R_Tire_psi = vehicleObj.TirePressure(2,1);
 F_camber = vehicleObj.Camber(1,1);
 R_camber = vehicleObj.Camber(2,1);
 
-[polyfits0I,polyfits2I,polyfits4I] = SpringRateSim(latTrainingData_P1,latTrainingData_P2);
+[polyfits0I,polyfits2I,polyfits4I] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2);
 
 % Front Spring Rate Calculator
 if (F_Tire_psi == 8 && F_camber == 0)
@@ -146,9 +146,9 @@ Radius = 348; %in
 %% Calculations
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
-[polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2);
+[polyfits] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2);
 
 if (F_Tire_psi == 8)
     F_polyCalc = polyfits(1,:);
@@ -183,7 +183,7 @@ if (R_Tire_psi == 14)
 end
 
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-[Fz,LoLT,Accelmax,Z] = LoLTSim(0,Velocity,0,K_r,vehicleObj);
+[Fz,LoLT,Accelmax,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
 
 mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
 mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
@@ -206,7 +206,7 @@ end
 CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
 
 % Dynamic Weights (lb) -> Max Fy from Weight Transfer
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,mu_drive,vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,mu_drive,vehicleObj);
 
 mu = [mu_F,mu_R];
 

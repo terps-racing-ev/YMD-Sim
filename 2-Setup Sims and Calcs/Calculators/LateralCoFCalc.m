@@ -1,6 +1,6 @@
 %% Lateral CoF Simulator
 
-function [polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2)
+function [polyfits] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2)
 
     % "Traditional" Plots - Data Stratification
 

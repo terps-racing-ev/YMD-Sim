@@ -1,6 +1,6 @@
 %% Yaw Moment & Acceleration Sim
 
-function [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicle)
+function [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicle)
     
     SteerAnglesrad = -SteerAngles*(pi/180);
     car_Fx = Fx.*cos(SteerAnglesrad) - Fy.*sin(SteerAnglesrad); %tire forces in car coordinate system

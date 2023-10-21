@@ -1,6 +1,6 @@
 %% Slip Angle Simulator
 
-function [SlipAngles,AccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,vehicle)
+function [SlipAngles,AccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleCalc(SteerAngles,Beta,Velocity,Radius,vehicle)
     % Velocity Calculations
     LongVelo = Velocity * 17.6; %in/s
     % Accel = -Velocityin_s.^2/Radius; %in/s^2

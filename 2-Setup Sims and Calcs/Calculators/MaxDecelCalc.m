@@ -1,6 +1,6 @@
 %% Max Deceleration Sim
 
-function [Decelmax] = MaxDecelSim(TL,mux,vehicle)    
+function [Decelmax] = MaxDecelCalc(TL,mux,vehicle)    
     for i = 1:2
         if(TL(i,:) >= mux)
             BFmax(i,:) = BF;

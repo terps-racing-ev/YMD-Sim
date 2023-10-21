@@ -1,6 +1,6 @@
 %% Spring Rate Simulator
 
-function [polyfits0I,polyfits2I,polyfits4I] = SpringRateSim(latTrainingData_P1,latTrainingData_P2)
+function [polyfits0I,polyfits2I,polyfits4I] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2)
 
     % "Traditional" Plots - Data Stratification
     

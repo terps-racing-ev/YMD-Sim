@@ -1,6 +1,6 @@
 %% Lateral Load Transfer Simulator
 
-function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTSim(Kroll,Velocity,LatAccel,vehicle)
+function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTCalc(Kroll,Velocity,LatAccel,vehicle)
     % Roll Gradient (deg/g)
     R_g = (vehicle.TotalWeight*vehicle.CoGhRA)./(Kroll(1,:)+Kroll(2,:));
     
