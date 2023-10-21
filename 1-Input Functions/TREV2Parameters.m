@@ -2,37 +2,77 @@ classdef TREV2Parameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
 
-    %% Car Properties
+    %% Car Parameters
     % Given
+
     properties 
-        TotalWeight
+        TotalWeight %lb
         FrontPercent 
-        Wheelbase
-        FrontTrackWidth 
-        RearTrackWidth 
-        CoGHeight 
-        TireRadius
-        FrontAxleH
-        RearAxleH
-        RollAxisF 
-        RollAxisR 
+        Wheelbase %in
+        FrontTrackWidth %in
+        RearTrackWidth %in
+        CoGHeight %in
+        TireRadius %in
+        FrontAxleH %in
+        RearAxleH %in
+        RollAxisF %in
+        RollAxisR %in
     end
     % Calculated
     properties (Dependent)
         RearPercent
-        FrontAxleToCoG
-        CoGToRearAxle
-        FrontStatic
-        RearStatic
-        CoGhZrF
-        CoGhZrR
-        CoGhRA
+        FrontAxleToCoG %in
+        CoGToRearAxle %in
+        FrontStatic %lb
+        RearStatic %lb
+        CoGhZrF %in
+        CoGhZrR %in
+        CoGhRA %in
+    end
+    
+    %% Alignment and Tuning Parameters
+    % Given
+    properties 
+        K_s   %lb/in
+        K_ARB  %lb/in
+        MR_s 
+        MR_ARB 
+        DampC_Low %((lb*s)/in)
+        DampC_High %((lb*s)/in)
+        Ackermann  % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+        Toe 
+        Camber  % positive = top of tires toward chassis (normally neg camber)
+        TirePressure 
     end
 
-    %% Aero Properties
+    %% Braking Parameters
+    % Given
+    properties 
+        FBrakePadArea %(in^2)
+        FPistonDia %(in)
+        FPadCoF
+        FNumPistons
+        FMasterCylBore %(in)
+        FRotorDia %(in)
+        RBrakePadArea %(in^2)
+        RPistonDia %(in)
+        RPadCoF
+        RNumPistons
+        RMasterCylBore %(in)
+        RRotorDia %(in)
+        BrakePedalRatio
+        BrakeBias
+        FPistonArea %(in^2)
+        FMasterCylArea %(in^2)
+        RPistonArea %(in^2)
+        RMasterCylArea %(in^2)
+    end
+
+    %% Aero Parameters
     % Given
     %Set Cl & Cd = 0 for no aero calculations
-    properties %(Constant)
+
+    properties 
         Cl 
         Cd 
         Af  %in^2
@@ -44,19 +84,10 @@ classdef TREV2Parameters
         RearAeroPercent
     end
 
-    %% Alignment and Tuning
+    %% Powertrain Parameters
     % Given
-    properties (Constant)
-        K_s = [350 350; 400 400]; %lbf/in
-        K_ARB = [0; 0]; %lbf/in
-        MR_s = [0.9 0.9; 0.9 0.9];
-        MR_ARB = [1; 1];
-        DampC_Low = [12 12; 12 12];
-        DampC_High = [12 12; 12 12];
-        Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
-        Toe = [-0.5, -0.5; 0, 0];
-        Camber = [0, 0; 0, 0]; % positive = top of tires toward chassis (normally neg camber)
-        TirePressure = [12, 12; 12, 12];
+    properties 
+        FinalDrive
     end
 
 
@@ -186,6 +217,7 @@ classdef TREV2Parameters
             % Defining output
             output = [obj.RollAxisF();obj.RollAxisR()];
         end
+
         function output = RollCFL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -359,7 +391,38 @@ classdef TREV2Parameters
             obj.air_density = parameters{25,2}; %lb/in^3
             obj.FrontAeroPercent = parameters{26,2};
        
+            obj.FinalDrive = parameters{30,3};
 
+            obj.K_s = [parameters{1,6} parameters{1,6}; parameters{2,6} parameters{2,6}]; %lb/in
+            obj.K_ARB = [parameters{3,6} ; parameters{4,6}]; %lb/in 
+            obj.MR_s = [parameters{5,6} parameters{5,6}; parameters{6,6} parameters{6,6}];
+            obj.MR_ARB = [parameters{7,6}; parameters{8,6}];
+            obj.DampC_Low = [parameters{9,6} parameters{9,6}; parameters{10,6} parameters{10,6}];
+            obj.DampC_High = [parameters{11,6} parameters{11,6}; parameters{12,6} parameters{12,6}];
+            obj.Ackermann = parameters{13,6}; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
+            obj.Toe = [parameters{14,6}, parameters{14,6}; parameters{15,6}, parameters{15,6}];
+            obj.Camber = [parameters{16,6}, parameters{16,6}; parameters{17,6}, parameters{17,6}]; % positive = top of tires toward chassis (normally neg camber)
+            obj.TirePressure = [parameters{18,6}, parameters{18,6}; parameters{19,6}, parameters{19,6}];
+
+
+            obj.FBrakePadArea = parameters{22,6};  %(in^2)
+            obj.FPistonDia = parameters{23,6};  %(in)
+            obj.FPadCoF = parameters{24,6};
+            obj.FNumPistons = parameters{25,6};
+            obj.FMasterCylBore = parameters{26,6}; %(in)
+            obj.FRotorDia = parameters{27,6}; %(in)
+            obj.RBrakePadArea = parameters{28,6}; %(in^2)
+            obj.RPistonDia = parameters{29,6}; %(in)
+            obj.RPadCoF = parameters{30,6};
+            obj.RNumPistons = parameters{31,6};
+            obj.RMasterCylBore = parameters{32,6}; %(in)
+            obj.RRotorDia = parameters{33,6}; %(in)
+            obj.BrakePedalRatio = parameters{34,6};
+            obj.BrakeBias = parameters{35,6};
+            obj.FPistonArea = parameters{36,6}; %(in^2)
+            obj.FMasterCylArea = parameters{37,6}; %(in^2)
+            obj.RPistonArea = parameters{38,6}; %(in^2)
+            obj.RMasterCylArea = parameters{39,6}; %(in^2)
 
 
             % Columns X, Y, and Z in inches
@@ -469,7 +532,6 @@ classdef TREV2Parameters
             output = plot(X, Y);
         end
 
-
-
+        
     end
 end
