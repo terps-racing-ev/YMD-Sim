@@ -71,7 +71,7 @@ end
 % CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
 
 % Dynamic Weights (lb) -> Max Fy from Weight Transfer
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,mu_drive,vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_r,K_roll,Velocity,mu_drive,vehicleObj);
 
 mu = [mu_F,mu_R];
 
