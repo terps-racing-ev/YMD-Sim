@@ -15,8 +15,8 @@ function [Fz,LoLT,Accelmax,Z] = LoLTSim(mu_x,Velocity,LongAccel,K_r,vehicle)
     Accelmax = mu_x*(vehicle.FrontAxleToCoG/(vehicle.Wheelbase-(vehicle.CoGHeight*mu_x)));
     
     % Wheel Displacement (in) (pos -> loaded (bump), neg -> unloaded (droop))
-    Z = [-(LoLT/2)/K_r(1,1), -(LoLT/2)/K_r(1,2);
-        (LoLT/2)/K_r(2,1), (LoLT/2)/K_r(2,2)];
+    Z = [-(Fz(1,1)+vehicle.FrontStatic)/K_r(1,1), -(Fz(1,2)+vehicle.FrontStatic)/K_r(1,2);
+        -(Fz(2,1)+vehicle.RearStatic)/K_r(2,1), -(Fz(2,2)+vehicle.RearStatic)/K_r(2,2)];
 
     for i = 1:2
         for j = 1:2
