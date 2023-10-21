@@ -31,7 +31,7 @@ trainData = latTrainingData_P1;
 Accel = false;
 
 % Test Velocity (mph)
-Velocity = 29.5707;
+Velocity = 30;
 
 %% Calculations
 
@@ -82,6 +82,16 @@ if Accel == false
     Fx_max = [mu_F;mu_R].*Fz;
 else
     Fx_max = -([mu_F;mu_R].*Fz);
+end
+
+if Accel == false
+    g_avg = sum(reshape(Fx_max,[1,4]))/(sum(reshape((-vehicleObj.staticWeights),[1,4])));
+else
+    g_avg = sum(Fx_max(2,:))/(sum(sum(-vehicleObj.staticWeights)));
+
+    if (Accelmax_static < g_avg)
+        g_avg = Accelmax_static;
+    end
 end
 
 disp('---------------');

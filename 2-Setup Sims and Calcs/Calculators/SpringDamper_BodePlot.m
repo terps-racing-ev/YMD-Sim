@@ -17,20 +17,33 @@ vehicleObj = TREV2Parameters();
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
+%% Tire Modeling
+
+filename_P1 = 'A2356run8.mat';
+[latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
+
+filename_P2 = 'A2356run9.mat';
+[latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
+
+totData = cat(1,latTrainingData_P1,latTrainingData_P2);
+trainData = latTrainingData_P1;
+
 %% Inputs
 
 % Input Car Parameters
 Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
-% Tire Stiffness for Fronts and Rears
-K_t = [442 442; 442 442]; %lbf/in 
+% Tire Spring Rates (lbf/in)
+[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+
+K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [350 350; 400 400]; %lbf/in
-K_ARB = [1000; 0]; %lbf/in
+K_s = [300 300; 450 450]; %lbf/in
+K_ARB = [0; 0]; %lbf/in
 
-MR_s = [0.9 0.9; 0.9 0.9];
+MR_s = [1 1; 1 1];
 MR_ARB = [0.5; 0.5];
 
 DampC_L = [12 12; 12 12];  %(lb-s)/in

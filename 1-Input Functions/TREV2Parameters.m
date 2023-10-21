@@ -15,7 +15,7 @@ classdef TREV2Parameters
         FrontAxleH = 8;
         RearAxleH = 8;
         RollAxisF = 0.9374;
-        RollAxisR = 1.9547;
+        RollAxisR = 1.6571;
     end
     % Calculated
     properties (Dependent)
@@ -32,9 +32,9 @@ classdef TREV2Parameters
     %% Alignment and Tuning Parameters
     % Given
     properties (Constant)
-        K_s = [350 350; 400 400]; %lbf/in
-        K_ARB = [0; 0]; %lbf/in
-        MR_s = [0.9 0.9; 0.9 0.9];
+        K_s = [300 300; 450 450]; %lbf/in
+        K_ARB = [250; 1000]; %lbf/in
+        MR_s = [1 1; 1 1];
         MR_ARB = [1; 1];
         DampC_Low = [12 12; 12 12];
         DampC_High = [12 12; 12 12];
@@ -120,6 +120,7 @@ classdef TREV2Parameters
             % Defining output
             output = [obj.RollAxisF();obj.RollAxisR()];
         end
+
         function output = RollCFL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];

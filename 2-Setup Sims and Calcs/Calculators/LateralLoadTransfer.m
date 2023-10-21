@@ -31,7 +31,7 @@ trainData = latTrainingData_P1;
 RightTurn = false;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-Velocity = 29.5707;
+Velocity = 25;
 
 Radius = 348; %in
 
@@ -68,7 +68,7 @@ if Velocity == 0 && RightTurn == true
 end
 
 % Maximum Cornering Velocity (mph)
-CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
+% CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
 
 % Dynamic Weights (lb) -> Max Fy from Weight Transfer
 [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,mu_drive,vehicleObj);
@@ -86,6 +86,9 @@ end
 
 g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
 
+% Maximum Cornering Velocity (mph)
+CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
+
 % Rough Yaw Calculator
 Yaw_Wheel = Fy_max.*[vehicleObj.FrontAxleToCoG,vehicleObj.FrontAxleToCoG;vehicleObj.CoGToRearAxle,vehicleObj.CoGToRearAxle];
 
@@ -95,8 +98,8 @@ disp('Fz (lb): ');
 disp(Fz);
 disp('Max Fy (lb): ');
 disp(Fy_max);
-disp('Yaw Moment (lb*in):');
-disp(Yaw);
+% disp('Yaw Moment (lb*in):');
+% disp(Yaw);
 disp('Max Lateral Acceleration (Gs): ');
 disp(g_avg);
 disp('Max Cornering Velocity (mph): ');
