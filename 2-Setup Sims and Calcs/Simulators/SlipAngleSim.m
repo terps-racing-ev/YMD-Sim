@@ -26,10 +26,10 @@ function [SlipAngles,AccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim
     
     SlipAngles = [SlipAnglesF; SlipAnglesR]*(180/pi);
     
-    if(Velocity == 0)
+    if(Velocity == 0 || Beta == 0)
         SlipAngles = [0 0; 0 0];
-        Betamax = 0;
         YawVelo = 0;
+        Accel = 0;
     end
     
 end

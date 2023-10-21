@@ -43,10 +43,10 @@ function [trainedModel, validationRMSE] = Trainer_mux(trainingData)
 % Convert input to table
 inputTable = array2table(trainingData, 'VariableNames', {'column_1', 'column_2', 'column_3', 'column_4', 'column_5', 'column_6', 'column_7'});
 
-predictorNames = {'column_1', 'column_2', 'column_3', 'column_4', 'column_5'};
+predictorNames = {'column_1', 'column_2', 'column_3', 'column_4'};
 predictors = inputTable(:, predictorNames);
 response = inputTable.column_7;
-isCategoricalPredictor = [false, false, false, false, false];
+isCategoricalPredictor = [false, false, false, false];
 
 % Train a regression model
 % This code specifies all the model options and trains the model.
@@ -75,10 +75,10 @@ trainedModel.HowToPredict = sprintf('To make predictions on a new predictor colu
 % Convert input to table
 inputTable = array2table(trainingData, 'VariableNames', {'column_1', 'column_2', 'column_3', 'column_4', 'column_5', 'column_6', 'column_7'});
 
-predictorNames = {'column_1', 'column_2', 'column_3', 'column_4', 'column_5'};
+predictorNames = {'column_1', 'column_2', 'column_3', 'column_4'};
 predictors = inputTable(:, predictorNames);
 response = inputTable.column_7;
-isCategoricalPredictor = [false, false, false, false, false];
+isCategoricalPredictor = [false, false, false, false];
 
 % Set up holdout validation
 cvp = cvpartition(size(response, 1), 'Holdout', 0.25);

@@ -11,7 +11,7 @@ clc
 Downforce_Total = 100;
 
 % Aero Balance (Front Percent);
-Aero_Balance = 0.25;
+Aero_Balance = 0.4;
 
 % Tire Data (equate psi -> K_t in excel)
 Tire_psi = 8;
@@ -35,10 +35,10 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 
 %% Tire Modeling
 
-filename_P1 = 'A1965run18.mat';
+filename_P1 = 'A2356run8.mat';
 [latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
 
-filename_P2 = 'A1965run19.mat';
+filename_P2 = 'A2356run9.mat';
 [latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
 
 totData = cat(1,latTrainingData_P1,latTrainingData_P2);

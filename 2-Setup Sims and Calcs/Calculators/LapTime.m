@@ -30,17 +30,15 @@ trainData = latTrainingData_P1;
 % convert track in straights and corners
 
 % Straights: x_straight
-% Corners: track entry/exit width & arc_angle (0-360 deg)
+% Corners: r_corner & arc_angle (0-360 deg)
 
 %% Corners
 
-% generate corner radii
-% for each corner radii generated...
+% for each corner generated...
 % take a test entry speed and iterate until entry speed = cornering speed
-% use highest speed as 
 
 %% Straights
 
 % for each straight generated...
 % x_accel + x_braking = x_straight
-% add driveline losses, rolling resistance, and drag
+%

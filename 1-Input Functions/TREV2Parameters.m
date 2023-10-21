@@ -1,6 +1,7 @@
 classdef TREV2Parameters
     % This class holds general vehicle parameters that can be used
     % in various calculations and simulations
+
     %% Car Parameters
     % Given
     properties (Constant)
@@ -42,11 +43,13 @@ classdef TREV2Parameters
         Camber = [0, 0; 0, 0]; % positive = top of tires toward chassis (normally neg camber)
         TirePressure = [8, 8; 8, 8];
     end
+
     %% Braking Parameters
     % Given
     properties (Constant)
         
     end
+
     %% Aero Parameters
     % Given
     %Set Cl & Cd = 0 for no aero calculations
@@ -61,12 +64,15 @@ classdef TREV2Parameters
     properties (Dependent)
         RearAeroPercent
     end
+
     %% Powertrain Parameters
     % Given
     properties (Constant)
         FinalDrive = 3.857
     end
+
     %% Functions
+
     methods
         % Car Getters:
         function value = get.RearPercent(obj)
@@ -96,6 +102,7 @@ classdef TREV2Parameters
         function value = get.CoGhRA(obj)
             value = obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.Wheelbase)*obj.FrontAxleToCoG) ;
         end
+
         % Function Methods:
         function output = staticWeights(obj)
             % Defining output
@@ -113,6 +120,7 @@ classdef TREV2Parameters
             % Defining output
             output = [obj.RollAxisF();obj.RollAxisR()];
         end
+
         function output = RollCFL(~, x)
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -197,6 +205,7 @@ classdef TREV2Parameters
             % X and Y coordinates in matrix form 
             X = [TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30)];
             Y = [5.01 3.78 2.79 1.95 1.22 0.58 0 -0.54 -1.05 -1.54 -2.03 -2.54 -3.09];
+
             % Checking if input value is in our array
             if ismember(x, X)
                 i = X == x;
@@ -216,6 +225,7 @@ classdef TREV2Parameters
             % X and Y coordinates in matrix form 
             X = [TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30)];
             Y = [-3.09 -2.54 -2.03 -1.54 -1.05 -0.54 0 0.58 1.22 1.95 2.79 3.78 5.01];
+
             % Checking if input value is in our array
             if ismember(x, X)
                 i = X == x;
@@ -236,6 +246,7 @@ classdef TREV2Parameters
             subplot(3, 2, 1);
             TREV2Parameters.RollCFL_plot();
             title('Roll vs. Camber Front Left');
+
             subplot(3, 2, 2);
             TREV2Parameters.RollCFR_plot();
             title('Roll vs. Camber Front Right');
@@ -243,27 +254,36 @@ classdef TREV2Parameters
             subplot(3, 2, 3);
             TREV2Parameters.RollCRL_plot();
             title('Roll vs. Camber Rear Left');
+
             subplot(3, 2, 4);
             TREV2Parameters.RollCRR_plot();
             title('Roll vs. Camber Rear Right');
+
             subplot(3, 2, 5);
             TREV2Parameters.steerCamberLHS_plot();
             title("Steer vs. Camber LHS")
+
             subplot(3, 2, 6);
             TREV2Parameters.steerCamberRHS_plot();
             title("Steer vs. Camber RHS")
         end
+
     end
+
     methods (Static)
+
         function output = getProportion(x)
             output = ((x / 25.4) * 90) / (1.625);
         end
+
         function output = RollCFL_plot()
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
             Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
+
             output = plot(X, Y);
         end
+
         function output = RollCFR_plot()
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -271,6 +291,7 @@ classdef TREV2Parameters
             
             output = plot(X, Y);
         end
+
         function output = RollCRL_plot()
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -278,6 +299,7 @@ classdef TREV2Parameters
             
             output = plot(X, Y);
         end
+
         function output = RollCRR_plot()
             % X and Y coordinates in matrix form 
             X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
@@ -285,19 +307,24 @@ classdef TREV2Parameters
             
             output = plot(X, Y);
         end
+
         function output = steerCamberLHS_plot()
             % X and Y coordinates in matrix form 
             % Added -90 and 90 for the graph - for visual completeness puproses 
             X = [-90 TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30) 90];
             Y = [9.0338 5.01 3.78 2.79 1.95 1.22 0.58 0 -0.54 -1.05 -1.54 -2.03 -2.54 -3.09 -4.7438];
+
             output = plot(X, Y);
         end
+
         function output = steerCamberRHS_plot()
             % X and Y coordinates in matrix form 
             % Added -90 and 90 for the graph - for visual completeness puproses 
             X = [-90 TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30) 90];
             Y = [-4.7438 -3.09 -2.54 -2.03 -1.54 -1.05 -0.54 0 0.58 1.22 1.95 2.79 3.78 5.01 9.0338];
+
             output = plot(X, Y);
         end
+
     end
 end

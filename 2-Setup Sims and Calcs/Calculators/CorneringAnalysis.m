@@ -73,8 +73,6 @@ BetaEntry = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 % Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 
 SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
-
-LatAccelG = 0;
             
 [SlipAngles,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaEntry,Velocity,Radius,vehicleObj);
              
@@ -119,6 +117,8 @@ disp('Fy: ');
 disp(Fy);
 disp('Fz: ');
 disp(Fz);
+disp('muy: ');
+disp(muy);
 disp('mu: ');
 disp(mu);
 %disp('mu_max: ');

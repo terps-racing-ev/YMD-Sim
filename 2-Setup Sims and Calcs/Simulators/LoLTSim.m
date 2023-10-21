@@ -8,8 +8,8 @@ function [Fz,LoLT,Accelmax,Z] = LoLTSim(mu_x,Velocity,LongAccel,K_r,vehicle)
     Fdown = (0.5*vehicle.air_density*vehicle.Cl*vehicle.Af*(Velocity*17.6).^2)/386.4;
     
     % Fz
-    Fz = [vehicle.FrontStatic-(LoLT/2)+(-Fdown*vehicle.FrontAeroPercent), vehicle.FrontStatic-(LoLT/2)+(-Fdown*vehicle.FrontAeroPercent);
-    vehicle.RearStatic+(LoLT/2)+(-Fdown*vehicle.RearAeroPercent), vehicle.RearStatic+(LoLT/2)+(-Fdown*vehicle.RearAeroPercent)];
+    Fz = [-(vehicle.FrontStatic-(LoLT/2)+(-Fdown*vehicle.FrontAeroPercent)), -(vehicle.FrontStatic-(LoLT/2)+(-Fdown*vehicle.FrontAeroPercent));
+    -(vehicle.RearStatic+(LoLT/2)+(-Fdown*vehicle.RearAeroPercent)), -(vehicle.RearStatic+(LoLT/2)+(-Fdown*vehicle.RearAeroPercent))];
     
     % Ax_max
     Accelmax = mu_x*(vehicle.FrontAxleToCoG/(vehicle.Wheelbase-(vehicle.CoGHeight*mu_x)));

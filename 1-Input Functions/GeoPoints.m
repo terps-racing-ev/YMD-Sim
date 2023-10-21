@@ -197,43 +197,52 @@ classdef GeoPoints
     methods
         % Setting all points, look here for values
         function obj = GeoPoints()
+                       filePath= 'TREV2 Cookbook.csv';
+            points= readtable(filePath, 'VariableNamingRule', 'preserve');
+
+            % Columns X, Y, and Z in inches
+            columnX=5;
+            columnY=6;
+            columnZ=7;
+
+
             % FR Suspension Points:
-            obj.p1F = obj.generatePoint(-898.68, 188.1, 63.5);
-            obj.p2F = obj.generatePoint(-573.654, 213.0934, 73.2599);
-            obj.p3F = obj.generatePoint(-760.59, 570.43, 117.46);
-            obj.p5F = obj.generatePoint(-909, 240.04, 175.94);
-            obj.p6F = obj.generatePoint(-571.981, 243.9088, 160.3162);
-            obj.p7F = obj.generatePoint(-740.35, 554.62, 291.63);
-            obj.p8F = obj.generatePoint(-748.725, 520.9286, 269.0795);
-            obj.p9F = obj.generatePoint(-738.288, 351.8476, 140.5161);
-            obj.p11F = obj.generatePoint(-810.79, 564.67, 144.71);
-            obj.p12F = obj.generatePoint(-812.36, 212.62, 84.48);
-            obj.p16F = obj.generatePoint(-752.892, 276.446, 354.2944);
-            obj.p17F = obj.generatePoint(-740.601, 277.4926, 174.3678);
-            obj.p18F = obj.generatePoint(-743.71, 647.7, 207.01);
-            obj.p19F = obj.generatePoint(-743.71, 609.6, 207.01);
-            obj.p20F = obj.generatePoint(-728.819, 275.6476, 141.6539);
-            obj.p21F = obj.generatePoint(-747.824, 275.6476, 139.2736);
-            obj.p99F = obj.generatePoint(-743.71, 609.6, 3.81);
+            obj.p1F = [points{1,columnX} points{1,columnY} points{1,columnZ}];
+            obj.p2F = [points{2,columnX} points{2,columnY} points{2,columnZ}];
+            obj.p3F = [points{3,columnX} points{3,columnY} points{3,columnZ}];
+            obj.p5F = [points{4,columnX} points{4,columnY} points{4,columnZ}];
+            obj.p6F = [points{5,columnX} points{5,columnY} points{5,columnZ}];
+            obj.p7F = [points{6,columnX} points{6,columnY} points{6,columnZ}];
+            obj.p8F = [points{7,columnX} points{7,columnY} points{7,columnZ}];
+            obj.p9F = [points{8,columnX} points{8,columnY} points{8,columnZ}];
+            obj.p11F = [points{9,columnX} points{9,columnY} points{9,columnZ}];
+            obj.p12F = [points{10,columnX} points{10,columnY} points{10,columnZ}];
+            obj.p16F = [points{11,columnX} points{11,columnY} points{11,columnZ}];
+            obj.p17F = [points{12,columnX} points{12,columnY} points{12,columnZ}];
+            obj.p18F = [points{13,columnX} points{13,columnY} points{13,columnZ}];
+            obj.p19F = [points{14,columnX} points{14,columnY} points{14,columnZ}];
+            obj.p20F = [points{15,columnX} points{15,columnY} points{15,columnZ}];
+            obj.p21F = [points{16,columnX} points{16,columnY} points{16,columnZ}];
+            obj.p99F = [points{17,columnX} points{17,columnY} points{17,columnZ}];
 
             % RR Suspension Points
-            obj.p1R = obj.generatePoint(572.5599, 188.26, 102.4402);
-            obj.p2R = obj.generatePoint(880.2599, 209.26, 72.1202);
-            obj.p3R = obj.generatePoint(807.26, 522.1, 109.44);
-            obj.p5R = obj.generatePoint(657.9677, 246.63, 193.3564);
-            obj.p6R = obj.generatePoint(885.01, 246.63, 184.08);
-            obj.p7R = obj.generatePoint(830.75, 503.79, 302.64);
-            obj.p8R = obj.generatePoint(783.32, 520.85, 127.28);
-            obj.p9R = obj.generatePoint(801.28, 338.38, 333.11);
-            obj.p11R = obj.generatePoint(872.4299, 503.79, 300.15);
-            obj.p12R = obj.generatePoint(938.01, 236.17, 179.9302);
-            obj.p16R = obj.generatePoint(801.9, 91.24, 340.28);
-            obj.p17R = obj.generatePoint(801.45, 262.2, 335.05);
-            obj.p18R = obj.generatePoint(805.69, 596.9, 207.01);
-            obj.p19R = obj.generatePoint(805.69, 558.8, 207.01);
-            obj.p20R = obj.generatePoint(805.14, 260.45, 265.92);
-            obj.p21R = obj.generatePoint(785.91, 260.45, 267.59);
-            obj.p99R = obj.generatePoint(805.69, 558.8, 3.81);
+            obj.p1R = [points{19,columnX} points{19,columnY} points{19,columnZ}];
+            obj.p2R = [points{20,columnX} points{20,columnY} points{20,columnZ}];
+            obj.p3R = [points{21,columnX} points{21,columnY} points{21,columnZ}];
+            obj.p5R = [points{22,columnX} points{22,columnY} points{22,columnZ}];
+            obj.p6R = [points{23,columnX} points{23,columnY} points{23,columnZ}];
+            obj.p7R = [points{24,columnX} points{24,columnY} points{24,columnZ}];
+            obj.p8R = [points{25,columnX} points{25,columnY} points{25,columnZ}];
+            obj.p9R = [points{26,columnX} points{26,columnY} points{26,columnZ}];
+            obj.p11R = [points{27,columnX} points{27,columnY} points{27,columnZ}];
+            obj.p12R = [points{28,columnX} points{28,columnY} points{28,columnZ}];
+            obj.p16R = [points{29,columnX} points{29,columnY} points{29,columnZ}];
+            obj.p17R = [points{30,columnX} points{30,columnY} points{30,columnZ}];
+            obj.p18R = [points{31,columnX} points{31,columnY} points{31,columnZ}];
+            obj.p19R = [points{32,columnX} points{32,columnY} points{32,columnZ}];
+            obj.p20R = [points{33,columnX} points{33,columnY} points{33,columnZ}];
+            obj.p21R = [points{34,columnX} points{34,columnY} points{34,columnZ}];
+            obj.p99R = [points{35,columnX} points{35,columnY} points{35,columnZ}];
 
             % Unit Vectors
 
@@ -401,9 +410,9 @@ classdef GeoPoints
             output = A;
         end
 
-        % Generates 3D points as a column vector and converts mm to in
-        function output = generatePoint(~, x, y, z)
-            output = [x/25.4 y/25.4 z/25.4];
-        end
+%         % Generates 3D points as a column vector and converts mm to in
+%         function output = generatePoint(~, x, y, z)
+%             output = [x/25.4 y/25.4 z/25.4];
+%         end
     end
 end
