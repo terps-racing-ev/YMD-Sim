@@ -388,7 +388,7 @@ end
             obj.air_density = parameters{25,2}; %lb/in^3
             obj.FrontAeroPercent = parameters{26,2};
        
-            obj.FinalDrive = parameters{30,3};
+            obj.FinalDrive = parameters{30,2};
 
             obj.K_s = [parameters{1,6} parameters{1,6}; parameters{2,6} parameters{2,6}]; %lb/in
             obj.K_ARB = [parameters{3,6} ; parameters{4,6}]; %lb/in 
