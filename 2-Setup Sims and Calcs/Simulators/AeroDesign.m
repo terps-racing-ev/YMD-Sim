@@ -1,4 +1,4 @@
-%% Aero Design Calculator
+%% Aero Design Simulator
 % Credit - LJ Hamilton
 
 close all
@@ -36,10 +36,10 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 %% Tire Modeling
 
 filename_P1 = 'A2356run8.mat';
-[latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
 
 filename_P2 = 'A2356run9.mat';
-[latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
 
 totData = cat(1,latTrainingData_P1,latTrainingData_P2);
 trainData = latTrainingData_P1;
@@ -47,14 +47,14 @@ trainData = latTrainingData_P1;
 %% Car Calculations
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
 % Roll Gradient (deg/g)
 R_g = (vehicleObj.TotalWeight*vehicleObj.CoGhRA)./(K_roll(1,:)+K_roll(2,:));
 
 %% muy Calculation Setup
 
-[polyfits] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2);
+[polyfits] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2);
 
 if (Tire_psi == 8)
     polyCalc = polyfits(1,:);

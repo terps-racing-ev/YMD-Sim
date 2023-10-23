@@ -1,4 +1,4 @@
-%% ARB Stiffness Design Calc
+%% ARB Stiffness Design Simulator
 
 % This calculator helps in the design of the ARB, finding the K_ARB of a
 % test design

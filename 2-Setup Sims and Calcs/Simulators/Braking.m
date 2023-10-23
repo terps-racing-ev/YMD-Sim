@@ -30,13 +30,13 @@ BrakeParameters = [1.45;1;3.131;0.3;4;1.45;1;1.5708;0.3;2;0.9375;0.69029;7;4.13;
 %% Calculations
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
 % Braking Forces (lb)
-[Fx,Ax,BF] = BrakingSim(DriverForce,mux,BrakeParameters,vehicleObj);
+[Fx,Ax,BF] = BrakingCalc(DriverForce,mux,BrakeParameters,vehicleObj);
 
 % Load Transfer (lb)
-[Fz,LoLT,Accelmax,Z] = LoLTSim(mux,Velocity,Ax,K_r,vehicleObj);
+[Fz,LoLT,Accelmax,Z] = LoLTCalc(mux,Velocity,Ax,K_r,vehicleObj);
 
 % Tire Limit (g's)
 [TL] = tireLimits(BF,Fz);

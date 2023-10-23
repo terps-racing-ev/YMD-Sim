@@ -1,6 +1,6 @@
 %% Cornering Stiffness Simulator
 
-function [Calpha] = CstiffSim(Fy)
+function [Calpha] = CstiffCalc(Fy)
     Calpha_FL = min(gradient(Fy(1,1)));
     Calpha_FR = min(gradient(Fy(1,2)));
     Calpha_RL = min(gradient(Fy(2,1)));

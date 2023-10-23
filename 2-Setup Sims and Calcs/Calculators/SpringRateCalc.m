@@ -1,6 +1,7 @@
 %% Spring Rate Simulator
 
-function [F_polyCalc,R_polyCalc] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicle)
+function [F_polyCalc,R_polyCalc] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2,vehicle)
+
 
     % "Traditional" Plots - Data Stratification
     

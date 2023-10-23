@@ -1,6 +1,6 @@
 %% Stiffness Simulator
 
-function [Kw,Kr,Kroll] = StiffnessSim(Kt,vehicle)
+function [Kw,Kr,Kroll] = StiffnessCalc(Kt,vehicle)
 
     %Kw: lbf/in
     Kw = [(vehicle.K_s(1,1)*(vehicle.MR_s(1,1))^2)+(vehicle.K_ARB(1,:)*(vehicle.MR_ARB(1,:))^2),(vehicle.K_s(1,2)*(vehicle.MR_s(1,2))^2)+(vehicle.K_ARB(1,:)*(vehicle.MR_ARB(1,:))^2);

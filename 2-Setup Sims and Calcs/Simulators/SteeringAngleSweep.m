@@ -21,7 +21,7 @@ SWAngle = linspace(-90,90,37); %deg (L = neg, R = pos)
 
 %% Code
 for i = 1:37
-    [SteerAngles(:,:,i),TurnRadius(:,i)] = SteerAngleSim(SWAngle(:,i),vehicleObj);
+    [SteerAngles(:,:,i),TurnRadius(:,i)] = SteerAngleCalc(SWAngle(:,i),vehicleObj);
 end
 
 %% Plots

@@ -28,5 +28,5 @@ Beta = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
     
 %% Code
 
-SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
-[SlipAngles,LatAccelG,Betamax] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,vehicleObj)
+SteerAngles = SteerAngleCalc(SWAngle,vehicleObj);
+[SlipAngles,LatAccelG,Betamax] = SlipAngleCalc(SteerAngles,Beta,Velocity,Radius,vehicleObj)

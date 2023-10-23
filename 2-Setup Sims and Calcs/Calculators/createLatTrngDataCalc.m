@@ -1,4 +1,4 @@
-function [latTrngData,tireID,testID] = createLatTrngData(filename)
+function [latTrngData,tireID,testID] = createLatTrngDataCalc(filename)
 %LJ Hamilton, 8 Jan 2022
 %   a function that puts lateral tire data into a table
 t = load(filename);

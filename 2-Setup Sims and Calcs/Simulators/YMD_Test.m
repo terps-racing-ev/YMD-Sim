@@ -79,9 +79,9 @@ for k = 1:length(Beta)
     for j = 1:length(SWAngle)
         for i = 1:length(Radius)
                            
-            SteerAngles(:,:,j) = SteerAngleSim(SWAngle(:,j),vehicleObj);
+            SteerAngles(:,:,j) = SteerAngleCalc(SWAngle(:,j),vehicleObj);
             
-            [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LongVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleSim(SteerAngles(:,:,j),Beta(:,k),Velocity,Radius(:,i),vehicleObj);
+            [SlipAngles(:,:,i),LatAccelG(:,:,i),Betamax(:,:,i),YawVelo(:,:,i),LongVelo(:,:,i),LateralVelo(:,:,i)] = SlipAngleCalc(SteerAngles(:,:,j),Beta(:,k),Velocity,Radius(:,i),vehicleObj);
             
             [Fz(:,:,i),LLT(:,:,i),LLT_D(:,:,i),R_g(:,:,i),Roll_Angle(:,:,i),Z(:,:,i)] = LLTSim(K_roll,Velocity,Accel(:,2),vehicleObj);
             
