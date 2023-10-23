@@ -44,21 +44,6 @@ classdef TREV2Parameters
         Camber  % positive = top of tires toward chassis (normally neg camber)
         TirePressure 
     end
-    
-    %% Alignment and Tuning Parameters
-    % Given
-    properties (Constant)
-        K_s = [300 300; 450 450]; %lbf/in
-        K_ARB = [0; 0]; %lbf/in
-        MR_s = [1 1; 1 1];
-        MR_ARB = [1; 1];
-        DampC_Low = [12 12; 12 12];
-        DampC_High = [12 12; 12 12];
-        Ackermann = -0.12655; % 1 = 100% Ackermann, -1 = 100% Anti-Ackermann, 0 = parallel)
-        Toe = [-0.5, -0.5; 0, 0];
-        Camber = [0, 0; 0, 0]; % positive = top of tires toward chassis (normally neg camber)
-        TirePressure = [8, 8; 8, 8];
-    end
 
     %% Braking Parameters
     % Given
@@ -104,9 +89,6 @@ classdef TREV2Parameters
     properties 
         FinalDrive
     end
-
-
-
     %% FR Suspension Points
  properties (SetAccess = private)  
         % Point 1: Lower wishbone front pivot
