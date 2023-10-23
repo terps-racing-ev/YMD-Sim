@@ -28,10 +28,10 @@ trainData = latTrainingData_P1;
 %% Inputs
 
 % Acceleration Case = True, Deceleration Case = False
-Accel = false;
+Accel = true;
 
 % Test Velocity (mph)
-Velocity = 10;
+Velocity = 0;
 
 %% Calculations
 
@@ -101,8 +101,10 @@ disp('Max Fx (lb): ');
 disp(Fx_max);
 disp('Longitudinal Acceleration (Gs): ');
 disp(g_avg);
-disp('Max Acceleration Possible (Car Limit) (Gs): ');
-disp(Accelmax_static);
+if Accel == true
+    disp('Max Acceleration Possible (Car Limit) (Gs): ');
+    disp(Accelmax_static);
+end
 disp('Pitch Angle (deg): ');
 disp(Pitch_Angle);
 disp('Wheel Displacement (in): ');
