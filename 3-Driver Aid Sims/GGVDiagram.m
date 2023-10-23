@@ -204,7 +204,7 @@ for i = 1:numel(Velocity)
 end
 
 
-% Right Turn
+% Left Turn
 RightTurn = false;
 
 LeftLatGs = [];
@@ -252,9 +252,9 @@ PlotData = [Velocity; AccelGs; DecelGs; LeftLatGs; RightLatGs];
 figure(1)
 title('G-G-V Diagram');
 hold on
-xlabel('Lateral Gs');
+xlabel('Longitudinal Gs');
 hold on
-ylabel('Longitudinal Gs');
+ylabel('Lateral Gs');
 hold on
 zlabel('Velocity (mph)');
 hold on
