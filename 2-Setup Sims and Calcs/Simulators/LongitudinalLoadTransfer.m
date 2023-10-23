@@ -31,7 +31,7 @@ trainData = latTrainingData_P1;
 Accel = false;
 
 % Test Velocity (mph)
-Velocity = 30;
+Velocity = 10;
 
 %% Calculations
 
@@ -46,12 +46,12 @@ K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
 [F_polyCalc,R_polyCalc] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
 
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-[Fz,LoLT,Accelmax_static,Z] = LoLTSim(0,Velocity,0,K_r,vehicleObj);
+[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(0,Velocity,0,K_r,vehicleObj);
 
 mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
 mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
 
-[Fz,LoLT,Accelmax_static,Z] = LoLTSim(mean(mu_R),Velocity,0,K_r,vehicleObj);
+[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity,0,K_r,vehicleObj);
 
 if Accel == false
     Fx_max = [mu_F;mu_R].*Fz;
@@ -73,7 +73,7 @@ else
 end
 
 % Dynamic Weights (lb) -> Max Fx from Weight Transfer
-[Fz,LoLT,Accelmax_static,Z] = LoLTSim(mean(mu_R),Velocity,g_avg,K_r,vehicleObj);
+[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity,g_avg,K_r,vehicleObj);
 
 mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
 mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
@@ -103,5 +103,7 @@ disp('Longitudinal Acceleration (Gs): ');
 disp(g_avg);
 disp('Max Acceleration Possible (Car Limit) (Gs): ');
 disp(Accelmax_static);
+disp('Pitch Angle (deg): ');
+disp(Pitch_Angle);
 disp('Wheel Displacement (in): ');
 disp(Z);

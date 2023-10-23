@@ -49,7 +49,7 @@ classdef TREV2Parameters
     % Given
     properties (Constant)
         K_s = [300 300; 450 450]; %lbf/in
-        K_ARB = [250; 1000]; %lbf/in
+        K_ARB = [0; 0]; %lbf/in
         MR_s = [1 1; 1 1];
         MR_ARB = [1; 1];
         DampC_Low = [12 12; 12 12];
