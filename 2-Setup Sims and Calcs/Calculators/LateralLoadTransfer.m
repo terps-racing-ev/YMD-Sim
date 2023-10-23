@@ -67,6 +67,17 @@ if Velocity == 0 && RightTurn == true
     mu_drive = -1.7;
 end
 
+disp('Fz (lb): ');
+disp(Fz);
+disp('Max Fy (lb): ');
+disp(Fy_max);
+% disp('Yaw Moment (lb*in):');
+% disp(Yaw);
+disp('Max Lateral Acceleration (Gs): ');
+disp(g_avg);
+disp('Wheel Displacement (in): ');
+disp(Z);
+
 % Maximum Cornering Velocity (mph)
 % CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
 
@@ -90,10 +101,11 @@ g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4]
 CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
 
 % Rough Yaw Calculator
-Yaw_Wheel = Fy_max.*[vehicleObj.FrontAxleToCoG,vehicleObj.FrontAxleToCoG;vehicleObj.CoGToRearAxle,vehicleObj.CoGToRearAxle];
+% Yaw_Wheel = Fy_max.*[vehicleObj.FrontAxleToCoG,vehicleObj.FrontAxleToCoG;vehicleObj.CoGToRearAxle,vehicleObj.CoGToRearAxle];
+% 
+% Yaw = sum(Yaw_Wheel(1,:))-sum(Yaw_Wheel(2,:));
 
-Yaw = sum(Yaw_Wheel(1,:))-sum(Yaw_Wheel(2,:));
-
+disp('----------');
 disp('Fz (lb): ');
 disp(Fz);
 disp('Max Fy (lb): ');
