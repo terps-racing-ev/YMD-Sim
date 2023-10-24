@@ -1,10 +1,29 @@
-%% Lateral CoF Simulator
+close all
+clearvars
+clc
 
+%% Adding Paths
 
-function [F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2,vehicle)
+% Adding Vehicle Parameters
+currentFolder = pwd;
+addpath([currentFolder, filesep, '1-Input Functions']);
+vehicleObj = TREV2Parameters();
 
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
 
-    % "Traditional" Plots - Data Stratification
+%% Tire Modeling
+
+filename_P1 = 'A2356run8.mat';
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
+
+filename_P2 = 'A2356run9.mat';
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
+
+totData = cat(1,latTrainingData_P1,latTrainingData_P2);
+trainData = latTrainingData_P1;
+
+%% "Traditional" Plots - Data Stratification
 
     Num8psi_P1 =  find(latTrainingData_P1(:,4) <= 9);
     Num10psi_P1 =  find(latTrainingData_P1(:,4) > 9 & latTrainingData_P1(:,4) <= 11);
@@ -140,39 +159,3 @@ function [F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1,latTraining
     
     polyfits = [poly8; poly10; poly12i; poly12f; poly14];
 
-    F_Tire_psi = vehicle.TirePressure(1,1);
-    R_Tire_psi = vehicle.TirePressure(2,1);
-
-    if (F_Tire_psi == 8)
-        F_polyCalc = polyfits(1,:);
-    end
-
-    if (F_Tire_psi == 10)
-        F_polyCalc = polyfits(2,:);
-    end
-
-    if (F_Tire_psi == 12)
-        F_polyCalc = polyfits(3,:);
-    end
-
-    if (F_Tire_psi == 14)
-        F_polyCalc = polyfits(5,:);
-    end
-
-    if (R_Tire_psi == 8)
-        R_polyCalc = polyfits(1,:);
-    end
-
-    if (R_Tire_psi == 10)
-        R_polyCalc = polyfits(2,:);
-    end
-
-    if (R_Tire_psi == 12)
-        R_polyCalc = polyfits(3,:);
-    end
-
-    if (R_Tire_psi == 14)
-        R_polyCalc = polyfits(5,:);
-    end
-
-end

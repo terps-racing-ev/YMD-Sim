@@ -31,7 +31,7 @@ trainData = latTrainingData_P1;
 RightTurn = false;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-Velocity = 25;
+Velocity = 86;
 
 Radius = 348; %in
 
@@ -50,8 +50,8 @@ K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
 [Fz,LoLT,Accelmax,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
 
-mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
-mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
+mu_F = [real(polyval(F_polyCalc,log(Fz(1,1)))), real(polyval(F_polyCalc,log(Fz(1,2))))];
+mu_R = [real(polyval(R_polyCalc,log(Fz(2,1)))), real(polyval(R_polyCalc,log(Fz(2,2))))];
 
 if RightTurn == true
     Fy_max = -([mu_F;mu_R].*Fz);
@@ -84,10 +84,8 @@ end
 % Dynamic Weights (lb) -> Max Fy from Weight Transfer
 [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity,mu_drive,vehicleObj);
 
-mu = [mu_F,mu_R];
-
-mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
-mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
+mu_F = [real(polyval(F_polyCalc,log(Fz(1,1)))), real(polyval(F_polyCalc,log(Fz(1,2))))];
+mu_R = [real(polyval(R_polyCalc,log(Fz(2,1)))), real(polyval(R_polyCalc,log(Fz(2,2))))];
 
 if RightTurn == true
     Fy_max = -([mu_F;mu_R].*Fz);
