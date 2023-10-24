@@ -11,16 +11,16 @@ currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV2Parameters();
 
-% Adding Additional Sims
-addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+% Adding Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
 
 %% Tire Modeling
 
 filename_P1 = 'A2356run8.mat';
-[latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
 
 filename_P2 = 'A2356run9.mat';
-[latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
 
 totData = cat(1,latTrainingData_P1,latTrainingData_P2);
 trainData = latTrainingData_P1;
@@ -28,14 +28,14 @@ trainData = latTrainingData_P1;
 %% Tuned Car Parameters
 
 % Tire Spring Rates (lbf/in)
-[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
 
 K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
-[F_polyCalc,R_polyCalc] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
 
 %% Motor Parameters
 
@@ -56,12 +56,12 @@ AccelGs = [];
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(0,Velocity(i),0,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
     
     mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
     mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
     
-    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity(i),0,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu_R),Velocity(i),0,K_r,vehicleObj);
     
     if Accel == false
         Fx_max = [mu_F;mu_R].*Fz;
@@ -80,7 +80,7 @@ for i = 1:numel(Velocity)
     end
     
     % Dynamic Weights (lb) -> Max Fx from Weight Transfer
-    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity(i),g_avg,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu_R),Velocity(i),g_avg,K_r,vehicleObj);
     
     mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
     mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
@@ -112,12 +112,12 @@ DecelGs = [];
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(0,Velocity(i),0,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
     
     mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
     mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
     
-    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity(i),0,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu_R),Velocity(i),0,K_r,vehicleObj);
     
     if Accel == false
         Fx_max = [mu_F;mu_R].*Fz;
@@ -136,7 +136,7 @@ for i = 1:numel(Velocity)
     end
     
     % Dynamic Weights (lb) -> Max Fx from Weight Transfer
-    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity(i),g_avg,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu_R),Velocity(i),g_avg,K_r,vehicleObj);
     
     mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
     mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
@@ -169,7 +169,7 @@ RightLatGs = [];
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-    [Fz,LoLT,Accelmax,Z] = LoLTSim(0,Velocity(i),0,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
     
     mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
     mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
@@ -185,7 +185,7 @@ for i = 1:numel(Velocity)
     mu_drive = g_avg;
     
     % Dynamic Weights (lb) -> Max Fy from Weight Transfer
-    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
+    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
     
     mu = [mu_F,mu_R];
     
@@ -211,7 +211,7 @@ LeftLatGs = [];
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-    [Fz,LoLT,Accelmax,Z] = LoLTSim(0,Velocity(i),0,K_r,vehicleObj);
+    [Fz,LoLT,Accelmax,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
     
     mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
     mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
@@ -227,7 +227,7 @@ for i = 1:numel(Velocity)
     mu_drive = g_avg;
     
     % Dynamic Weights (lb) -> Max Fy from Weight Transfer
-    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
+    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
     
     mu = [mu_F,mu_R];
     

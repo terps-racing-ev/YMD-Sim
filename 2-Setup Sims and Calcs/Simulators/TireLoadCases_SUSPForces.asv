@@ -18,13 +18,12 @@ clc
 %% Adding Paths
 
 % Adding Vehicle Parameters
-% currentFolder = pwd;
-% addpath([currentFolder, filesep, '1-Input Functions']);
-% addpath([currentFolder, filesep, '2-Setup Sims and Calcs']);
-% 
-% 
-% vehicleObj = TREV2Parameters();
-% Adding Additional Sims
+currentFolder = pwd;
+addpath([currentFolder, filesep, '1-Input Functions']);
+vehicleObj = TREV2Parameters();
+
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
 
 %% Inputs
 
@@ -49,23 +48,26 @@ Cone_Strike = 8;
 Col_Num = Zerog_Static;
 % reading Gstatic , change column number for different cases
 % 1x3 matrices - [Fx Fy Fz] 
-F_FL = [dataTable{1,Col_Num}, dataTable{2,Col_Num} dataTable{3,Col_Num}];
+F_FL = [dataTable{1,Col_Num}; dataTable{2,Col_Num}; dataTable{3,Col_Num}];
 
-F_FR = [dataTable{10,Col_Num}, dataTable{11,Col_Num} dataTable{12,Col_Num}];
+F_FR = [dataTable{10,Col_Num}; dataTable{11,Col_Num}; dataTable{12,Col_Num}];
 
-F_RL = [dataTable{19,Col_Num} dataTable{20,Col_Num} dataTable{21,Col_Num}];
+F_RL = [dataTable{19,Col_Num}; dataTable{20,Col_Num}; dataTable{21,Col_Num}];
 
-F_RR = [dataTable{28,Col_Num} dataTable{29,Col_Num} dataTable{30,Col_Num}];
+F_RR = [dataTable{28,Col_Num}; dataTable{29,Col_Num}; dataTable{30,Col_Num}];
 
 %% Calculations
 
 % output:
 % 4 1x6 matrices 
 
-
+disp('Front Left (FL) Tire Loads');
 disp(F_FL);
+disp('Front Right (FR) Tire Loads');
 disp(F_FR);
+disp('Rear Left (FL) Tire Loads');
 disp(F_RL);
+disp('Rear Right (FL) Tire Loads');
 disp(F_RR);
 
 FL = ForceCalc().Forces_FL(F_FL(1), F_FL(2), F_FL(3));
@@ -73,15 +75,9 @@ FR = ForceCalc().Forces_FR(F_FR(1), F_FR(2), F_FR(3));
 RL = ForceCalc().Forces_RL(F_RL(1), F_RL(2), F_RL(3));
 RR = ForceCalc().Forces_RR(F_RR(1), F_RR(2), F_RR(3));
 
-
+disp('Front Left (FL) Forces');
 disp(FL);
+disp('Front Right (FR) Tire Loads');
 disp(FR);
 disp(RL);
-disp(ForceCalc().Forces_RR(F_RR(1), F_RR(2), F_RR(3)));
-
-
-
-
-
-
-
+disp(RR);
