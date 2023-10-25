@@ -365,6 +365,20 @@ end
 
         % Setting all points, look here for values
         function obj = TREV2Parameters()
+            
+            % To try and keep the excel open 
+           function data = CopyAndReadTable(fileName)
+            [filepath, name, extension] = fileparts(fileName);
+            newFullFileName = fullfile('directory file on comp here', [name, extension]);
+            disp(newFullFileName);
+            fullfile example:
+            fullfile('c:\','user','xlsm')
+            copyfile(fileName, newFullFileName);
+            data = readtable(newFullFileName);
+            delete(newFillFileName);
+            end
+
+
             parameters = readtable('TREV2 Cookbook.xlsx','Sheet', 'Parameters','VariableNamingRule','preserve');
             points = readtable('TREV2 Cookbook.xlsx','Sheet', 'Geo Points','VariableNamingRule','preserve');
 
