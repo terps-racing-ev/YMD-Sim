@@ -65,6 +65,8 @@ FR = ForceCalc().Forces_FR(F_FR(1), F_FR(2), F_FR(3));
 RL = ForceCalc().Forces_RL(F_RL(1), F_RL(2), F_RL(3));
 RR = ForceCalc().Forces_RR(F_RR(1), F_RR(2), F_RR(3));
 
+format shortG
+
 disp('Front Left (FL) Tire Loads');
 disp(F_FL);
 disp('------------------');
