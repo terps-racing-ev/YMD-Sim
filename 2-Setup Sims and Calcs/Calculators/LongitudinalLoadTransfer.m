@@ -14,6 +14,9 @@ vehicleObj = TREV2Parameters();
 % Adding Calculators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
 
+% Adding Simulators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
 %% Tire Modeling
 
 filename_P1 = 'A2356run8.mat';

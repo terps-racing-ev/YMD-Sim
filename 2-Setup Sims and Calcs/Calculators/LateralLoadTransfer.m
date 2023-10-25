@@ -28,10 +28,10 @@ trainData = latTrainingData_P1;
 %% Inputs
 
 % Right Turn = True, Left Turn = False
-RightTurn = false;
+RightTurn = true;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-Velocity = 86;
+Velocity = 0;
 
 Radius = 348; %in
 

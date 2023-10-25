@@ -43,7 +43,7 @@ Cone_Strike = 8;
 % Maximum_Tension = 10;
 
 %Choose column number from above
-Col_Num = Max_Acceleration;
+Col_Num = Cone_Strike;
 
 % reading Gstatic , change column number for different cases
 % 1x3 matrices - [Fx Fy Fz] 
@@ -88,3 +88,5 @@ disp(F_RR);
 disp('------------------');
 disp('Rear Right (RR) Forces');
 disp(RR);
+
+winopen('TREV2 Cookbook.xlsx');

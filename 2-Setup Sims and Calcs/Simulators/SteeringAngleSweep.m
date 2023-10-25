@@ -12,7 +12,7 @@ addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV1Parameters();
 
 % Adding StiffnessSim & LLTSim
-addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
 
 %% Inputs
 

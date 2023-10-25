@@ -1,4 +1,4 @@
-%% G-G-V 
+%% G-G-V Diagram
 
 close all
 clearvars
