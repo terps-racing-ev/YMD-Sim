@@ -15,14 +15,20 @@ vehicleObj = TREV2Parameters();
 % Adding Tire Models
 addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
 
-% Adding Additional Sims
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
 
 %% Tire Modeling
 
 %Input tire filenames
-filename.FrontTire = 'A1965run18.mat';
-filename.RearTire = 'A1965run18.mat';
+filename.FrontTire = 'A2356run8.mat';
+filename.RearTire = 'A2356run8.mat';
 [trainingDataFront,tire.IDfront] = createLatTrngData2(filename.FrontTire);
 [trainingDataRear,tire.IDrear] = createLatTrngData2(filename.RearTire);
 
@@ -50,9 +56,23 @@ toc(t1)
 
 disp('Training completed')
 
+filename_P1 = 'A2356run8.mat';
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
+
+filename_P2 = 'A2356run9.mat';
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
+
+totData = cat(1,latTrainingData_P1,latTrainingData_P2);
+trainData = latTrainingData_P1;
+
 %% Inputs
 
-K_t = [548 548; 548 548];%lbf/in 
+% Tire Spring Rates (lbf/in)
+[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+
+K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
+
+[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
 
 % Number of Iterations
 n = 5;
@@ -68,7 +88,7 @@ SWAngle = -8; %linspace(-90,90,5); %deg (L = neg, R = pos)
 BetaEntry = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
 % Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 
@@ -78,7 +98,7 @@ SteerAngles = SteerAngleCalc(SWAngle,vehicleObj);
              
 LatAccelG = 0;
 
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,LatAccelG,vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity,LatAccelG,vehicleObj);
 
 [IA] = CamberCalc(Roll_Angle,SWAngle,vehicleObj);
 
@@ -86,11 +106,13 @@ LatAccelG = 0;
 
 [YM,AccelEntry] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
 
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,AccelEntry(1,2),vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity,AccelEntry(1,2),vehicleObj);
 
 [IA] = CamberCalc(Roll_Angle,SWAngle,vehicleObj);
 
 mu = [sqrt(((Fx(1,1)/Fz(1,1))^2+((Fy(1,1)/Fz(1,1))^2))), sqrt(((Fx(1,2)/Fz(1,2))^2+((Fy(1,2)/Fz(1,2))^2))); sqrt(((Fx(2,1)/Fz(2,1))^2+((Fy(2,1)/Fz(2,1))^2))), sqrt(((Fx(2,2)/Fz(2,2))^2+((Fy(2,2)/Fz(2,2))^2)))];
+
+format shortG
 
 disp('Velocity: ');
 disp(Velocity);

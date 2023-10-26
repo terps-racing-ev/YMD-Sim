@@ -21,13 +21,22 @@ currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV2Parameters();
 
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
 % Adding Additional Calculators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
 
 %% Inputs
 
 % Load Geo Points from Cookbook
-dataTable = readtable('TREV2 Cookbook.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
+dataTable = readtable('TREV2 Cookbook-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
 
 % Display the modified column names
 columnNames = dataTable.Properties.VariableNames;
@@ -60,12 +69,12 @@ F_RR = [dataTable{28,Col_Num}; dataTable{29,Col_Num}; dataTable{30,Col_Num}];
 % output:
 % 4 1x6 matrices 
 
-FL = ForceCalc().Forces_FL(F_FL(1), F_FL(2), F_FL(3));
-FR = ForceCalc().Forces_FR(F_FR(1), F_FR(2), F_FR(3));
-RL = ForceCalc().Forces_RL(F_RL(1), F_RL(2), F_RL(3));
-RR = ForceCalc().Forces_RR(F_RR(1), F_RR(2), F_RR(3));
+FL = round(ForceCalc().Forces_FL(F_FL(1), F_FL(2), F_FL(3)),4,"decimals");
+FR = round(ForceCalc().Forces_FR(F_FR(1), F_FR(2), F_FR(3)),4,"decimals");
+RL = round(ForceCalc().Forces_RL(F_RL(1), F_RL(2), F_RL(3)),4,"decimals");
+RR = round(ForceCalc().Forces_RR(F_RR(1), F_RR(2), F_RR(3)),4,"decimals");
 
-format shortG
+format longG
 
 disp('Front Left (FL) Tire Loads');
 disp(F_FL);
@@ -91,4 +100,4 @@ disp('------------------');
 disp('Rear Right (RR) Forces');
 disp(RR);
 
-winopen('TREV2 Cookbook.xlsx');
+% winopen('TREV2 Cookbook.xlsx');

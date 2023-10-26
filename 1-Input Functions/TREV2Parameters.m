@@ -362,25 +362,16 @@ end
             title("Steer vs. Camber RHS")
         end
 
-
         % Setting all points, look here for values
         function obj = TREV2Parameters()
             
-            % To try and keep the excel open 
-           function data = CopyAndReadTable(fileName)
-            [filepath, name, extension] = fileparts(fileName);
-            newFullFileName = fullfile('directory file on comp here', [name, extension]);
-            disp(newFullFileName);
-            fullfile example:
-            fullfile('c:\','user','xlsm')
-            copyfile(fileName, newFullFileName);
-            data = readtable(newFullFileName);
-            delete(newFillFileName);
-            end
+            [~, name, ext] = fileparts('TREV2 Cookbook.xlsx');
+            tempTREV2Cookbook = fullfile('Reference Files/',['TREV2 Cookbook-MATLAB', ext]);
+            copyfile('TREV2 Cookbook.xlsx', tempTREV2Cookbook);
+            %data = readtable(tempTREV2Cookbook)
 
-
-            parameters = readtable('TREV2 Cookbook.xlsx','Sheet', 'Parameters','VariableNamingRule','preserve');
-            points = readtable('TREV2 Cookbook.xlsx','Sheet', 'Geo Points','VariableNamingRule','preserve');
+            parameters = readtable('TREV2 Cookbook-MATLAB','Sheet', 'Parameters','VariableNamingRule','preserve');
+            points = readtable('TREV2 Cookbook-MATLAB','Sheet', 'Geo Points','VariableNamingRule','preserve');
 
             
             obj.TotalWeight = parameters{1,2};
