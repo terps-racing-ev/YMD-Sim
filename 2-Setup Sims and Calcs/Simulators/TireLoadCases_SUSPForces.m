@@ -19,7 +19,7 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
+
 
 % Adding Tire Models
 addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
@@ -34,12 +34,11 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 addpath([currentFolder, filesep, 'Reference Files\']);
 
 %% Inputs
-
+% Create a TREV object with car parameters 
+vehicleObj = TREV2Parameters();
 % Load Geo Points from Cookbook
 dataTable = readtable('TREV2 Cookbook-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
 
-% Display the modified column names
-columnNames = dataTable.Properties.VariableNames;
 
 % Input test tire forces for analysis
 Zerog_Static = 3;
@@ -54,7 +53,6 @@ Cone_Strike = 8;
 %Choose column number from above
 Col_Num = Cone_Strike;
 
-% reading Gstatic , change column number for different cases
 % 1x3 matrices - [Fx Fy Fz] 
 F_FL = [dataTable{1,Col_Num}; dataTable{2,Col_Num}; dataTable{3,Col_Num}];
 
