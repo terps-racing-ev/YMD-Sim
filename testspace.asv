@@ -1,0 +1,63 @@
+close all
+clearvars
+clc
+
+%% Adding Paths
+
+% Adding Vehicle Parameters
+currentFolder = pwd;
+addpath([currentFolder, filesep, '1-Input Functions']);
+
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+
+vehicleObj = TREV2Parameters();
+
+%% Tire Modeling
+
+filename_P1 = 'A2356run8.mat';
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
+
+filename_P2 = 'A2356run9.mat';
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
+
+totData = cat(1,latTrainingData_P1,latTrainingData_P2);
+trainData = latTrainingData_P1;
+
+%% C_alpha Calculation
+
+Fz = [-400,-400;-250,-250];
+
+
+    %train Fy model
+    tic
+        disp('Fy Model is being trained.  Standby...')
+        [Model_Fy, validation.RMSE_Fy] = Trainer_Fy(totData); %creates trained model and root mean square error to evaluate "fit"
+        disp('Training completed')
+    toc
+
+    for i = 1:10
+        SA = [-13:1:13]'; %slip angle vector
+        UCV = ones(size(SA));%makes a unit column vector of the same length as the slip angle vector
+    
+        Fy_FL(i) = Model_Fy.predictFcn([SA vehicleObj.Camber(1,1)*UCV Fz(1,1)*UCV vehicleObj.TirePressure(1,1)*UCV]); %Fy at Fz = FL
+        Fy_FR = Model_Fy.predictFcn([SA vehicleObj.Camber(1,2)*UCV Fz(1,2)*UCV vehicleObj.TirePressure(1,2)*UCV]); %Fy at Fz = FR
+        Fy_RL = Model_Fy.predictFcn([SA vehicleObj.Camber(2,1)*UCV Fz(2,1)*UCV vehicleObj.TirePressure(2,1)*UCV]); %Fy at Fz = RL
+        Fy_RR = Model_Fy.predictFcn([SA vehicleObj.Camber(2,2)*UCV Fz(2,2)*UCV vehicleObj.TirePressure(2,2)*UCV]); %Fy at Fz = RR
+    
+        Calpha_FL(i,:) = min(gradient(Fy_FL));
+        Calpha_FR(i,:) = min(gradient(Fy_FR));
+        Calpha_RL(i,:) = min(gradient(Fy_RL));
+        Calpha_RR(i,:) = min(gradient(Fy_RR));
+    end
+
+    Calpha = [mean(Calpha_FL) mean(Calpha_FR); mean(Calpha_RL) mean(Calpha_RR)];

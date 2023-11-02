@@ -30,9 +30,9 @@ InnerD_F = .259; %in
 TorsionL_F = 10; %in
 LeverL_F = 2; %in
 
-OuterD_R = 5/16; %in
-InnerD_R = 0.215; %in
-TorsionL_R = 16; %in
+OuterD_R = 0.25; %in
+InnerD_R = 0.12; %in
+TorsionL_R = 15; %in
 LeverL_R = 2; %in
 
 %% Calculations

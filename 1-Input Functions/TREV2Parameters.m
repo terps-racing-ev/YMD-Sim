@@ -89,6 +89,7 @@ classdef TREV2Parameters
     properties 
         FinalDrive
     end
+
     %% FR Suspension Points
  properties (SetAccess = private)  
         % Point 1: Lower wishbone front pivot
@@ -469,10 +470,7 @@ end
             obj.p19R = [points{32,columnX} points{32,columnY} points{32,columnZ}];
             obj.p20R = [points{33,columnX} points{33,columnY} points{33,columnZ}];
             obj.p21R = [points{34,columnX} points{34,columnY} points{34,columnZ}];
-            obj.p99R = [points{35,columnX} points{35,columnY} points{35,columnZ}];
-
-
-        
+            obj.p99R = [points{35,columnX} points{35,columnY} points{35,columnZ}];     
          end
 
     end

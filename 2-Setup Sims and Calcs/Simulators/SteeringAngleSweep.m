@@ -9,10 +9,19 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV1Parameters();
+vehicleObj = TREV2Parameters();
 
-% Adding StiffnessSim & LLTSim
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
 
 %% Inputs
 

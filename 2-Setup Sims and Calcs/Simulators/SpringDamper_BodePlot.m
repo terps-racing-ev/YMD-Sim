@@ -14,16 +14,25 @@ currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
 vehicleObj = TREV2Parameters();
 
-% Adding Additional Sims
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
 
 %% Tire Modeling
 
 filename_P1 = 'A2356run8.mat';
-[latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
+[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
 
 filename_P2 = 'A2356run9.mat';
-[latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
+[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
 
 totData = cat(1,latTrainingData_P1,latTrainingData_P2);
 trainData = latTrainingData_P1;
@@ -35,7 +44,7 @@ Weights = vehicleObj.staticWeights();
 TrackWidth = vehicleObj.TrackWidth;
 
 % Tire Spring Rates (lbf/in)
-[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
 
 K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
 

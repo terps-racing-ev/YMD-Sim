@@ -9,13 +9,20 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
 
-% Adding Calculators
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
 
-% Adding Simulators
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+
+vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
@@ -63,7 +70,7 @@ else
 end
 
 disp('Max Static Fx (lb): ');
-disp(Fx_max);
+disp(round(Fx_max,3,"decimals"));
 
 if Accel == false
     g_avg = sum(reshape(Fx_max,[1,4]))/(sum(reshape((-vehicleObj.staticWeights),[1,4])));
@@ -99,16 +106,16 @@ end
 
 disp('---------------');
 disp('Fz (lb): ');
-disp(Fz);
+disp(round(Fz,3,"decimals"));
 disp('Max Fx (lb): ');
-disp(Fx_max);
+disp(round(Fx_max,3,"decimals"));
 disp('Longitudinal Acceleration (Gs): ');
-disp(g_avg);
+disp(round(g_avg,3,"decimals"));
 if Accel == true
     disp('Max Acceleration Possible (Car Limit) (Gs): ');
-    disp(Accelmax_static);
+    disp(round(Accelmax_static,3,"decimals"));
 end
 disp('Pitch Angle (deg): ');
-disp(Pitch_Angle);
+disp(round(Pitch_Angle,3,"decimals"));
 disp('Wheel Displacement (in): ');
-disp(Z);
+disp(round(Z,3,"decimals"));

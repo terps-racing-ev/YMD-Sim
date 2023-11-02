@@ -9,10 +9,20 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
 
-% Adding Calculators
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+
+vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
@@ -67,20 +77,6 @@ if Velocity == 0 && RightTurn == true
     mu_drive = -1.7;
 end
 
-% disp('Fz (lb): ');
-% disp(Fz);
-% disp('Max Fy (lb): ');
-% disp(Fy_max);
-% % disp('Yaw Moment (lb*in):');
-% % disp(Yaw);
-% disp('Max Lateral Acceleration (Gs): ');
-% disp(g_avg);
-% disp('Wheel Displacement (in): ');
-% disp(Z);
-
-% Maximum Cornering Velocity (mph)
-% CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
-
 % Dynamic Weights (lb) -> Max Fy from Weight Transfer
 [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity,mu_drive,vehicleObj);
 
@@ -98,27 +94,20 @@ g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4]
 % Maximum Cornering Velocity (mph)
 CornerSpeed = sqrt(((abs(sum(reshape(Fy_max,[1,4]))))/(vehicleObj.TotalWeight/32.2))*(Radius/12))/1.467;
 
-% Rough Yaw Calculator
-% Yaw_Wheel = Fy_max.*[vehicleObj.FrontAxleToCoG,vehicleObj.FrontAxleToCoG;vehicleObj.CoGToRearAxle,vehicleObj.CoGToRearAxle];
-% 
-% Yaw = sum(Yaw_Wheel(1,:))-sum(Yaw_Wheel(2,:));
-
 % disp('----------');
 disp('Fz (lb): ');
-disp(Fz);
+disp(round(Fz,3,"decimals"));
 disp('Max Fy (lb): ');
-disp(Fy_max);
-% disp('Yaw Moment (lb*in):');
-% disp(Yaw);
+disp(round(Fy_max,3,"decimals"));
 disp('Max Lateral Acceleration (Gs): ');
-disp(g_avg);
+disp(round(g_avg,3,"decimals"));
 disp('Max Cornering Velocity (mph): ');
-disp(CornerSpeed);
+disp(round(CornerSpeed,3,"decimals"));
 disp('LLT_D: ');
-disp(LLT_D);
+disp(round(LLT_D,3,"decimals"));
 disp('Roll Sensitivity (deg/g): ');
-disp(R_g);
+disp(round(R_g,3,"decimals"));
 disp('Roll Angle (deg): ');
-disp(Roll_Angle);
+disp(round(Roll_Angle,3,"decimals"));
 disp('Wheel Displacement (in): ');
-disp(Z);
+disp(round(Z,3,"decimals"));

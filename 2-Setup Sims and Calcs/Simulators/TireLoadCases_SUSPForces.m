@@ -6,7 +6,7 @@
 % - 0g Static
 % - Max Acceleration (g's)
 % - Max Deceleration (g's)
-% - Max Cornering (g's) - Skidpad
+% - Max Cornering (g's)
 % - Cone Strike (5g Bump)
 % - Tilt Test (1.7 g's cornering)
 
@@ -19,7 +19,6 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-
 
 % Adding Tire Models
 addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
@@ -34,11 +33,12 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 addpath([currentFolder, filesep, 'Reference Files\']);
 
 %% Inputs
+
 % Create a TREV object with car parameters 
 vehicleObj = TREV2Parameters();
+
 % Load Geo Points from Cookbook
 dataTable = readtable('TREV2 Cookbook-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
-
 
 % Input test tire forces for analysis
 Zerog_Static = 3;
@@ -51,7 +51,7 @@ Cone_Strike = 8;
 % Maximum_Tension = 10;
 
 %Choose column number from above
-Col_Num = Cone_Strike;
+Col_Num = 3;
 
 % 1x3 matrices - [Fx Fy Fz] 
 F_FL = [dataTable{1,Col_Num}; dataTable{2,Col_Num}; dataTable{3,Col_Num}];
