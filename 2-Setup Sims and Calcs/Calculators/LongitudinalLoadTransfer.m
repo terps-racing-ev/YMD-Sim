@@ -38,10 +38,10 @@ trainData = latTrainingData_P1;
 %% Inputs
 
 % Acceleration Case = True, Deceleration Case = False
-Accel = false;
+Accel = true;
 
 % Test Velocity (mph)
-Velocity = 86;
+Velocity = 0;
 
 %% Calculations
 
