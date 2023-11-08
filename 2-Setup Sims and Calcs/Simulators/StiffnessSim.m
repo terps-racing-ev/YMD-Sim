@@ -1,4 +1,4 @@
-%% Stiffness Simulator
+%% Stiffness Calculator
 
 function [Kw,Kr,Kroll] = StiffnessSim(Kt,vehicle)
 

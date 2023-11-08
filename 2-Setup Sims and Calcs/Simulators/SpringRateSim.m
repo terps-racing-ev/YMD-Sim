@@ -1,4 +1,4 @@
-%% Spring Rate Simulator
+%% Spring Rate Calculator
 
 function [F_polyCalc,R_polyCalc] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicle)
 

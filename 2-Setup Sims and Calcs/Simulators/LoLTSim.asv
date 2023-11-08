@@ -1,4 +1,4 @@
-%% Longitudinal Load Transfer Simulator
+%% Longitudinal Load Transfer Calculator
 
 function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTSim(mu_x,Velocity,LongAccel,K_r,vehicle)
     % LoLT

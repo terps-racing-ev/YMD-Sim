@@ -1,4 +1,4 @@
-%% Lateral CoF Simulator
+%% Lateral CoF Calculator
 
 function [F_polyCalc,R_polyCalc] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2,vehicle)
 

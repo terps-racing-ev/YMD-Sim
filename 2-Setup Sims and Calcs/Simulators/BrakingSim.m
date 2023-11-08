@@ -1,4 +1,4 @@
-%% Braking Forces Sim
+%% Braking Forces Calculator
 
 function [Fx,Ax,BF] = BrakingSim(DriverForce,mu_x,BrakeParameters,vehicle)
     % Brake Forces (lbf)

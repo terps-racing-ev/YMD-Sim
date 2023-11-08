@@ -1,4 +1,4 @@
-%% Steering Angle Simulator
+%% Steering Angle Calculator
 % Credit: CAPT Hamilton
 
 function [SteerAngles,TurnRadius] = SteerAngleSim(SWAngle,vehicle)

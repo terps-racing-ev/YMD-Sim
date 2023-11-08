@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:1-Input Functions/GeoPoints.m
 classdef GeoPoints
     % Helps create points in 3D space, generating unit vectors and lengths
     % of A-Arms and Control Arms
@@ -77,6 +78,9 @@ classdef GeoPoints
         % Point 99: Tyre Contact Patch, x,y,z
         p99R
     end
+=======
+%% Force Calculator
+>>>>>>> Stashed changes:2-Setup Sims and Calcs/Calculators/ForceCalc.m
 
     %% Unit Vectors (FR, FL, RR, RL)
     properties (SetAccess = private)

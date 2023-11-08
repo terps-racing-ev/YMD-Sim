@@ -10,7 +10,6 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
 
 % Adding Tire Models
 addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
@@ -18,6 +17,14 @@ addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling'])
 % Adding Additional Sims
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
+<<<<<<< Updated upstream:2-Setup Sims and Calcs/Calculators/CorneringAnalysis.m
+=======
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+
+vehicleObj = TREV2Parameters();
+
+>>>>>>> Stashed changes:2-Setup Sims and Calcs/Simulators/CorneringAnalysis.m
 %% Tire Modeling
 
 %Input tire filenames

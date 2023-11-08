@@ -9,11 +9,22 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
+<<<<<<< Updated upstream:2-Setup Sims and Calcs/Calculators/SteeringAngleSweep.m
 vehicleObj = TREV1Parameters();
+=======
+>>>>>>> Stashed changes:2-Setup Sims and Calcs/Simulators/SteeringAngleSweep.m
 
 % Adding StiffnessSim & LLTSim
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
+<<<<<<< Updated upstream:2-Setup Sims and Calcs/Calculators/SteeringAngleSweep.m
+=======
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+
+vehicleObj = TREV2Parameters();
+
+>>>>>>> Stashed changes:2-Setup Sims and Calcs/Simulators/SteeringAngleSweep.m
 %% Inputs
 
 % Steering Wheel Angle Sweep
@@ -25,7 +36,9 @@ for i = 1:37
 end
 
 %% Plots
-figure('Name','Steering Angle Sweep');
+
+subplot(1,2,1);
+title('Steering Angle Sweep');
 SteerAnglesL = squeeze(SteerAngles(1,1,:));
 plot(SWAngle,SteerAnglesL,'-r*');
 hold on
@@ -38,7 +51,8 @@ xlabel('Steering Wheel Angle (deg)');
 ylabel('Steer Angles (deg)');
 legend(' FL',' FR','Location','eastoutside')
 
-figure('Name','Turning Radius Sweep');
+subplot(1,2,2);
+title('Turning Radius Sweep');
 plot(SWAngle,TurnRadius,'-b*');
 title('Turning Radius Sweep');
 xlim([-90 90]);

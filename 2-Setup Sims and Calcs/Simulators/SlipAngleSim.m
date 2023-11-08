@@ -1,4 +1,4 @@
-%% Slip Angle Simulator
+%% Slip Angle Calculator
 
 function [SlipAngles,AccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,Beta,Velocity,Radius,vehicle)
     % Velocity Calculations

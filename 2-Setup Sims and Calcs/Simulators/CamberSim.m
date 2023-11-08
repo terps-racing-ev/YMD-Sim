@@ -1,4 +1,4 @@
-%% Camber Simulator
+%% Camber Calculator
 
 function [IA] = CamberSim(RollAngle,SWAngle,vehicle)
     % Calculating the camber change given Steering Wheel Angle and Roll Angle

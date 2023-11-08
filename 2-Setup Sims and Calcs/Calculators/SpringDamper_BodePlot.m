@@ -40,8 +40,8 @@ TrackWidth = vehicleObj.TrackWidth;
 K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [300 300; 450 450]; %lbf/in
-K_ARB = [0; 0]; %lbf/in
+K_s = [200 200; 300 300]; %lbf/in
+K_ARB = [750; 1000]; %lbf/in
 
 MR_s = [1 1; 1 1];
 MR_ARB = [0.5; 0.5];
