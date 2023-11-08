@@ -1,6 +1,6 @@
 %% Cornering Stiffness Calculator
 
-function [Calpha] = CstiffCalc(Fz,Model_Fy,vehicle)
+function [Calpha] = CstiffCalc(Fz,Model_FyF,Model_FyR,vehicle)
 
     SA = [-13:1:13]'; %slip angle vector
     UCV = ones(size(SA));%makes a unit column vector of the same length as the slip angle vector
@@ -8,11 +8,11 @@ function [Calpha] = CstiffCalc(Fz,Model_Fy,vehicle)
     FzRange = [-50, -100, -150, -200, -250];
 
     % FL Sweep
-    Fy_50FL = Model_Fy.predictFcn([SA vehicle.Camber(1,1)*UCV -50*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -50
-    Fy_100FL = Model_Fy.predictFcn([SA vehicle.Camber(1,1)*UCV -100*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -100
-    Fy_150FL = Model_Fy.predictFcn([SA vehicle.Camber(1,1)*UCV -150*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -150
-    Fy_200FL = Model_Fy.predictFcn([SA vehicle.Camber(1,1)*UCV -200*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -200
-    Fy_250FL = Model_Fy.predictFcn([SA vehicle.Camber(1,1)*UCV -250*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -250
+    Fy_50FL = Model_FyF.predictFcn([SA vehicle.Camber(1,1)*UCV -50*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -50
+    Fy_100FL = Model_FyF.predictFcn([SA vehicle.Camber(1,1)*UCV -100*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -100
+    Fy_150FL = Model_FyF.predictFcn([SA vehicle.Camber(1,1)*UCV -150*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -150
+    Fy_200FL = Model_FyF.predictFcn([SA vehicle.Camber(1,1)*UCV -200*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -200
+    Fy_250FL = Model_FyF.predictFcn([SA vehicle.Camber(1,1)*UCV -250*UCV vehicle.TirePressure(1,1)*UCV]); %Fy at Fz = -250
 
     Calpha_50FL = min(gradient(Fy_50FL));
     Calpha_100FL = min(gradient(Fy_100FL));
@@ -25,11 +25,11 @@ function [Calpha] = CstiffCalc(Fz,Model_Fy,vehicle)
     polyFL = polyfit(log(FzRange),CalphaFL,1);
     
     % FR Sweep
-    Fy_50FR = Model_Fy.predictFcn([SA vehicle.Camber(1,2)*UCV -50*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -50
-    Fy_100FR = Model_Fy.predictFcn([SA vehicle.Camber(1,2)*UCV -100*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -100
-    Fy_150FR = Model_Fy.predictFcn([SA vehicle.Camber(1,2)*UCV -150*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -150
-    Fy_200FR = Model_Fy.predictFcn([SA vehicle.Camber(1,2)*UCV -200*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -200
-    Fy_250FR = Model_Fy.predictFcn([SA vehicle.Camber(1,2)*UCV -250*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -250
+    Fy_50FR = Model_FyF.predictFcn([SA vehicle.Camber(1,2)*UCV -50*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -50
+    Fy_100FR = Model_FyF.predictFcn([SA vehicle.Camber(1,2)*UCV -100*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -100
+    Fy_150FR = Model_FyF.predictFcn([SA vehicle.Camber(1,2)*UCV -150*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -150
+    Fy_200FR = Model_FyF.predictFcn([SA vehicle.Camber(1,2)*UCV -200*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -200
+    Fy_250FR = Model_FyF.predictFcn([SA vehicle.Camber(1,2)*UCV -250*UCV vehicle.TirePressure(1,2)*UCV]); %Fy at Fz = -250
 
     Calpha_50FR = min(gradient(Fy_50FR));
     Calpha_100FR = min(gradient(Fy_100FR));
@@ -42,11 +42,11 @@ function [Calpha] = CstiffCalc(Fz,Model_Fy,vehicle)
     polyFR = polyfit(log(FzRange),CalphaFR,1);
 
     % RL Sweep
-    Fy_50RL = Model_Fy.predictFcn([SA vehicle.Camber(2,1)*UCV -50*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -50
-    Fy_100RL = Model_Fy.predictFcn([SA vehicle.Camber(2,1)*UCV -100*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -100
-    Fy_150RL = Model_Fy.predictFcn([SA vehicle.Camber(2,1)*UCV -150*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -150
-    Fy_200RL = Model_Fy.predictFcn([SA vehicle.Camber(2,1)*UCV -200*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -200
-    Fy_250RL = Model_Fy.predictFcn([SA vehicle.Camber(2,1)*UCV -250*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -250
+    Fy_50RL = Model_FyR.predictFcn([SA vehicle.Camber(2,1)*UCV -50*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -50
+    Fy_100RL = Model_FyR.predictFcn([SA vehicle.Camber(2,1)*UCV -100*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -100
+    Fy_150RL = Model_FyR.predictFcn([SA vehicle.Camber(2,1)*UCV -150*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -150
+    Fy_200RL = Model_FyR.predictFcn([SA vehicle.Camber(2,1)*UCV -200*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -200
+    Fy_250RL = Model_FyR.predictFcn([SA vehicle.Camber(2,1)*UCV -250*UCV vehicle.TirePressure(2,1)*UCV]); %Fy at Fz = -250
 
     Calpha_50RL = min(gradient(Fy_50RL));
     Calpha_100RL = min(gradient(Fy_100RL));
@@ -59,11 +59,11 @@ function [Calpha] = CstiffCalc(Fz,Model_Fy,vehicle)
     polyRL = polyfit(log(FzRange),CalphaRL,1);
 
     % RR Sweep
-    Fy_50RR = Model_Fy.predictFcn([SA vehicle.Camber(2,2)*UCV -50*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -50
-    Fy_100RR = Model_Fy.predictFcn([SA vehicle.Camber(2,2)*UCV -100*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -100
-    Fy_150RR = Model_Fy.predictFcn([SA vehicle.Camber(2,2)*UCV -150*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -150
-    Fy_200RR = Model_Fy.predictFcn([SA vehicle.Camber(2,2)*UCV -200*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -200
-    Fy_250RR = Model_Fy.predictFcn([SA vehicle.Camber(2,2)*UCV -250*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -250
+    Fy_50RR = Model_FyR.predictFcn([SA vehicle.Camber(2,2)*UCV -50*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -50
+    Fy_100RR = Model_FyR.predictFcn([SA vehicle.Camber(2,2)*UCV -100*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -100
+    Fy_150RR = Model_FyR.predictFcn([SA vehicle.Camber(2,2)*UCV -150*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -150
+    Fy_200RR = Model_FyR.predictFcn([SA vehicle.Camber(2,2)*UCV -200*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -200
+    Fy_250RR = Model_FyR.predictFcn([SA vehicle.Camber(2,2)*UCV -250*UCV vehicle.TirePressure(2,2)*UCV]); %Fy at Fz = -250
 
     Calpha_50RR = min(gradient(Fy_50RR));
     Calpha_100RR = min(gradient(Fy_100RR));

@@ -18,11 +18,11 @@ function [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle,vehicle)
     DiffL = SWAngle - AckSteerAngleL;
     
     % Final Steering Angles
-    SteerAngleR = SWAngle + vehicle.Ackermann*DiffL - vehicle.Toe(1,2);
-    SteerAngleL = SWAngle - vehicle.Ackermann*DiffR + vehicle.Toe(1,1);
+    SteerAngleR = SWAngle + vehicle.Ackermann*DiffR - vehicle.Toe(1,2);
+    SteerAngleL = SWAngle - vehicle.Ackermann*DiffL + vehicle.Toe(1,1);
     
     SteerAnglesF = [SteerAngleL, SteerAngleR];
-    SteerAnglesR = [vehicle.Toe(2,1), vehicle.Toe(2,2)];
+    SteerAnglesR = [vehicle.Toe(2,1), -vehicle.Toe(2,2)];
     
     SteerAngles = [SteerAnglesF; SteerAnglesR];
 end

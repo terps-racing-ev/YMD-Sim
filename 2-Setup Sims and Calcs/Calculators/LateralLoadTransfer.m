@@ -31,11 +31,7 @@ trainData = latTrainingData_P1;
 RightTurn = false;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-<<<<<<< Updated upstream
-Velocity = 25;
-=======
 Velocity = 20;
->>>>>>> Stashed changes
 
 Radius = 348; %in
 

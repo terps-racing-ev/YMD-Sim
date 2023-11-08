@@ -9,22 +9,21 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-<<<<<<< Updated upstream:2-Setup Sims and Calcs/Calculators/SteeringAngleSweep.m
-vehicleObj = TREV1Parameters();
-=======
->>>>>>> Stashed changes:2-Setup Sims and Calcs/Simulators/SteeringAngleSweep.m
 
-% Adding StiffnessSim & LLTSim
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
-<<<<<<< Updated upstream:2-Setup Sims and Calcs/Calculators/SteeringAngleSweep.m
-=======
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
 vehicleObj = TREV2Parameters();
 
->>>>>>> Stashed changes:2-Setup Sims and Calcs/Simulators/SteeringAngleSweep.m
 %% Inputs
 
 % Steering Wheel Angle Sweep
@@ -32,11 +31,12 @@ SWAngle = linspace(-90,90,37); %deg (L = neg, R = pos)
 
 %% Code
 for i = 1:37
-    [SteerAngles(:,:,i),TurnRadius(:,i)] = SteerAngleSim(SWAngle(:,i),vehicleObj);
+    [SteerAngles(:,:,i),TurnRadius(:,i)] = SteerAngleCalc(SWAngle(:,i),vehicleObj);
 end
 
 %% Plots
 
+figure('Name','Plots - Steering Sweeps');
 subplot(1,2,1);
 title('Steering Angle Sweep');
 SteerAnglesL = squeeze(SteerAngles(1,1,:));

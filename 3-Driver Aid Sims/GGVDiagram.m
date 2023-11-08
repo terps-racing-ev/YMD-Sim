@@ -259,7 +259,7 @@ end
 
 PlotData = [Velocity; AccelGs; DecelGs; LeftLatGs; RightLatGs];
 
-figure(1)
+figure('Name','Plot - G-G-V');
 title('G-G-V Diagram');
 hold on
 xlabel('Longitudinal Gs');
