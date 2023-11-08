@@ -1,6 +1,6 @@
 %% Longitudinal Load Transfer Simulator
 
-function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r,vehicle)
+function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTSim(mu_x,Velocity,LongAccel,K_r,vehicle)
     % LoLT
     LoLT = LongAccel*((vehicle.TotalWeight*vehicle.CoGHeight)/vehicle.Wheelbase);
     
@@ -18,8 +18,8 @@ function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r
     Z = [-(Fz(1,1)+vehicle.FrontStatic)/K_r(1,1), -(Fz(1,2)+vehicle.FrontStatic)/K_r(1,2);
         -(Fz(2,1)+vehicle.RearStatic)/K_r(2,1), -(Fz(2,2)+vehicle.RearStatic)/K_r(2,2)];
 
-    % Pitch Angle (deg)
-    Pitch_Angle = -atan((mean(Z(1,:)))/vehicle.FrontAxleToCoG)*(180/pi());
+    % Pitch Angle (deg) % Accel = + pitch, Decel = - pitch
+    Pitch_Angle = atan(-(mean(Z(1,:)))/vehicle.FrontAxleToCoG)*(180/pi());
 
     for i = 1:2
         for j = 1:2

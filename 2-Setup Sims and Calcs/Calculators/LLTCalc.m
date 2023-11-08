@@ -1,4 +1,4 @@
-%% Lateral Load Transfer Simulator
+%% Lateral Load Transfer Calculator
 
 
 function [Fz,LLT,LLTD,R_g,Roll_Angle,Z] = LLTCalc(K_r,Kroll,Velocity,LatAccel,vehicle)
