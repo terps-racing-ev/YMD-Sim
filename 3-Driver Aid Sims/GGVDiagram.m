@@ -26,26 +26,60 @@ vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
-filename_P1 = 'A2356run8.mat';
-[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
+% Input Front and Rear Tire Data
+% Front
+filename_P1F = 'A2356run8.mat';
+[latTrainingData_P1F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P1F);
 
-filename_P2 = 'A2356run9.mat';
-[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
+filename_P2F = 'A2356run9.mat';
+[latTrainingData_P2F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P2F);
 
-totData = cat(1,latTrainingData_P1,latTrainingData_P2);
-trainData = latTrainingData_P1;
+totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
+trainDataF = totDataF;
+
+% Rear
+filename_P1R = 'A2356run8.mat';
+[latTrainingData_P1R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1R);
+
+filename_P2R = 'A2356run9.mat';
+[latTrainingData_P2R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2R);
+
+totDataR = cat(1,latTrainingData_P1R,latTrainingData_P2R);
+trainDataR = totDataR;
+
+% Front tires
+disp([tire.IDF, ', Front Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainDataF);
+[model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainDataF);
+[model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainDataF);
+% [model.muxFront, validation.RMSE_muxFront] = Trainer_mux(trainDataF);
+% [model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
+toc(t1)
+
+disp('Training completed')
+
+% Rear tires
+disp([tire.IDR, ', Rear Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainDataR);
+[model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainDataR);
+[model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainDataR);
+% [model.muxRear, validation.RMSE_muxRear] = Trainer_mux(trainDataR);
+% [model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
+toc(t1)
+
+disp('Training completed')
 
 %% Tuned Car Parameters
 
 % Tire Spring Rates (lbf/in)
-[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
-
-K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
+[K_t] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
-[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2,vehicleObj);
+[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 %% Motor Parameters
 
