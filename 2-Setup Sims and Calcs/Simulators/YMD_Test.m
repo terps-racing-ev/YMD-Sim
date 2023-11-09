@@ -75,14 +75,12 @@ disp('Training completed')
 %% Tuned Car Parameters
 
 % Tire Spring Rates (lbf/in)
-[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,vehicleObj);
-
-K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
+[K_t] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
-[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,vehicleObj);
+[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 %% Motor Parameters
 
@@ -92,9 +90,9 @@ Max_Velocity = 86; % mph
 
 VelocityInput = 0; % mph
 
-SWAngle = -2; % deg (pos->Right, neg->Left)
+SWAngle = 0; % deg (pos->Right, neg->Left)
 
-BetaInput = 1; % deg (pos->Right, neg->Left)
+BetaInput = 0; % deg (pos->Right, neg->Left)
 
 Radius = 329; % in (pos->Right, neg->Left)
 
@@ -117,16 +115,13 @@ while(converge == false)
     [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
     
     [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
-
-    % Acceltot = sqrt(Accel(1,1)^2 + Accel(1,2)^2);
     
-    % NextBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((Velocity*17.6)^2)/(Radius*386.4))));
-    % Vcalc = sqrt(abs((Acceltot*386.4))*Radius)./17.6;
+    MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
 
     if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
         Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;
         VelocityInput = Vcalc;
-    else
+    else 
         converge = true;
     end
 
@@ -140,30 +135,30 @@ disp('Steering Wheel Angle: ');
 disp(SWAngle);
 disp('Input Beta: ');
 disp(BetaInput);
-% disp('Next Beta: ');
-% disp(NextBeta);
-disp('Roll Angle: ');
-disp(Roll_Angle);
-disp('Slip Angles: ');
-disp(SlipAngles);
-disp('Fx: ');
-disp(Fx);
-disp('Fy: ');
-disp(Fy);
-disp('Fz: ');
-disp(Fz);
-disp('Mz: ');
-disp(Mz);
+disp('Max Beta: ');
+disp(MaxBeta);
+% disp('Roll Angle: ');
+% disp(Roll_Angle);
+% disp('Slip Angles: ');
+% disp(SlipAngles);
+% disp('Fx: ');
+% disp(Fx);
+% disp('Fy: ');
+% disp(Fy);
+% disp('Fz: ');
+% disp(Fz);
+% disp('Mz: ');
+% disp(Mz);
 disp('Gs: ');
 disp(Accel);
 % disp('Acceleration: ');
 % disp(LatAccelG);
 disp('Yaw Moment: ');
 disp(YM);
-disp('Camber: ');
-disp(IA);
-disp('Wheel Displacement: ');
-disp(Z);
-disp('Tire Pressure: ');
-disp(vehicleObj.TirePressure);
+% disp('Camber: ');
+% disp(IA);
+% disp('Wheel Displacement: ');
+% disp(Z);
+% disp('Tire Pressure: ');
+% disp(vehicleObj.TirePressure);
 disp('----------------------');

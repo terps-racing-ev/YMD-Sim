@@ -9,21 +9,77 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
 
-% Adding Additional Sims
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+
+vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
-filename_P1 = 'A2356run8.mat';
-[latTrainingData_P1,tireID,testID] = createLatTrngDataCalc(filename_P1);
+% Input Front and Rear Tire Data
+% Front
+filename_P1F = 'A2356run8.mat';
+[latTrainingData_P1F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P1F);
 
-filename_P2 = 'A2356run9.mat';
-[latTrainingData_P2,tireID,testID] = createLatTrngDataCalc(filename_P2);
+filename_P2F = 'A2356run9.mat';
+[latTrainingData_P2F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P2F);
 
-totData = cat(1,latTrainingData_P1,latTrainingData_P2);
-trainData = latTrainingData_P1;
+totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
+trainDataF = totDataF;
+
+% Rear
+filename_P1FR = 'A2356run8.mat';
+[latTrainingData_P1FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1FR);
+
+filename_P2FR = 'A2356run9.mat';
+[latTrainingData_P2FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2FR);
+
+totDataR = cat(1,latTrainingData_P1FR,latTrainingData_P2FR);
+trainDataR = totDataR;
+
+% Front tires
+disp([tire.IDF, ', Front Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainDataF);
+[model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainDataF);
+[model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainDataF);
+% [model.muxFront, validation.RMSE_muxFront] = Trainer_mux(trainDataF);
+% [model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
+toc(t1)
+
+disp('Training completed')
+
+% Rear tires
+disp([tire.IDR, ', Rear Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainDataR);
+[model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainDataR);
+[model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainDataR);
+% [model.muxRear, validation.RMSE_muxRear] = Trainer_mux(trainDataR);
+% [model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
+toc(t1)
+
+disp('Training completed')
+
+%% Tuned Car Parameters
+
+% Tire Spring Rates (lbf/in)
+[K_t] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
+
+% Stiffnesses (lbf/in)
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
+
+[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 %% Inputs
 
@@ -35,23 +91,13 @@ Velocity = 10;
 
 %% Calculations
 
-% Tire Spring Rates (lbf/in)
-[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
-
-K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
-
-% Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
-
-[F_polyCalc,R_polyCalc] = LateralCoFSim(latTrainingData_P1,latTrainingData_P2,vehicleObj);
-
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(0,Velocity,0,K_r,vehicleObj);
+[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
 
-mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
-mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
+mu_F = [real(polyval(F_polyCalc,log(Fz(1,1)))), real(polyval(F_polyCalc,log(Fz(1,2))))];
+mu_R = [real(polyval(R_polyCalc,log(Fz(2,1)))), real(polyval(R_polyCalc,log(Fz(2,2))))];
 
-[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity,0,K_r,vehicleObj);
+[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu_R),Velocity,0,K_r,vehicleObj);
 
 if Accel == false
     Fx_max = [mu_F;mu_R].*Fz;
@@ -73,10 +119,10 @@ else
 end
 
 % Dynamic Weights (lb) -> Max Fx from Weight Transfer
-[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTSim(mean(mu_R),Velocity,g_avg,K_r,vehicleObj);
+[Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu_R),Velocity,g_avg,K_r,vehicleObj);
 
-mu_F = [polyval(F_polyCalc,Fz(1,1)), polyval(F_polyCalc,Fz(1,2))];
-mu_R = [polyval(R_polyCalc,Fz(2,1)), polyval(R_polyCalc,Fz(2,2))];
+mu_F = [real(polyval(F_polyCalc,log(Fz(1,1)))), real(polyval(F_polyCalc,log(Fz(1,2))))];
+mu_R = [real(polyval(R_polyCalc,log(Fz(2,1)))), real(polyval(R_polyCalc,log(Fz(2,2))))];
 
 if Accel == false
     Fx_max = [mu_F;mu_R].*Fz;

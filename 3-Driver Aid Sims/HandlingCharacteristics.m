@@ -74,14 +74,12 @@ disp('Training completed')
 %% Tuned Car Parameters
 
 % Tire Spring Rates (lbf/in)
-[F_polyCalc_Kt,R_polyCalc_Kt] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,vehicleObj);
-
-K_t = [F_polyCalc_Kt, F_polyCalc_Kt; R_polyCalc_Kt, R_polyCalc_Kt];
+[K_t] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
-[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,vehicleObj);
+[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 %% Motor Parameters
 

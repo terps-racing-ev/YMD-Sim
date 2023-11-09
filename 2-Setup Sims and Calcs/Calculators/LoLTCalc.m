@@ -1,6 +1,6 @@
 %% Longitudinal Load Transfer Simulator
 
-function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTSim(mu_x,Velocity,LongAccel,K_r,vehicle)
+function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r,vehicle)
     % LoLT
     LoLT = LongAccel*((vehicle.TotalWeight*vehicle.CoGHeight)/vehicle.Wheelbase);
     
