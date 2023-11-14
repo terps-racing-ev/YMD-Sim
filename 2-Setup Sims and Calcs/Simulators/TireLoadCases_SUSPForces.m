@@ -32,10 +32,9 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-%% Inputs
-
-% Create a TREV object with car parameters 
 vehicleObj = TREV2Parameters();
+
+%% Inputs
 
 % Load Geo Points from Cookbook
 dataTable = readtable('TREV2 Cookbook-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');

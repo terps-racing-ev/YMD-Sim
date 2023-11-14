@@ -88,9 +88,9 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
-VelocityInput = 0; % mph
+VelocityInput = 0.1; % mph
 
-SWAngle = 0; % deg (pos->Right, neg->Left)
+SWAngle = 20; % deg (pos->Right, neg->Left)
 
 BetaInput = 0; % deg (pos->Right, neg->Left)
 
@@ -102,11 +102,26 @@ converge = false;
 
 while(converge == false)
 
+    if SWAngle < 0
+            RadiusInput = -Radius;
+    else
+            RadiusInput = Radius;
+    end
+
     [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle,vehicleObj);
     
-    [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,VelocityInput,Radius,vehicleObj);
+    [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,VelocityInput,RadiusInput,vehicleObj);
+
+    if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
+        Accel = 0;
+        if Accel == 0
+            Accel(1,2) = 0;
+        end
+        YM = 0;
+        break %no calculations for conditions outside of testing limits
+    end
     
-    Accelcalc = -((VelocityInput*17.6)^2/Radius)/386.4; % g's
+    Accelcalc = -((VelocityInput*17.6)^2/RadiusInput)/386.4; % g's
     
     [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,VelocityInput,Accelcalc,vehicleObj);
                 
@@ -115,8 +130,16 @@ while(converge == false)
     [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
     
     [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+
+    [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
     
     MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
+    
+    if SWAngle < 0
+            MaxBeta = -MaxBeta;
+    else
+            MaxBeta = MaxBeta;
+    end
 
     if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
         Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;

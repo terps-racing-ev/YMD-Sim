@@ -36,13 +36,13 @@ totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
 trainDataF = totDataF;
 
 % Rear
-filename_P1FR = 'A2356run8.mat';
-[latTrainingData_P1FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1FR);
+filename_P1R = 'A2356run8.mat';
+[latTrainingData_P1R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1R);
 
-filename_P2FR = 'A2356run9.mat';
-[latTrainingData_P2FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2FR);
+filename_P2R = 'A2356run9.mat';
+[latTrainingData_P2R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2R);
 
-totDataR = cat(1,latTrainingData_P1FR,latTrainingData_P2FR);
+totDataR = cat(1,latTrainingData_P1R,latTrainingData_P2R);
 trainDataR = totDataR;
 
 % Front tires
@@ -84,3 +84,92 @@ disp('Training completed')
 Max_Velocity = 86; % mph
 
 %% Inputs
+
+VelocityInput = 0.1; % mph
+
+%SWAngle = -90;
+
+SWAngle = -90:1:90; % deg (pos->Right, neg->Left)
+
+BetaInput = 0; % deg (pos->Right, neg->Left)
+
+Radius = 329; % in
+
+converge = false;
+
+%% Calculations
+
+AccelGradient = [];
+YMGradient = [];
+
+for i = 1:numel(SWAngle)
+    while(converge == false)
+
+        if SWAngle(i) < 0
+            RadiusInput = -Radius;
+        else
+            RadiusInput = Radius;
+        end
+
+        [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle(i),vehicleObj);
+
+        [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,VelocityInput,RadiusInput,vehicleObj);
+
+        if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
+            Accel = 0;
+            if Accel == 0
+                Accel(1,2) = 0;
+            end
+            YM = 0;
+            break %no calculations for conditions outside of testing limits
+        end
+
+        Accelcalc = -((VelocityInput*17.6)^2/RadiusInput)/386.4; % g's
+
+        [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,VelocityInput,Accelcalc,vehicleObj);
+
+        [IA] = CamberCalc(Roll_Angle,SWAngle(i),vehicleObj);
+
+        [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+
+        [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+
+        [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
+
+        MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
+
+        if SWAngle(i) < 0
+            MaxBeta = -MaxBeta;
+        else
+            MaxBeta = MaxBeta;
+        end
+
+        if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
+            Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;
+            VelocityInput = Vcalc;
+        else
+            converge = true;
+        end
+
+    end
+
+    AccelGradient(1,i) = Accel(1,2);
+    YMGradient(1,i) = YM;
+
+    converge = false;
+
+end
+
+figure('Name','Plot - YMD');
+title('Yaw Moment Diagram');
+hold on
+xlabel('Lateral Gs');
+hold on
+ylabel('Yaw Moment');
+hold on
+grid on
+
+plot(AccelGradient,YMGradient,'r*');
+hold on
+
+Analysis = [SWAngle;AccelGradient;YMGradient];
