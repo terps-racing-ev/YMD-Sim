@@ -32,12 +32,12 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-vehicleObj = TREV2ParametersV2();
+vehicleObj = TREV2Parameters();
 
 %% Inputs
 
 % Load Geo Points from Cookbook
-dataTable = readtable('TREV2 Cookbook V2-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
+dataTable = readtable('TREV2 Cookbook-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
 
 % Input test tire forces for analysis
 Zerog_Static = 3;
