@@ -32,12 +32,12 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV2ParametersV2();
 
 %% Inputs
 
 % Load Geo Points from Cookbook
-dataTable = readtable('TREV2 Cookbook-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
+dataTable = readtable('TREV2 Cookbook V2-MATLAB.xlsx','Sheet', 'Geo Forces','VariableNamingRule','preserve');
 
 % Input test tire forces for analysis
 Zerog_Static = 3;
@@ -50,7 +50,7 @@ Cone_Strike = 8;
 % Maximum_Tension = 10;
 
 %Choose column number from above
-Col_Num = 3;
+Col_Num = 8;
 
 % 1x3 matrices - [Fx Fy Fz] 
 F_FL = [dataTable{1,Col_Num}; dataTable{2,Col_Num}; dataTable{3,Col_Num}];

@@ -75,7 +75,6 @@ function [Calpha] = CstiffCalc(Fz,Model_FyF,Model_FyR,vehicle)
 
     polyRR = polyfit(log(FzRange),CalphaRR,1);
     
-
     polyfits = [polyFL, polyFR; polyRL, polyRR];
 
     Calpha_F = [real(polyval(polyFL,log(Fz(1,1)))), real(polyval(polyFR,log(Fz(1,2))))];

@@ -25,9 +25,9 @@ clc
 
 ShearMod = [1.16e7; 1.16e7]; %psi
 
-OuterD_F = 3/8; %in
-InnerD_F = .259; %in
-TorsionL_F = 10; %in
+OuterD_F = 0.5; %in
+InnerD_F = 0.402; %in
+TorsionL_F = 15; %in
 LeverL_F = 2; %in
 
 OuterD_R = 0.25; %in

@@ -27,6 +27,7 @@ vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
+% Hoosier 16x7.5-10 R20 (8 in Rim)
 % Input Front and Rear Tire Data
 % Front
 filename_P1F = 'A2356run8.mat';
@@ -39,13 +40,13 @@ totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
 trainDataF = totDataF;
 
 % Rear
-filename_P1R = 'A2356run8.mat';
-[latTrainingData_P1R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1R);
+filename_P1FR = 'A2356run8.mat';
+[latTrainingData_P1FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1FR);
 
-filename_P2R = 'A2356run9.mat';
-[latTrainingData_P2R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2R);
+filename_P2FR = 'A2356run9.mat';
+[latTrainingData_P2FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2FR);
 
-totDataR = cat(1,latTrainingData_P1R,latTrainingData_P2R);
+totDataR = cat(1,latTrainingData_P1FR,latTrainingData_P2FR);
 trainDataR = totDataR;
 
 % Front tires
@@ -54,8 +55,7 @@ t1 = tic;
 [model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainDataF);
 [model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainDataF);
 [model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainDataF);
-% [model.muxFront, validation.RMSE_muxFront] = Trainer_mux(trainDataF);
-% [model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
+[model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
 toc(t1)
 
 disp('Training completed')
@@ -66,8 +66,7 @@ t1 = tic;
 [model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainDataR);
 [model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainDataR);
 [model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainDataR);
-% [model.muxRear, validation.RMSE_muxRear] = Trainer_mux(trainDataR);
-% [model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
+[model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
 toc(t1)
 
 disp('Training completed')
@@ -79,8 +78,6 @@ disp('Training completed')
 
 % Stiffnesses (lbf/in)
 [K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
-
-[F_polyCalc,R_polyCalc] = LateralCoFCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 %% Motor Parameters
 
@@ -100,88 +97,36 @@ converge = false;
 
 %% Calculations
 
-while(converge == false)
+    SA = [-13:1:13]'; %slip angle vector
+    UCV = ones(size(SA)); %makes a unit column vector of the same length as the slip angle vector
 
-    if SWAngle < 0
-            RadiusInput = -Radius;
-    else
-            RadiusInput = Radius;
+    FzRange = [-50, -100, -150, -200, -250];
+    mu_FLSweep = zeros(1,numel(FzRange));
+    mu_FRSweep = zeros(1,numel(FzRange));
+    mu_RLSweep = zeros(1,numel(FzRange));
+    mu_RRSweep = zeros(1,numel(FzRange));
+
+    % Maximum mu Sweep
+    for i = 1:numel(FzRange)
+        mu_FL = max(abs(Model_muyF.predictFcn([SA vehicle.Camber(1,1)*UCV FzRange(i)*UCV vehicle.TirePressure(1,1)*UCV])));
+        mu_FR = max(abs(Model_muyF.predictFcn([SA vehicle.Camber(1,2)*UCV FzRange(i)*UCV vehicle.TirePressure(1,2)*UCV])));
+        mu_RL = max(abs(Model_muyR.predictFcn([SA vehicle.Camber(2,1)*UCV FzRange(i)*UCV vehicle.TirePressure(2,1)*UCV])));
+        mu_RR = max(abs(Model_muyR.predictFcn([SA vehicle.Camber(2,2)*UCV FzRange(i)*UCV vehicle.TirePressure(2,2)*UCV])));
+        
+        mu_FLSweep(1,i) = mu_FL;
+        mu_FRSweep(1,i) = mu_FR;
+        mu_RLSweep(1,i) = mu_RL;
+        mu_RRSweep(1,i) = mu_RR;
     end
 
-    [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle,vehicleObj);
-    
-    [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,VelocityInput,RadiusInput,vehicleObj);
+    polyFL = polyfit(log(FzRange),mu_FLSweep,1);
+    polyFR = polyfit(log(FzRange),mu_FRSweep,1);
+    polyRL = polyfit(log(FzRange),mu_RLSweep,1);
+    polyRR = polyfit(log(FzRange),mu_RRSweep,1);
 
-    if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
-        Accel = 0;
-        if Accel == 0
-            Accel(1,2) = 0;
-        end
-        YM = 0;
-        break %no calculations for conditions outside of testing limits
-    end
-    
-    Accelcalc = -((VelocityInput*17.6)^2/RadiusInput)/386.4; % g's
-    
-    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,VelocityInput,Accelcalc,vehicleObj);
-                
-    [IA] = CamberCalc(Roll_Angle,SWAngle,vehicleObj);
-                
-    [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
-    
-    [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+    mu_FLcalc = real(polyval(polyFL,log(Fz(1,1))));
+    mu_FRcalc = real(polyval(polyFR,log(Fz(1,2))));
+    mu_RLcalc = real(polyval(polyRL,log(Fz(2,1))));
+    mu_RRcalc = real(polyval(polyRR,log(Fz(2,2))));
 
-    [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
-    
-    MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
-    
-    if SWAngle < 0
-            MaxBeta = -MaxBeta;
-    else
-            MaxBeta = MaxBeta;
-    end
-
-    if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
-        Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;
-        VelocityInput = Vcalc;
-    else 
-        converge = true;
-    end
-
-end
-
-disp('Velocity: ');
-disp(Vcalc);
-disp('Radius: ');
-disp(Radius);
-disp('Steering Wheel Angle: ');
-disp(SWAngle);
-disp('Input Beta: ');
-disp(BetaInput);
-disp('Max Beta: ');
-disp(MaxBeta);
-% disp('Roll Angle: ');
-% disp(Roll_Angle);
-% disp('Slip Angles: ');
-% disp(SlipAngles);
-% disp('Fx: ');
-% disp(Fx);
-% disp('Fy: ');
-% disp(Fy);
-% disp('Fz: ');
-% disp(Fz);
-% disp('Mz: ');
-% disp(Mz);
-disp('Gs: ');
-disp(Accel);
-% disp('Acceleration: ');
-% disp(LatAccelG);
-disp('Yaw Moment: ');
-disp(YM);
-% disp('Camber: ');
-% disp(IA);
-% disp('Wheel Displacement: ');
-% disp(Z);
-% disp('Tire Pressure: ');
-% disp(vehicleObj.TirePressure);
-disp('----------------------');
+    mu = [mu_FLcalc, mu_FRcalc; mu_RLcalc, mu_RRcalc];
