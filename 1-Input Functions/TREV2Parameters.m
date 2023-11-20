@@ -91,7 +91,7 @@ classdef TREV2Parameters
     end
 
     %% FR Suspension Points
- properties (SetAccess = private)  
+    properties (SetAccess = private)  
         % Point 1: Lower wishbone front pivot
         p1F
         % Point 2: Lower wishbone rear pivot
@@ -126,7 +126,7 @@ classdef TREV2Parameters
         p21F
         % Point 99: Tyre Contact Patch, x,y,z
         p99F
- end
+    end
 
     %% RR Suspension Points
     properties (SetAccess = private)
@@ -164,7 +164,40 @@ classdef TREV2Parameters
         p21R
         % Point 99: Tyre Contact Patch, x,y,z
         p99R
-end
+    end
+    
+    %% BRS Gain
+    properties (SetAccess = private)
+        % Bump
+        % Front Camber Gain
+        BCF
+        % Rear Camber Gain
+        BCR
+        % Front Toe Gain
+        BTF
+        % Rear Toe Gain
+        BTR
+
+        % Roll
+        % Front Camber Gain
+        RCF
+        % Rear Camber Gain
+        RCR
+        % Front Toe Gain
+        RTF
+        % Rear Toe Gain
+        RTR
+
+        % Steer
+        % Front Camber Gain
+        SCF
+        % Rear Camber Gain
+        SCR
+        % Front Toe Gain
+        STF
+        % Rear Toe Gain
+        STR
+    end
 
     %% Functions
 
@@ -216,153 +249,6 @@ end
             output = [obj.RollAxisF();obj.RollAxisR()];
         end
 
-        function output = RollCFL(~, x)
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
-            
-            % Checking if input value is in our array
-            if ismember(x, X)
-                i = X == x;
-                output = Y(i);
-            else
-                % 4th order polynomial
-                p = polyfit(X, Y, 4);
-            
-                % Constructing our function
-                f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
-            
-                y = f(x);
-                output = y;
-            end  
-        end
-        function output = RollCFR(~, x)
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1004 -0.0654 -0.0379 -0.0177 -0.0048 0.0010 0 -0.0078 -0.0221 -0.0429 -0.0700 -0.1031 -0.1422];
-            
-            % Checking if input value is in our array
-            if ismember(x, X)
-                i = X == x;
-                output = Y(i);
-            else
-                % 4th order polynomial
-                p = polyfit(X, Y, 4);
-            
-                % Constructing our function
-                f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
-            
-                y = f(x);
-                output = y;
-            end 
-        end
-        function output = RollCRL(~, x)
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.2835  -0.2222  -0.1663  -0.1161  -0.0715  -0.0328   0.0000   0.0268   0.0475   0.0620   0.0702   0.0719   0.0672];
-            
-            % Checking if input value is in our array
-            if ismember(x, X)
-                i = X == x;
-                output = Y(i);
-            else
-                % 4th order polynomial
-                p = polyfit(X, Y, 4);
-            
-                % Constructing our function
-                f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
-            
-                y = f(x);
-                output = y;
-            end
-        end
-        function output = RollCRR(~, x)
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [0.0672 0.0719 0.0702 0.0620 0.0475 0.0268 0 -0.0328 -0.0715 -0.1161 -0.1663 -0.2222 -0.2835];
-            
-            % Checking if input value is in our array
-            if ismember(x, X)
-                i = X == x;
-                output = Y(i);
-            else
-                % 4th order polynomial
-                p = polyfit(X, Y, 4);
-            
-                % Constructing our function
-                f = @(x) p(1)*x.^4 + p(2)*x.^3 + p(3)*x.^2 + p(4)*x + p(5);
-            
-                y = f(x);
-                output = y;
-            end 
-        end
-        function output = steerCamberLHS(~, x)
-            % X and Y coordinates in matrix form 
-            X = [TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30)];
-            Y = [5.01 3.78 2.79 1.95 1.22 0.58 0 -0.54 -1.05 -1.54 -2.03 -2.54 -3.09];
-
-            % Checking if input value is in our array
-            if ismember(x, X)
-                i = X == x;
-                output = Y(i);
-            else
-                % 5th order polynomial
-                p = polyfit(X, Y, 5);
-            
-                % Constructing our function
-                f = @(x) p(1)*x.^5 + p(2)*x.^4 + p(3)*x.^3 + p(4)*x.^2 + p(5)*x + p(6);
-            
-                y = f(x);
-                output = y;
-            end 
-        end
-        function output = steerCamberRHS(~, x)
-            % X and Y coordinates in matrix form 
-            X = [TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30)];
-            Y = [-3.09 -2.54 -2.03 -1.54 -1.05 -0.54 0 0.58 1.22 1.95 2.79 3.78 5.01];
-
-            % Checking if input value is in our array
-            if ismember(x, X)
-                i = X == x;
-                output = Y(i);
-            else
-                % 5th order polynomial
-                p = polyfit(X, Y, 5);
-            
-                % Constructing our function
-                f = @(x) p(1)*x.^5 + p(2)*x.^4 + p(3)*x.^3 + p(4)*x.^2 + p(5)*x + p(6);
-            
-                y = f(x);
-                output = y;
-            end 
-        end
-        function graphRolls(~)
-            % Create a 3x2 grid of subplots
-            subplot(3, 2, 1);
-            TREV2Parameters.RollCFL_plot();
-            title('Roll vs. Camber Front Left');
-
-            subplot(3, 2, 2);
-            TREV2Parameters.RollCFR_plot();
-            title('Roll vs. Camber Front Right');
-            
-            subplot(3, 2, 3);
-            TREV2Parameters.RollCRL_plot();
-            title('Roll vs. Camber Rear Left');
-
-            subplot(3, 2, 4);
-            TREV2Parameters.RollCRR_plot();
-            title('Roll vs. Camber Rear Right');
-
-            subplot(3, 2, 5);
-            TREV2Parameters.steerCamberLHS_plot();
-            title("Steer vs. Camber LHS")
-
-            subplot(3, 2, 6);
-            TREV2Parameters.steerCamberRHS_plot();
-            title("Steer vs. Camber RHS")
-        end
-
         % Setting all points, look here for values
         function obj = TREV2Parameters()
             
@@ -373,6 +259,7 @@ end
 
             parameters = readtable('TREV2 Cookbook-MATLAB','Sheet', 'Parameters','VariableNamingRule','preserve');
             points = readtable('TREV2 Cookbook-MATLAB','Sheet', 'Geo Points','VariableNamingRule','preserve');
+            BRS = readtable('TREV2 Cookbook-MATLAB','Sheet', 'BRS Camber & Toe Gain','VariableNamingRule','preserve');
 
             
             obj.TotalWeight = parameters{1,2};
@@ -470,68 +357,114 @@ end
             obj.p19R = [points{32,columnX} points{32,columnY} points{32,columnZ}];
             obj.p20R = [points{33,columnX} points{33,columnY} points{33,columnZ}];
             obj.p21R = [points{34,columnX} points{34,columnY} points{34,columnZ}];
-            obj.p99R = [points{35,columnX} points{35,columnY} points{35,columnZ}];     
-         end
+            obj.p99R = [points{35,columnX} points{35,columnY} points{35,columnZ}];
 
-    end
-
-    
-    methods (Static)
-
-        function output = getProportion(x)
-            output = ((x / 25.4) * 90) / (1.625);
-        end
-
-        function output = RollCFL_plot()
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1422 -0.1031 -0.0700 -0.0429 -0.0221 -0.0078 0 0.0010 -0.0048 -0.0177 -0.0379 -0.0654 -0.1004];
-
-            output = plot(X, Y);
-        end
-
-        function output = RollCFR_plot()
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.1004 -0.0654 -0.0379 -0.0177 -0.0048 0.0010 0 -0.0078 -0.0221 -0.0429 -0.0700 -0.1031 -0.1422];
             
-            output = plot(X, Y);
-        end
+            % Columns Front and Rear
+            columnFront=2;
+            columnRear=3;
 
-        function output = RollCRL_plot()
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [-0.2835  -0.2222  -0.1663  -0.1161  -0.0715  -0.0328   0.0000   0.0268   0.0475   0.0620   0.0702   0.0719   0.0672];
+            % Bump Gain
+            obj.BCF = [BRS{2,columnFront} BRS{3,columnFront} BRS{4,columnFront} BRS{5,columnFront}];
+            obj.BCR = [BRS{2,columnRear} BRS{3,columnRear} BRS{4,columnRear} BRS{5,columnRear}];
             
-            output = plot(X, Y);
-        end
-
-        function output = RollCRR_plot()
-            % X and Y coordinates in matrix form 
-            X = [-3.00 -2.50 -2.00 -1.50 -1.00 -0.50 0 0.50 1.00 1.50 2.00 2.50 3.00];
-            Y = [0.0672 0.0719 0.0702 0.0620 0.0475 0.0268 0 -0.0328 -0.0715 -0.1161 -0.1663 -0.2222 -0.2835];
+            obj.BTF = [BRS{7,columnFront} BRS{8,columnFront} BRS{9,columnFront} BRS{10,columnFront}];
+            obj.BTR = [BRS{7,columnRear} BRS{8,columnRear} BRS{9,columnRear} BRS{10,columnRear}];
             
-            output = plot(X, Y);
+            % Roll Gain
+            obj.RCF = [BRS{14,columnFront} BRS{15,columnFront} BRS{16,columnFront} BRS{17,columnFront}];
+            obj.RCR = [BRS{14,columnRear} BRS{15,columnRear} BRS{16,columnRear} BRS{17,columnRear}];
+            
+            obj.RTF = [BRS{19,columnFront} BRS{20,columnFront} BRS{21,columnFront} BRS{22,columnFront}];
+            obj.RTR = [BRS{19,columnRear} BRS{20,columnRear} BRS{21,columnRear} BRS{22,columnRear}];
+            
+            % Steer Gain
+            obj.SCF = [BRS{26,columnFront} BRS{27,columnFront} BRS{28,columnFront} BRS{29,columnFront}];
+            obj.SCR = [BRS{26,columnRear} BRS{27,columnRear} BRS{28,columnRear} BRS{29,columnRear}];
+            
+            obj.STF = [BRS{31,columnFront} BRS{32,columnFront} BRS{33,columnFront} BRS{34,columnFront}];
+            obj.STR = [BRS{31,columnRear} BRS{32,columnRear} BRS{33,columnRear} BRS{34,columnRear}];
+
         end
-
-        function output = steerCamberLHS_plot()
-            % X and Y coordinates in matrix form 
-            % Added -90 and 90 for the graph - for visual completeness puproses 
-            X = [-90 TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30) 90];
-            Y = [9.0338 5.01 3.78 2.79 1.95 1.22 0.58 0 -0.54 -1.05 -1.54 -2.03 -2.54 -3.09 -4.7438];
-
-            output = plot(X, Y);
-        end
-
-        function output = steerCamberRHS_plot()
-            % X and Y coordinates in matrix form 
-            % Added -90 and 90 for the graph - for visual completeness puproses 
-            X = [-90 TREV2Parameters.getProportion(-30) TREV2Parameters.getProportion(-25) TREV2Parameters.getProportion(-20) TREV2Parameters.getProportion(-15) TREV2Parameters.getProportion(-10) TREV2Parameters.getProportion(-5) TREV2Parameters.getProportion(0) TREV2Parameters.getProportion(5) TREV2Parameters.getProportion(10) TREV2Parameters.getProportion(15) TREV2Parameters.getProportion(20) TREV2Parameters.getProportion(25) TREV2Parameters.getProportion(30) 90];
-            Y = [-4.7438 -3.09 -2.54 -2.03 -1.54 -1.05 -0.54 0 0.58 1.22 1.95 2.79 3.78 5.01 9.0338];
-
-            output = plot(X, Y);
-        end
-
         
+        % Bump Camber Gains
+        function output = BumpC(obj,x)
+
+            x = x.*25.4;
+
+            % RHS
+            % FR
+            fFR = @(x) (obj.BCF(1,1)*x(1,2).^0) + (obj.BCF(1,2)*x(1,2).^1) + (obj.BCF(1,3)*x(1,2).^2) + (obj.BCF(1,4)*x(1,2).^3);
+            yFR = fFR(x);
+
+            % RR
+            fRR = @(x) (obj.BCR(1,1)*x(2,2).^0) + (obj.BCR(1,2)*x(2,2).^1) + (obj.BCR(1,3)*x(2,2).^2) + (obj.BCR(1,4)*x(2,2).^3);
+            yRR = fRR(x);
+
+            % LHS
+            % FL
+            fFL = @(x) (obj.BCF(1,1)*x(1,1).^0) + (obj.BCF(1,2)*x(1,1).^1) + (obj.BCF(1,3)*x(1,1).^2) + (obj.BCF(1,4)*x(1,1).^3);
+            yFL = fFL(x);
+
+            % RL
+            fRL = @(x) (obj.BCR(1,1)*x(2,1).^0) + (obj.BCR(1,2)*x(2,1).^1) + (obj.BCR(1,3)*x(2,1).^2) + (obj.BCR(1,4)*x(2,1).^3);
+            yRL = fRL(x);
+
+            output = [yFL, yFR; yRL, yRR];
+        end
+
+        % Roll Camber Gains
+        function output = RollC(obj,x)
+
+            x = -x;
+            
+            % RHS
+            % FR
+            fFR = @(x) (obj.RCF(1,1)*x.^0) + (obj.RCF(1,2)*x.^1) + (obj.RCF(1,3)*x.^2) + (obj.RCF(1,4)*x.^3);
+            yFR = fFR(x);
+
+            % RR
+            fRR = @(x) (obj.RCR(1,1)*x.^0) + (obj.RCR(1,2)*x.^1) + (obj.RCR(1,3)*x.^2) + (obj.RCR(1,4)*x.^3);
+            yRR = fRR(x);
+
+            % LHS
+            % FL
+            fFL = @(x) (obj.RCF(1,1)*(-x).^0) + (obj.RCF(1,2)*(-x).^1) + (obj.RCF(1,3)*(-x).^2) + (obj.RCF(1,4)*(-x).^3);
+            yFL = fFL(x);
+
+            % RL
+            fRL = @(x) (obj.RCR(1,1)*(-x).^0) + (obj.RCR(1,2)*(-x).^1) + (obj.RCR(1,3)*(-x).^2) + (obj.RCR(1,4)*(-x).^3);
+            yRL = fRL(x);
+
+            output = [yFL, yFR; yRL, yRR];
+        end
+
+        % Steer Camber Gains
+        function output = SteerC(obj,x)
+
+            x = (-x*2)*(1.625/248)*25.4;
+
+            % RHS
+            % FR
+            fFR = @(x) (obj.SCF(1,1)*x.^0) + (obj.SCF(1,2)*x.^1) + (obj.SCF(1,3)*x.^2) + (obj.SCF(1,4)*x.^3);
+            yFR = fFR(x);
+
+            % RR
+            fRR = @(x) (obj.SCR(1,1)*x.^0) + (obj.SCR(1,2)*x.^1) + (obj.SCR(1,3)*x.^2) + (obj.SCR(1,4)*x.^3);
+            yRR = fRR(x);
+
+            % LHS
+            % FL
+            fFL = @(x) (obj.SCF(1,1)*(-x).^0) + (obj.SCF(1,2)*(-x).^1) + (obj.SCF(1,3)*(-x).^2) + (obj.SCF(1,4)*(-x).^3);
+            yFL = fFL(x);
+
+            % RL
+            fRL = @(x) (obj.SCR(1,1)*(-x).^0) + (obj.SCR(1,2)*(-x).^1) + (obj.SCR(1,3)*(-x).^2) + (obj.SCR(1,4)*(-x).^3);
+            yRL = fRL(x);
+
+            output = [yFL, yFR; yRL, yRR];
+        end
+            
     end
+
 end

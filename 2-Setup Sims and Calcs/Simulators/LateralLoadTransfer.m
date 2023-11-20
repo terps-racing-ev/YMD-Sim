@@ -22,7 +22,7 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV2ParametersV2();
 
 %% Tire Modeling
 
@@ -89,10 +89,12 @@ Velocity = 86;
 
 Radius = 329; %in
 
+format longG
+
 %% Calculations
 
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
-[Fz,LoLT,Accelmax,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
+[Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
 
 [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
 

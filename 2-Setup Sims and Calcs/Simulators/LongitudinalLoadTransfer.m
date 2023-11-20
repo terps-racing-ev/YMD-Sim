@@ -87,6 +87,8 @@ Accel = true;
 % Test Velocity (mph)
 Velocity = 0;
 
+format longG
+
 %% Calculations
 
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
