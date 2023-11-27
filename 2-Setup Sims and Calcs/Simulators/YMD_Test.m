@@ -1,4 +1,4 @@
- %% YMD Test
+%% YMD Test
 % Credit - LJ Hamilton
 
 close all
@@ -28,6 +28,7 @@ vehicleObj = TREV2Parameters();
 %% Tire Modeling
 
 % Hoosier 16x7.5-10 R20 (8 in Rim)
+
 % Input Front and Rear Tire Data
 % Front
 filename_P1F = 'A2356run8.mat';
@@ -40,13 +41,13 @@ totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
 trainDataF = totDataF;
 
 % Rear
-filename_P1FR = 'A2356run8.mat';
-[latTrainingData_P1FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1FR);
+filename_P1R = 'A2356run8.mat';
+[latTrainingData_P1R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1R);
 
-filename_P2FR = 'A2356run9.mat';
-[latTrainingData_P2FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2FR);
+filename_P2R = 'A2356run9.mat';
+[latTrainingData_P2R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2R);
 
-totDataR = cat(1,latTrainingData_P1FR,latTrainingData_P2FR);
+totDataR = cat(1,latTrainingData_P1R,latTrainingData_P2R);
 trainDataR = totDataR;
 
 % Front tires
@@ -85,11 +86,14 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
+n = 101;
+
+ConstantVelocity = 20; % mph
 VelocityInput = 0.1; % mph
 
-SWAngle = 20; % deg (pos->Right, neg->Left)
+SWAngle = linspace(-90,90,n); % deg (pos->Right, neg->Left)
 
-BetaInput = 0; % deg (pos->Right, neg->Left)
+Beta = 0; % deg (pos->Right, neg->Left)
 
 Radius = 329; % in (pos->Right, neg->Left)
 
@@ -97,66 +101,173 @@ converge = false;
 
 %% Calculations
 
-while(converge == false)
+% Constant Radius
+% YMGradient = zeros(1,numel(SWAngle));
+% AccelGradient = zeros(1,numel(SWAngle));
+% 
+% for i = 1:numel(SWAngle)
+%     while(converge == false)
+% 
+%         if SWAngle(i) < 0
+%             RadiusInput = -Radius;
+%         else
+%             RadiusInput = Radius;
+%         end
+% 
+%         [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle(i),vehicleObj);
+% 
+%         [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,VelocityInput,RadiusInput,vehicleObj);
+% 
+%         if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
+%             Accel = 0;
+%             if Accel == 0
+%                 Accel(1,2) = 0;
+%             end
+%             YM = 0;
+%             break %no calculations for conditions outside of testing limits
+%         end
+% 
+%         Accelcalc = -((VelocityInput*17.6)^2/RadiusInput)/386.4; % g's
+% 
+%         [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,VelocityInput,Accelcalc,vehicleObj);
+% 
+%         [IA] = CamberCalc(Z,Roll_Angle,SWAngle(i),vehicleObj);
+% 
+%         [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+% 
+%         [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+% 
+%         % [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
+%         %
+%         % MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
+%         %
+%         % if SWAngle < 0
+%         %         MaxBeta = -MaxBeta;
+%         % else
+%         %         MaxBeta = MaxBeta;
+%         % end
+% 
+%         if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
+%             Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;
+%             VelocityInput = Vcalc;
+%         else
+%             converge = true;
+%         end
+% 
+%     end
+% 
+%     YMGradient(1,i) = YM;
+%     AccelGradient(1,i) = Accel(1,2);
+% 
+%     converge = false;
+% end
 
-    if SWAngle < 0
+% Constant Velocity
+YMGradient = zeros(1,numel(SWAngle));
+AccelGradient = zeros(1,numel(SWAngle));
+VeloGradient = zeros(1,numel(SWAngle));
+
+for i = 1:numel(SWAngle)
+    while(converge == false)
+
+        if SWAngle(i) < 0
             RadiusInput = -Radius;
-    else
+        else
             RadiusInput = Radius;
-    end
-
-    [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle,vehicleObj);
-    
-    [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,VelocityInput,RadiusInput,vehicleObj);
-
-    if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
-        Accel = 0;
-        if Accel == 0
-            Accel(1,2) = 0;
         end
-        YM = 0;
-        break %no calculations for conditions outside of testing limits
-    end
-    
-    Accelcalc = -((VelocityInput*17.6)^2/RadiusInput)/386.4; % g's
-    
-    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,VelocityInput,Accelcalc,vehicleObj);
-                
-    [IA] = CamberCalc(Roll_Angle,SWAngle,vehicleObj);
-                
-    [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
-    
-    [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
 
-    [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
-    
-    MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
-    
-    if SWAngle < 0
-            MaxBeta = -MaxBeta;
-    else
-            MaxBeta = MaxBeta;
-    end
+        [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle(i),vehicleObj);
 
-    if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
+        [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,ConstantVelocity,RadiusInput,vehicleObj);
+
+        if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
+            Accel = 0;
+            if Accel == 0
+                Accel(1,2) = 0;
+            end
+            YM = 0;
+            break %no calculations for conditions outside of testing limits
+        end
+
+        Accelcalc = -((ConstantVelocity*17.6)^2/RadiusInput)/386.4; % g's
+
+        [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,ConstantVelocity,Accelcalc,vehicleObj);
+
+        [IA] = CamberCalc(Z,Roll_Angle,SWAngle(i),vehicleObj);
+
+        [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+
+        [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+
+        % [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
+        %
+        % MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
+        %
+        % if SWAngle < 0
+        %         MaxBeta = -MaxBeta;
+        % else
+        %         MaxBeta = MaxBeta;
+        % end
+
         Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;
-        VelocityInput = Vcalc;
-    else 
-        converge = true;
+
+        if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
+            RadiusInput = Vcalc^2/Accel(1,2);
+        else
+            converge = true;
+        end
+
     end
 
+    YMGradient(1,i) = YM;
+    AccelGradient(1,i) = Accel(1,2);
+    VeloGradient(1,i) = Vcalc;
+
+    converge = false;
 end
 
-disp('Velocity: ');
-disp(Vcalc);
-disp('Radius: ');
-disp(Radius);
-disp('Steering Wheel Angle: ');
-disp(SWAngle);
-disp('Input Beta: ');
-disp(BetaInput);
-disp('Max Beta: ');
-disp(MaxBeta);
+%% Plot - YMD
+
+% Constant Radius
+% PlotData = [SWAngle; AccelGradient; YMGradient];
+% 
+% figure('Name','Plot - YMD');
+% title('Yaw Moment Diagram');
+% hold on
+% xlabel('Acceleration (Gs)');
+% hold on
+% ylabel('Yaw Moment (lb-in)');
+% hold on
+% grid on
+% 
+% plot(AccelGradient,YMGradient,'r*');
+% hold on
+
+% Constant Velocity
+PlotData = [SWAngle; AccelGradient; YMGradient; VeloGradient];
+
+figure('Name','Plot - YMD');
+title('Yaw Moment Diagram');
+hold on
+xlabel('Acceleration (Gs)');
+hold on
+ylabel('Yaw Moment (lb-in)');
+hold on
+grid on
+
+plot(AccelGradient,YMGradient,'r*');
+hold on
+
+% disp('Velocity: ');
+% disp(Vcalc);
+% disp('Radius: ');
+% disp(Radius);
+% disp('Steering Wheel Angle: ');
+% disp(SWAngle);
+% disp('Input Beta: ');
+% disp(BetaInput);
+% disp('Max Beta: ');
+% disp(MaxBeta);
 % disp('Roll Angle: ');
 % disp(Roll_Angle);
 % disp('Slip Angles: ');
@@ -169,16 +280,16 @@ disp(MaxBeta);
 % disp(Fz);
 % disp('Mz: ');
 % disp(Mz);
-disp('Gs: ');
-disp(Accel);
+% disp('Gs: ');
+% disp(Accel);
 % disp('Acceleration: ');
 % disp(LatAccelG);
-disp('Yaw Moment: ');
-disp(YM);
+% disp('Yaw Moment: ');
+% disp(YM);
 % disp('Camber: ');
 % disp(IA);
 % disp('Wheel Displacement: ');
 % disp(Z);
 % disp('Tire Pressure: ');
 % disp(vehicleObj.TirePressure);
-disp('----------------------');
+% disp('----------------------');
