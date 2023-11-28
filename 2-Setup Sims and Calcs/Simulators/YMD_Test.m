@@ -212,7 +212,7 @@ for i = 1:numel(SWAngle)
         Vcalc = sqrt(abs((Accel(1,2)*386.4))*Radius)./17.6;
 
         if (abs(Accelcalc - Accel(1,2))>(0.0001*abs(Accelcalc)))
-            RadiusInput = Vcalc^2/Accel(1,2);
+            RadiusInput = ConstantVelocity^2/Accel(1,2);
         else
             converge = true;
         end

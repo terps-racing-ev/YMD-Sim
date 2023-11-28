@@ -228,7 +228,7 @@ classdef TREV2Parameters
             value = (obj.CoGHeight - obj.RollAxisR);
         end
         function value = get.CoGhRA(obj)
-            value = obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.Wheelbase)*obj.FrontAxleToCoG) ;
+            value = obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.Wheelbase)*obj.FrontAxleToCoG);
         end
 
         % Function Methods:
