@@ -85,7 +85,7 @@ disp('Training completed')
 Accel = false;
 
 % Test Velocity (mph)
-Velocity = 30;
+Velocity = 86;
 
 format longG
 

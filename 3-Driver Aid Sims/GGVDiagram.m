@@ -22,28 +22,28 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-vehicleObj = TREV2ParametersV2();
+vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
-% Hoosier 18x7.5-10 R25B (8 in Rim)
+% Hoosier 16x7.5-10 R20 (8 in Rim)
 
 % Input Front and Rear Tire Data
 % Front
-filename_P1F = 'A1654run24.mat';
+filename_P1F = 'A2356run8.mat';
 [latTrainingData_P1F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P1F);
 
-filename_P2F = 'A1654run25.mat';
+filename_P2F = 'A2356run9.mat';
 [latTrainingData_P2F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P2F);
 
 totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
 trainDataF = totDataF;
 
 % Rear
-filename_P1R = 'A1654run24.mat';
+filename_P1R = 'A2356run8.mat';
 [latTrainingData_P1R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1R);
 
-filename_P2R = 'A1654run25.mat';
+filename_P2R = 'A2356run9.mat';
 [latTrainingData_P2R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2R);
 
 totDataR = cat(1,latTrainingData_P1R,latTrainingData_P2R);
@@ -90,7 +90,7 @@ DataPoints = 100;
 % Velocity Sweep (mph)
 Velocity = linspace(0,Max_Velocity,DataPoints);
 
-%% G-G-V w/ Tire Capabilities (No Camber Change)
+%% G-G-V - Grip Limited (No Camber Change)
 
 % Acceleration Sweep
 
@@ -293,7 +293,7 @@ for i = 1:numel(Velocity)
     LeftLatGsM(1,i) = g_avg;
 end
 
-%% G-G-V w/ Suspension Setup (Camber Change)
+%% G-G-V - Suspension Limited (Camber Change)
 
 % Acceleration Sweep
 
@@ -507,8 +507,8 @@ tiledlayout(1, 2)
 
 nexttile
 
-% G-G-V w/ Tire Capabilities (No Camber Change)
-title('G-G-V Diagram (Tire Capabilities)');
+% G-G-V - Grip Limited (No Camber Change)
+title('G-G-V Diagram (Grip Limited)');
 hold on
 xlabel('Longitudinal Gs');
 hold on
@@ -531,8 +531,8 @@ hold off
 
 nexttile
 
-% G-G-V w/ Suspension Setup (Camber Change)
-title('G-G-V Diagram (Suspension Setup)');
+% G-G-V - Suspension Limited (Camber Change)
+title('G-G-V Diagram (Suspension Limited)');
 hold on
 xlabel('Longitudinal Gs');
 hold on
