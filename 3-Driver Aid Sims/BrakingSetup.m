@@ -112,7 +112,9 @@ for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
     
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),0,K_r,vehicleObj);
 
@@ -125,7 +127,9 @@ for i = 1:numel(Velocity)
 
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),g_avg,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
    
     Fx_max = mu.*Fz;
     

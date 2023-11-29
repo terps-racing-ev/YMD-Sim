@@ -82,10 +82,10 @@ disp('Training completed')
 %% Inputs
 
 % Acceleration Case = True, Deceleration Case = False
-Accel = true;
+Accel = false;
 
 % Test Velocity (mph)
-Velocity = 0;
+Velocity = 30;
 
 format longG
 
@@ -94,7 +94,9 @@ format longG
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
 [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
 
-[mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+[IA] = CamberCalc(Z,0,0,vehicleObj);
+
+[mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
 [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity,0,K_r,vehicleObj);
 
@@ -120,7 +122,9 @@ end
 % Dynamic Weights (lb) -> Max Fx from Weight Transfer
 [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity,g_avg,K_r,vehicleObj);
 
-[mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+[IA] = CamberCalc(Z,0,0,vehicleObj);
+
+[mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
 if Accel == false
     Fx_max = mu.*Fz;
@@ -149,5 +153,7 @@ disp('Max Acceleration Possible (Car Limit) (Gs): ');
 disp(round(Accelmax_static,4,"decimals"));
 disp('Pitch Angle (deg): ');
 disp(round(Pitch_Angle,4,"decimals"));
+disp('Camber (deg): ');
+disp(round(IA,4,"decimals"));
 disp('Wheel Displacement (in): ');
 disp(round(Z,4,"decimals"));

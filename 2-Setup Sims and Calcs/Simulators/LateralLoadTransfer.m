@@ -96,7 +96,9 @@ format longG
 % Static Weights at Velocity (lb) -> Max G's Possible on Entry
 [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(0,Velocity,0,K_r,vehicleObj);
 
-[mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+[IA] = CamberCalc(Z,0,0,vehicleObj);
+
+[mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
 if RightTurn == true
     Fy_max = -(mu.*Fz);
@@ -129,7 +131,9 @@ end
 % Dynamic Weights (lb) -> Max Fy from Weight Transfer
 [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity,mu_drive,vehicleObj);
 
-[mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+[IA] = CamberCalc(Z,Roll_Angle,0,vehicleObj);
+
+[mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
 if RightTurn == true
     Fy_max = -(mu.*Fz);
@@ -164,5 +168,7 @@ disp('Roll Sensitivity (deg/g): ');
 disp(round(R_g,4,"decimals"));
 disp('Roll Angle (deg): ');
 disp(round(Roll_Angle,4,"decimals"));
+disp('Camber (deg): ');
+disp(round(IA,4,"decimals"));
 disp('Wheel Displacement (in): ');
 disp(round(Z,4,"decimals"));

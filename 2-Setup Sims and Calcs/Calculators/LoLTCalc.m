@@ -19,7 +19,7 @@ function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r
         -(Fz(2,1)+vehicle.RearStatic)/K_r(2,1), -(Fz(2,2)+vehicle.RearStatic)/K_r(2,2)];
 
     % Pitch Angle (deg) % Accel = + pitch, Decel = - pitch
-    Pitch_Angle = atan(-(mean(Z(1,:)))/vehicle.FrontAxleToCoG)*(180/pi());
+    Pitch_Angle = atan( (mean((Z(2,:))) - (mean(Z(1,:))) )/vehicle.Wheelbase)*(180/pi());
 
     for i = 1:2
         for j = 1:2

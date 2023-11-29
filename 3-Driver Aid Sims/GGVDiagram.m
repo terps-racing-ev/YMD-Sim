@@ -90,17 +90,21 @@ DataPoints = 100;
 % Velocity Sweep (mph)
 Velocity = linspace(0,Max_Velocity,DataPoints);
 
-%% Acceleration Sweep
+%% G-G-V w/ Tire Capabilities (No Camber Change)
+
+% Acceleration Sweep
 
 Accel = true;
 
-AccelGs = zeros(1,numel(Velocity));
+AccelGsM = zeros(1,numel(Velocity));
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),0,K_r,vehicleObj);
 
@@ -123,7 +127,9 @@ for i = 1:numel(Velocity)
     % Dynamic Weights (lb) -> Max Fx from Weight Transfer
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),g_avg,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     if Accel == false
         Fx_max = mu.*Fz;
@@ -141,20 +147,22 @@ for i = 1:numel(Velocity)
         end
     end
 
-    AccelGs(1,i) = g_avg;
+    AccelGsM(1,i) = g_avg;
 end
 
-%% Deceleration Sweep
+% Deceleration Sweep
 
 Accel = false;
 
-DecelGs = zeros(1,numel(Velocity));
+DecelGsM = zeros(1,numel(Velocity));
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),0,K_r,vehicleObj);
 
@@ -177,7 +185,9 @@ for i = 1:numel(Velocity)
     % Dynamic Weights (lb) -> Max Fx from Weight Transfer
     [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),g_avg,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     if Accel == false
         Fx_max = mu.*Fz;
@@ -195,21 +205,23 @@ for i = 1:numel(Velocity)
         end
     end
 
-    DecelGs(1,i) = g_avg;
+    DecelGsM(1,i) = g_avg;
 end
 
-%% Cornering Sweep
+% Cornering Sweep
 
 % Right Turn
 RightTurn = true;
 
-RightLatGs = zeros(1,numel(Velocity));
+RightLatGsM = zeros(1,numel(Velocity));
 
 for i = 1:numel(Velocity)
     % Static Weights at Velocity (lb) -> Max G's Possible on Entry
     [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     if RightTurn == true
         Fy_max = -(mu.*Fz);
@@ -224,7 +236,9 @@ for i = 1:numel(Velocity)
     % Dynamic Weights (lb) -> Max Fy from Weight Transfer
     [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     if RightTurn == true
         Fy_max = -(mu.*Fz);
@@ -234,20 +248,22 @@ for i = 1:numel(Velocity)
 
     g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
 
-    RightLatGs(1,i) = g_avg;
+    RightLatGsM(1,i) = g_avg;
 end
 
 
 % Left Turn
 RightTurn = false;
 
-LeftLatGs = zeros(1,numel(Velocity));
+LeftLatGsM = zeros(1,numel(Velocity));
 
 for i = 1:numel(Velocity)
         % Static Weights at Velocity (lb) -> Max G's Possible on Entry
     [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     if RightTurn == true
         Fy_max = -(mu.*Fz);
@@ -262,7 +278,9 @@ for i = 1:numel(Velocity)
     % Dynamic Weights (lb) -> Max Fy from Weight Transfer
     [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
 
-    [mu] = CoFCalc(Fz,model.muyFront,model.muyRear,vehicleObj);
+    IA = [0, 0; 0, 0];
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
 
     if RightTurn == true
         Fy_max = -(mu.*Fz);
@@ -272,15 +290,225 @@ for i = 1:numel(Velocity)
 
     g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
 
-    LeftLatGs(1,i) = g_avg;
+    LeftLatGsM(1,i) = g_avg;
 end
+
+%% G-G-V w/ Suspension Setup (Camber Change)
+
+% Acceleration Sweep
+
+Accel = true;
+
+AccelGsA = zeros(1,numel(Velocity));
+
+for i = 1:numel(Velocity)
+    % Static Weights at Velocity (lb) -> Max G's Possible on Entry
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
+
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),0,K_r,vehicleObj);
+
+    if Accel == false
+        Fx_max = mu.*Fz;
+    else
+        Fx_max = -(mu.*Fz);
+    end
+
+    if Accel == false
+        g_avg = sum(reshape(Fx_max,[1,4]))/(sum(reshape((-vehicleObj.staticWeights),[1,4])));
+    else
+        g_avg = sum(Fx_max(2,:))/(sum(sum(-vehicleObj.staticWeights)));
+
+        if (Accelmax_static < g_avg)
+            g_avg = Accelmax_static;
+        end
+    end
+
+    % Dynamic Weights (lb) -> Max Fx from Weight Transfer
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),g_avg,K_r,vehicleObj);
+
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    if Accel == false
+        Fx_max = mu.*Fz;
+    else
+        Fx_max = -(mu.*Fz);
+    end
+
+    if Accel == false
+        g_avg = sum(reshape(Fx_max,[1,4]))/(sum(reshape((-vehicleObj.staticWeights),[1,4])));
+    else
+        g_avg = sum(Fx_max(2,:))/(sum(sum(-vehicleObj.staticWeights)));
+
+        if (Accelmax_static < g_avg)
+            g_avg = Accelmax_static;
+        end
+    end
+
+    AccelGsA(1,i) = g_avg;
+end
+
+% Deceleration Sweep
+
+Accel = false;
+
+DecelGsA = zeros(1,numel(Velocity));
+
+for i = 1:numel(Velocity)
+    % Static Weights at Velocity (lb) -> Max G's Possible on Entry
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
+
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),0,K_r,vehicleObj);
+
+    if Accel == false
+        Fx_max = mu.*Fz;
+    else
+        Fx_max = -(mu.*Fz);
+    end
+
+    if Accel == false
+        g_avg = sum(reshape(Fx_max,[1,4]))/(sum(reshape((-vehicleObj.staticWeights),[1,4])));
+    else
+        g_avg = sum(Fx_max(2,:))/(sum(sum(-vehicleObj.staticWeights)));
+
+        if (Accelmax_static < g_avg)
+            g_avg = Accelmax_static;
+        end
+    end
+
+    % Dynamic Weights (lb) -> Max Fx from Weight Transfer
+    [Fz,LoLT,Accelmax_static,Pitch_Angle,Z] = LoLTCalc(mean(mu(2,:)),Velocity(i),g_avg,K_r,vehicleObj);
+
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    if Accel == false
+        Fx_max = mu.*Fz;
+    else
+        Fx_max = -(mu.*Fz);
+    end
+
+    if Accel == false
+        g_avg = sum(reshape(Fx_max,[1,4]))/(sum(reshape((-vehicleObj.staticWeights),[1,4])));
+    else
+        g_avg = sum(Fx_max(2,:))/(sum(sum(-vehicleObj.staticWeights)));
+
+        if (Accelmax_static < g_avg)
+            g_avg = Accelmax_static;
+        end
+    end
+
+    DecelGsA(1,i) = g_avg;
+end
+
+% Cornering Sweep
+
+% Right Turn
+RightTurn = true;
+
+RightLatGsA = zeros(1,numel(Velocity));
+
+for i = 1:numel(Velocity)
+    % Static Weights at Velocity (lb) -> Max G's Possible on Entry
+    [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
+
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    if RightTurn == true
+        Fy_max = -(mu.*Fz);
+    else
+        Fy_max = mu.*Fz;
+    end
+
+    g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
+
+    mu_drive = g_avg;
+
+    % Dynamic Weights (lb) -> Max Fy from Weight Transfer
+    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
+
+    [IA] = CamberCalc(Z,Roll_Angle,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    if RightTurn == true
+        Fy_max = -(mu.*Fz);
+    else
+        Fy_max = mu.*Fz;
+    end
+
+    g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
+
+    RightLatGsA(1,i) = g_avg;
+end
+
+
+% Left Turn
+RightTurn = false;
+
+LeftLatGsA = zeros(1,numel(Velocity));
+
+for i = 1:numel(Velocity)
+        % Static Weights at Velocity (lb) -> Max G's Possible on Entry
+    [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(0,Velocity(i),0,K_r,vehicleObj);
+
+    [IA] = CamberCalc(Z,0,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    if RightTurn == true
+        Fy_max = -(mu.*Fz);
+    else
+        Fy_max = mu.*Fz;
+    end
+
+    g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
+
+    mu_drive = g_avg;
+
+    % Dynamic Weights (lb) -> Max Fy from Weight Transfer
+    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,Velocity(i),mu_drive,vehicleObj);
+
+    [IA] = CamberCalc(Z,Roll_Angle,0,vehicleObj);
+
+    [mu] = CoFCalc(abs(IA),Fz,model.muyFront,model.muyRear,vehicleObj);
+
+    if RightTurn == true
+        Fy_max = -(mu.*Fz);
+    else
+        Fy_max = mu.*Fz;
+    end
+
+    g_avg = sum(reshape(Fy_max,[1,4]))/(sum(reshape((vehicleObj.staticWeights),[1,4])));
+
+    LeftLatGsA(1,i) = g_avg;
+end
+
 
 %% G-G-V Plotting
 
-PlotData = [Velocity; AccelGs; DecelGs; LeftLatGs; RightLatGs];
+PlotDataM = [Velocity; AccelGsM; DecelGsM; LeftLatGsM; RightLatGsM];
+PlotDataA = [Velocity; AccelGsA; DecelGsA; LeftLatGsA; RightLatGsA];
 
-figure('Name','Plot - G-G-V');
-title('G-G-V Diagram');
+figure('Name','Plot - G-G-V Diagrams');
+tiledlayout(1, 2)
+
+nexttile
+
+% G-G-V w/ Tire Capabilities (No Camber Change)
+title('G-G-V Diagram (Tire Capabilities)');
 hold on
 xlabel('Longitudinal Gs');
 hold on
@@ -290,11 +518,37 @@ zlabel('Velocity (mph)');
 hold on
 grid on
 
-plot3(AccelGs,zeros(numel(Velocity)),Velocity,'g');
+view([-37.5, 10]);
 hold on
-plot3(DecelGs,zeros(numel(Velocity)),Velocity,'r');
+plot3(AccelGsM,zeros(numel(Velocity)),Velocity,'g');
 hold on
-plot3(zeros(numel(Velocity)),RightLatGs,Velocity,'b');
+plot3(DecelGsM,zeros(numel(Velocity)),Velocity,'r');
 hold on
-plot3(zeros(numel(Velocity)),LeftLatGs,Velocity,'b');
+plot3(zeros(numel(Velocity)),RightLatGsM,Velocity,'b');
+hold on
+plot3(zeros(numel(Velocity)),LeftLatGsM,Velocity,'b');
+hold off
+
+nexttile
+
+% G-G-V w/ Suspension Setup (Camber Change)
+title('G-G-V Diagram (Suspension Setup)');
+hold on
+xlabel('Longitudinal Gs');
+hold on
+ylabel('Lateral Gs');
+hold on
+zlabel('Velocity (mph)');
+hold on
+grid on
+
+view([-37.5, 10]);
+hold on
+plot3(AccelGsA,zeros(numel(Velocity)),Velocity,'g');
+hold on
+plot3(DecelGsA,zeros(numel(Velocity)),Velocity,'r');
+hold on
+plot3(zeros(numel(Velocity)),RightLatGsA,Velocity,'b');
+hold on
+plot3(zeros(numel(Velocity)),LeftLatGsA,Velocity,'b');
 hold off
