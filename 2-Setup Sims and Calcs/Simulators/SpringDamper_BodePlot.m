@@ -12,29 +12,82 @@ clc
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
 
-% Adding Additional Sims
+% Adding Tire Models
+addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
+
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
-%% Inputs
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
 
-% Input Car Parameters
-Weights = vehicleObj.staticWeights();
-TrackWidth = vehicleObj.TrackWidth;
+vehicleObj = TREV2Parameters();
 
-% Tire Stiffness for Fronts and Rears
-K_t = [442 442; 442 442]; %lbf/in 
+%% Tire Modeling
+
+% Input Front and Rear Tire Data
+% Front
+filename_P1F = 'A2356run8.mat';
+[latTrainingData_P1F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P1F);
+
+filename_P2F = 'A2356run9.mat';
+[latTrainingData_P2F,tire.IDF,test.IDF] = createLatTrngDataCalc(filename_P2F);
+
+totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
+trainDataF = totDataF;
+
+% Rear
+filename_P1FR = 'A2356run8.mat';
+[latTrainingData_P1FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1FR);
+
+filename_P2FR = 'A2356run9.mat';
+[latTrainingData_P2FR,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P2FR);
+
+totDataR = cat(1,latTrainingData_P1FR,latTrainingData_P2FR);
+trainDataR = totDataR;
+
+% Front tires
+disp([tire.IDF, ', Front Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainDataF);
+[model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainDataF);
+[model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainDataF);
+% [model.muxFront, validation.RMSE_muxFront] = Trainer_mux(trainDataF);
+% [model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
+toc(t1)
+
+disp('Training completed')
+
+% Rear tires
+disp([tire.IDR, ', Rear Tire Model is being trained.  Standby...'])
+t1 = tic;
+[model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainDataR);
+[model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainDataR);
+[model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainDataR);
+% [model.muxRear, validation.RMSE_muxRear] = Trainer_mux(trainDataR);
+% [model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
+toc(t1)
+
+disp('Training completed')
+
+%% Tuned Car Parameters
+
+% Tire Spring Rates (lbf/in)
+[K_t] = SpringRateCalc(latTrainingData_P1F,latTrainingData_P2F,latTrainingData_P1R,latTrainingData_P2R,vehicleObj);
 
 % Input Test Spring Stiffness and Motion Ratios + Damper Settings
-K_s = [350 350; 400 400]; %lbf/in
-K_ARB = [1000; 0]; %lbf/in
+K_s = [200 200; 400 400]; %lbf/in
+K_ARB = [250; 0]; %lbf/in
 
-MR_s = [0.9 0.9; 0.9 0.9];
-MR_ARB = [0.5; 0.5];
+MR_s = [1 1; 1 1];
+MR_ARB = [1; 1];
 
 DampC_L = [12 12; 12 12];  %(lb-s)/in
-DampC_H = [12 12; 12 12]; %(lb-s)/in
+DampC_H = [20 20; 20 20]; %(lb-s)/in
 
 %% Calculations
 
@@ -48,17 +101,17 @@ K_r = [(K_t(1,1)*K_w(1,1))/(K_t(1,1)+K_w(1,1)) (K_t(1,2)*K_w(1,2))/(K_t(1,2)+K_w
     (K_t(2,1)*K_w(2,1))/(K_t(2,1)+K_w(2,1)) (K_t(2,2)*K_w(2,2))/(K_t(2,2)+K_w(2,2))];
 
 %Kroll
-Kroll = [(mean(K_r(1,:))*((TrackWidth(1,:)^2)/2)); (mean(K_r(2,:))*((TrackWidth(2,:)^2)/2))]/57.3;
+Kroll = [(mean(K_r(1,:))*((vehicleObj.FrontTrackWidth^2)/2)); (mean(K_r(2,:))*((vehicleObj.RearTrackWidth^2)/2))]/57.3;
 
 % Natural Frequency (Hz)
-NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/abs(Weights(1,1)))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/abs(Weights(1,2))));
-    (1/(2*pi))*(sqrt((K_r(2,1)*386.4)/abs(Weights(2,1)))),(1/(2*pi))*(sqrt((K_r(2,2)*386.4)/abs(Weights(2,2))))];
+NF = [(1/(2*pi))*(sqrt((K_r(1,1)*386.4)/abs(vehicleObj.FrontStatic))),(1/(2*pi))*(sqrt((K_r(1,2)*386.4)/abs(vehicleObj.FrontStatic)));
+    (1/(2*pi))*(sqrt((K_r(2,1)*386.4)/abs(vehicleObj.RearStatic))),(1/(2*pi))*(sqrt((K_r(2,2)*386.4)/abs(vehicleObj.RearStatic)))];
 disp('Natural Frequency (Hz) = ');
 disp(NF);
 
 % Critical Damping (lb-s)/in
-CD = [2*sqrt(K_r(1,1)*abs(Weights(1,1))/386.4),2*sqrt(K_r(1,1)*abs(Weights(1,2))/386.4);
-    2*sqrt(K_r(1,1)*abs(Weights(2,1))/386.4),2*sqrt(K_r(1,1)*abs(Weights(2,2))/386.4)];
+CD = [2*sqrt(K_r(1,1)*abs(vehicleObj.FrontStatic)/386.4),2*sqrt(K_r(1,1)*abs(vehicleObj.FrontStatic)/386.4);
+    2*sqrt(K_r(1,1)*abs(vehicleObj.RearStatic)/386.4),2*sqrt(K_r(1,1)*abs(vehicleObj.RearStatic)/386.4)];
 
 % Damping Ratio
 DR_L = [DampC_L(1,1)/CD(1,1) DampC_L(1,2)/CD(1,2); DampC_L(2,1)/CD(2,1) DampC_L(2,2)/CD(2,2)];
@@ -69,10 +122,10 @@ disp('Damping Ratio - High = ');
 disp(DR_H);
 
 % Damped Natural Frequency (Hz)
-DNF_L = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/abs(Weights(1,1)))*sqrt(1-DR_L(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/abs(Weights(1,2)))*sqrt(1-DR_L(1,2)^2);
-    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/abs(Weights(2,1)))*sqrt(1-DR_L(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/abs(Weights(2,2)))*sqrt(1-DR_L(2,2)^2)];
-DNF_H = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/abs(Weights(1,1)))*sqrt(1-DR_H(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/abs(Weights(1,2)))*sqrt(1-DR_H(1,2)^2);
-    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/abs(Weights(2,1)))*sqrt(1-DR_H(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/abs(Weights(2,2)))*sqrt(1-DR_H(2,2)^2)];
+DNF_L = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/abs(vehicleObj.FrontStatic))*sqrt(1-DR_L(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/abs(vehicleObj.FrontStatic))*sqrt(1-DR_L(1,2)^2);
+    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/abs(vehicleObj.RearStatic))*sqrt(1-DR_L(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/abs(vehicleObj.RearStatic))*sqrt(1-DR_L(2,2)^2)];
+DNF_H = [(1/(2*pi))*sqrt((K_r(1,1)*386.4)/abs(vehicleObj.FrontStatic))*sqrt(1-DR_H(1,1)^2) (1/(2*pi))*sqrt((K_r(1,2)*386.4)/abs(vehicleObj.FrontStatic))*sqrt(1-DR_H(1,2)^2);
+    (1/(2*pi))*sqrt((K_r(2,1)*386.4)/abs(vehicleObj.RearStatic))*sqrt(1-DR_H(2,1)^2) (1/(2*pi))*sqrt((K_r(2,2)*386.4)/abs(vehicleObj.RearStatic))*sqrt(1-DR_H(2,2)^2)];
 disp('Damped Natural Frequency - Low (Hz)= ');
 disp(DNF_L);
 disp('Damped Natural Frequency - High (Hz)= ');

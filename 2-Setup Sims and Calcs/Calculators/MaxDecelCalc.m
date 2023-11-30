@@ -1,4 +1,4 @@
-%% Max Deceleration Sim
+%% Max Deceleration Calculator
 
 function [Decelmax] = MaxDecelCalc(TL,mux,vehicle)    
     for i = 1:2

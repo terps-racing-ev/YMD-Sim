@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 %% Camber Simulator
 
 function [IA] = CamberCalc(RollAngle,SWAngle,vehicle)
@@ -12,6 +13,23 @@ function [IA] = CamberCalc(RollAngle,SWAngle,vehicle)
 %         RollGain(2,1)+SteerGain(2,1), RollGain(2,2)+SteerGain(2,2)];
     
     CamberGain = [RollGain(1,1), RollGain(1,2); RollGain(2,1), RollGain(2,2)];
+=======
+%% Camber Calculator
+
+function [IA] = CamberCalc(Z,RollAngle,SWAngle,vehicle)
+    % Calculating the camber change given Bump, Roll, and Steer
+
+    % Bump
+    BumpCamber = [vehicle.BumpC(Z)];
+
+    % Roll
+    RollCamber = [vehicle.RollC(RollAngle)];
+
+    % Steer
+    SteerCamber = [vehicle.SteerC(SWAngle)];
+
+    CamberGain = BumpCamber + RollCamber + SteerCamber;
+>>>>>>> main
 
     % Camber Gain
     IA = [vehicle.Camber(1,1)+CamberGain(1,1), vehicle.Camber(1,2)+CamberGain(1,2);

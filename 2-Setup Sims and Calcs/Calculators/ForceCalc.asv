@@ -125,17 +125,21 @@ classdef ForceCalc
     methods
         % Setting all points, look here for values
         function obj = ForceCalc(~)
+<<<<<<< HEAD
         poin
+=======
+        point= TREV2Parameters();
+>>>>>>> main
 
             % Unit Vectors
 
             % FR
-            obj.U_TR_FR = obj.unit(obj.p11F - obj.p12F);
-            obj.U_LAA_F_FR = obj.unit(obj.p3F - obj.p1F);
-            obj.U_LAA_A_FR = obj.unit(obj.p3F - obj.p2F);
-            obj.U_UAA_F_FR = obj.unit(obj.p7F - obj.p5F);
-            obj.U_UAA_A_FR = obj.unit(obj.p7F - obj.p6F);
-            obj.U_PR_FR = obj.unit(obj.p8F - obj.p9F);
+            obj.U_TR_FR = obj.unit(point.p11F - point.p12F);
+            obj.U_LAA_F_FR = obj.unit(point.p3F - point.p1F);
+            obj.U_LAA_A_FR = obj.unit(point.p3F - point.p2F);
+            obj.U_UAA_F_FR = obj.unit(point.p7F - point.p5F);
+            obj.U_UAA_A_FR = obj.unit(point.p7F - point.p6F);
+            obj.U_PR_FR = obj.unit(point.p8F - point.p9F);
 
             % FL
             obj.U_TR_FL = obj.makeYNegative(obj.U_TR_FR);
@@ -146,12 +150,12 @@ classdef ForceCalc
             obj.U_PR_FL = obj.makeYNegative(obj.U_PR_FR);
             
             % RR
-            obj.U_TR_RR = obj.unit(obj.p11R - obj.p12R);
-            obj.U_LAA_F_RR = obj.unit(obj.p3R - obj.p1R);
-            obj.U_LAA_A_RR = obj.unit(obj.p3R - obj.p2R);
-            obj.U_UAA_F_RR = obj.unit(obj.p7R - obj.p5R);
-            obj.U_UAA_A_RR = obj.unit(obj.p7R - obj.p6R);
-            obj.U_PR_RR = obj.unit(obj.p8R - obj.p9R);
+            obj.U_TR_RR = obj.unit(point.p11R - point.p12R);
+            obj.U_LAA_F_RR = obj.unit(point.p3R - point.p1R);
+            obj.U_LAA_A_RR = obj.unit(point.p3R - point.p2R);
+            obj.U_UAA_F_RR = obj.unit(point.p7R - point.p5R);
+            obj.U_UAA_A_RR = obj.unit(point.p7R - point.p6R);
+            obj.U_PR_RR = obj.unit(point.p8R - point.p9R);
 
             % RL
             obj.U_TR_RL = obj.makeYNegative(obj.U_TR_RR);
@@ -164,12 +168,12 @@ classdef ForceCalc
             % "Rs"
 
             % FR
-            obj.R_FR_TR = obj.p11F - obj.p19F;
-            obj.R_FR_LAAF = obj.p3F - obj.p19F;
-            obj.R_FR_LAAA = obj.p3F - obj.p19F;
-            obj.R_FR_UAAF = obj.p7F - obj.p19F;
-            obj.R_FR_UAAA = obj.p7F - obj.p19F;
-            obj.R_FR_PR = obj.p8F - obj.p19F;
+            obj.R_FR_TR = point.p11F - point.p19F;
+            obj.R_FR_LAAF = point.p3F - point.p19F;
+            obj.R_FR_LAAA = point.p3F - point.p19F;
+            obj.R_FR_UAAF = point.p7F - point.p19F;
+            obj.R_FR_UAAA = point.p7F - point.p19F;
+            obj.R_FR_PR = point.p8F - point.p19F;
 
             % FL
             obj.R_FL_TR = obj.makeYNegative(obj.R_FR_TR);
@@ -180,12 +184,12 @@ classdef ForceCalc
             obj.R_FL_PR = obj.makeYNegative(obj.R_FR_PR);
 
             % RR
-            obj.R_RR_TR = obj.p11R - obj.p19R;
-            obj.R_RR_LAAF = obj.p3R - obj.p19R;
-            obj.R_RR_LAAA = obj.p3R - obj.p19R;
-            obj.R_RR_UAAF = obj.p7R - obj.p19R;
-            obj.R_RR_UAAA = obj.p7R - obj.p19R;
-            obj.R_RR_PR = obj.p8R - obj.p19R;
+            obj.R_RR_TR = point.p11R - point.p19R;
+            obj.R_RR_LAAF = point.p3R - point.p19R;
+            obj.R_RR_LAAA = point.p3R - point.p19R;
+            obj.R_RR_UAAF = point.p7R - point.p19R;
+            obj.R_RR_UAAA = point.p7R - point.p19R;
+            obj.R_RR_PR = point.p8R - point.p19R;
 
             % RL
             obj.R_RL_TR = obj.makeYNegative(obj.R_RR_TR);
@@ -198,31 +202,31 @@ classdef ForceCalc
             % Moments 
 
             % FR
-            obj.M1_FR_TR = [((obj.U_TR_FR(3) * obj.R_FR_TR(2)) - (obj.U_TR_FR(2) * obj.R_FR_TR(3))) ((obj.U_TR_FR(3) * obj.R_FR_TR(1)) - (obj.U_TR_FR(1) * obj.R_FR_TR(3))) ((obj.U_TR_FR(2) * obj.R_FR_TR(1)) - (obj.U_TR_FR(1) * obj.R_FR_TR(2)))];
-            obj.M1_FR_LAAF = [((obj.U_LAA_F_FR(3) * obj.R_FR_LAAF(2)) - (obj.U_LAA_F_FR(2) * obj.R_FR_LAAF(3))) ((obj.U_LAA_F_FR(3) * obj.R_FR_LAAF(1)) - (obj.U_LAA_F_FR(1) * obj.R_FR_LAAF(3))) ((obj.U_LAA_F_FR(2) * obj.R_FR_LAAF(1)) - (obj.U_LAA_F_FR(1) * obj.R_FR_LAAF(2)))];
-            obj.M1_FR_LAAA = [((obj.U_LAA_A_FR(3) * obj.R_FR_LAAA(2)) - (obj.U_LAA_A_FR(2) * obj.R_FR_LAAA(3))) ((obj.U_LAA_A_FR(3) * obj.R_FR_LAAA(1)) - (obj.U_LAA_A_FR(1) * obj.R_FR_LAAA(3))) ((obj.U_LAA_A_FR(2) * obj.R_FR_LAAA(1)) - (obj.U_LAA_A_FR(1) * obj.R_FR_LAAA(2)))];
-            obj.M1_FR_UAAF = [((obj.U_UAA_F_FR(3) * obj.R_FR_UAAF(2)) - (obj.U_UAA_F_FR(2) * obj.R_FR_UAAF(3))) ((obj.U_UAA_F_FR(3) * obj.R_FR_UAAF(1)) - (obj.U_UAA_F_FR(1) * obj.R_FR_UAAF(3))) ((obj.U_UAA_F_FR(2) * obj.R_FR_UAAF(1)) - (obj.U_UAA_F_FR(1) * obj.R_FR_UAAF(2)))];
-            obj.M1_FR_UAAA = [((obj.U_UAA_A_FR(3) * obj.R_FR_UAAA(2)) - (obj.U_UAA_A_FR(2) * obj.R_FR_UAAA(3))) ((obj.U_UAA_A_FR(3) * obj.R_FR_UAAA(1)) - (obj.U_UAA_A_FR(1) * obj.R_FR_UAAA(3))) ((obj.U_UAA_A_FR(2) * obj.R_FR_UAAA(1)) - (obj.U_UAA_A_FR(1) * obj.R_FR_UAAA(2)))];
-            obj.M1_FR_PR = [((obj.U_PR_FR(3) * obj.R_FR_PR(2)) - (obj.U_PR_FR(2) * obj.R_FR_PR(3))) ((obj.U_PR_FR(3) * obj.R_FR_PR(1)) - (obj.U_PR_FR(1) * obj.R_FR_PR(3))) ((obj.U_PR_FR(2) * obj.R_FR_PR(1)) - (obj.U_PR_FR(1) * obj.R_FR_PR(2)))];
+            obj.M1_FR_TR = [((obj.U_TR_FR(3) * obj.R_FR_TR(2)) - (obj.U_TR_FR(2) * obj.R_FR_TR(3))) ((obj.U_TR_FR(1) * obj.R_FR_TR(3)) - (obj.U_TR_FR(3) * obj.R_FR_TR(1))) ((obj.U_TR_FR(2) * obj.R_FR_TR(1)) - (obj.U_TR_FR(1) * obj.R_FR_TR(2)))];
+            obj.M1_FR_LAAF = [((obj.U_LAA_F_FR(3) * obj.R_FR_LAAF(2)) - (obj.U_LAA_F_FR(2) * obj.R_FR_LAAF(3))) ((obj.U_LAA_F_FR(1) * obj.R_FR_LAAF(3)) - (obj.U_LAA_F_FR(3) * obj.R_FR_LAAF(1))) ((obj.U_LAA_F_FR(2) * obj.R_FR_LAAF(1)) - (obj.U_LAA_F_FR(1) * obj.R_FR_LAAF(2)))];
+            obj.M1_FR_LAAA = [((obj.U_LAA_A_FR(3) * obj.R_FR_LAAA(2)) - (obj.U_LAA_A_FR(2) * obj.R_FR_LAAA(3))) ((obj.U_LAA_A_FR(1) * obj.R_FR_LAAA(3)) - (obj.U_LAA_A_FR(3) * obj.R_FR_LAAA(1))) ((obj.U_LAA_A_FR(2) * obj.R_FR_LAAA(1)) - (obj.U_LAA_A_FR(1) * obj.R_FR_LAAA(2)))];
+            obj.M1_FR_UAAF = [((obj.U_UAA_F_FR(3) * obj.R_FR_UAAF(2)) - (obj.U_UAA_F_FR(2) * obj.R_FR_UAAF(3))) ((obj.U_UAA_F_FR(1) * obj.R_FR_UAAF(3)) - (obj.U_UAA_F_FR(3) * obj.R_FR_UAAF(1))) ((obj.U_UAA_F_FR(2) * obj.R_FR_UAAF(1)) - (obj.U_UAA_F_FR(1) * obj.R_FR_UAAF(2)))];
+            obj.M1_FR_UAAA = [((obj.U_UAA_A_FR(3) * obj.R_FR_UAAA(2)) - (obj.U_UAA_A_FR(2) * obj.R_FR_UAAA(3))) ((obj.U_UAA_A_FR(1) * obj.R_FR_UAAA(3)) - (obj.U_UAA_A_FR(3) * obj.R_FR_UAAA(1))) ((obj.U_UAA_A_FR(2) * obj.R_FR_UAAA(1)) - (obj.U_UAA_A_FR(1) * obj.R_FR_UAAA(2)))];
+            obj.M1_FR_PR = [((obj.U_PR_FR(3) * obj.R_FR_PR(2)) - (obj.U_PR_FR(2) * obj.R_FR_PR(3))) ((obj.U_PR_FR(1) * obj.R_FR_PR(3)) - (obj.U_PR_FR(3) * obj.R_FR_PR(1))) ((obj.U_PR_FR(2) * obj.R_FR_PR(1)) - (obj.U_PR_FR(1) * obj.R_FR_PR(2)))];
             
             % FL
-            obj.M1_FL_TR = [((obj.U_TR_FL(3) * obj.R_FL_TR(2)) - (obj.U_TR_FL(2) * obj.R_FL_TR(3))) ((obj.U_TR_FL(3) * obj.R_FL_TR(1)) - (obj.U_TR_FL(1) * obj.R_FL_TR(3))) ((obj.U_TR_FL(2) * obj.R_FL_TR(1)) - (obj.U_TR_FL(1) * obj.R_FL_TR(2)))];
-            obj.M1_FL_LAAF = [((obj.U_LAA_F_FL(3) * obj.R_FL_LAAF(2)) - (obj.U_LAA_F_FL(2) * obj.R_FL_LAAF(3))) ((obj.U_LAA_F_FL(3) * obj.R_FL_LAAF(1)) - (obj.U_LAA_F_FL(1) * obj.R_FL_LAAF(3))) ((obj.U_LAA_F_FL(2) * obj.R_FL_LAAF(1)) - (obj.U_LAA_F_FL(1) * obj.R_FL_LAAF(2)))];
-            obj.M1_FL_LAAA = [((obj.U_LAA_A_FL(3) * obj.R_FL_LAAA(2)) - (obj.U_LAA_A_FL(2) * obj.R_FL_LAAA(3))) ((obj.U_LAA_A_FL(3) * obj.R_FL_LAAA(1)) - (obj.U_LAA_A_FL(1) * obj.R_FL_LAAA(3))) ((obj.U_LAA_A_FL(2) * obj.R_FL_LAAA(1)) - (obj.U_LAA_A_FL(1) * obj.R_FL_LAAA(2)))];
-            obj.M1_FL_UAAF = [((obj.U_UAA_F_FL(3) * obj.R_FL_UAAF(2)) - (obj.U_UAA_F_FL(2) * obj.R_FL_UAAF(3))) ((obj.U_UAA_F_FL(3) * obj.R_FL_UAAF(1)) - (obj.U_UAA_F_FL(1) * obj.R_FL_UAAF(3))) ((obj.U_UAA_F_FL(2) * obj.R_FL_UAAF(1)) - (obj.U_UAA_F_FL(1) * obj.R_FL_UAAF(2)))];
-            obj.M1_FL_UAAA = [((obj.U_UAA_A_FL(3) * obj.R_FL_UAAA(2)) - (obj.U_UAA_A_FL(2) * obj.R_FL_UAAA(3))) ((obj.U_UAA_A_FL(3) * obj.R_FL_UAAA(1)) - (obj.U_UAA_A_FL(1) * obj.R_FL_UAAA(3))) ((obj.U_UAA_A_FL(2) * obj.R_FL_UAAA(1)) - (obj.U_UAA_A_FL(1) * obj.R_FL_UAAA(2)))];
-            obj.M1_FL_PR = [((obj.U_PR_FL(3) * obj.R_FL_PR(2)) - (obj.U_PR_FL(2) * obj.R_FL_PR(3))) ((obj.U_PR_FL(3) * obj.R_FL_PR(1)) - (obj.U_PR_FL(1) * obj.R_FL_PR(3))) ((obj.U_PR_FL(2) * obj.R_FL_PR(1)) - (obj.U_PR_FL(1) * obj.R_FL_PR(2)))];
+            obj.M1_FL_TR = [((obj.U_TR_FL(3) * obj.R_FL_TR(2)) - (obj.U_TR_FL(2) * obj.R_FL_TR(3))) ((obj.U_TR_FL(1) * obj.R_FL_TR(3)) - (obj.U_TR_FL(3) * obj.R_FL_TR(1))) ((obj.U_TR_FL(2) * obj.R_FL_TR(1)) - (obj.U_TR_FL(1) * obj.R_FL_TR(2)))];
+            obj.M1_FL_LAAF = [((obj.U_LAA_F_FL(3) * obj.R_FL_LAAF(2)) - (obj.U_LAA_F_FL(2) * obj.R_FL_LAAF(3))) ((obj.U_LAA_F_FL(1) * obj.R_FL_LAAF(3)) - (obj.U_LAA_F_FL(3) * obj.R_FL_LAAF(1))) ((obj.U_LAA_F_FL(2) * obj.R_FL_LAAF(1)) - (obj.U_LAA_F_FL(1) * obj.R_FL_LAAF(2)))];
+            obj.M1_FL_LAAA = [((obj.U_LAA_A_FL(3) * obj.R_FL_LAAA(2)) - (obj.U_LAA_A_FL(2) * obj.R_FL_LAAA(3))) ((obj.U_LAA_A_FL(1) * obj.R_FL_LAAA(3)) - (obj.U_LAA_A_FL(3) * obj.R_FL_LAAA(1))) ((obj.U_LAA_A_FL(2) * obj.R_FL_LAAA(1)) - (obj.U_LAA_A_FL(1) * obj.R_FL_LAAA(2)))];
+            obj.M1_FL_UAAF = [((obj.U_UAA_F_FL(3) * obj.R_FL_UAAF(2)) - (obj.U_UAA_F_FL(2) * obj.R_FL_UAAF(3))) ((obj.U_UAA_F_FL(1) * obj.R_FL_UAAF(3)) - (obj.U_UAA_F_FL(3) * obj.R_FL_UAAF(1))) ((obj.U_UAA_F_FL(2) * obj.R_FL_UAAF(1)) - (obj.U_UAA_F_FL(1) * obj.R_FL_UAAF(2)))];
+            obj.M1_FL_UAAA = [((obj.U_UAA_A_FL(3) * obj.R_FL_UAAA(2)) - (obj.U_UAA_A_FL(2) * obj.R_FL_UAAA(3))) ((obj.U_UAA_A_FL(1) * obj.R_FL_UAAA(3)) - (obj.U_UAA_A_FL(3) * obj.R_FL_UAAA(1))) ((obj.U_UAA_A_FL(2) * obj.R_FL_UAAA(1)) - (obj.U_UAA_A_FL(1) * obj.R_FL_UAAA(2)))];
+            obj.M1_FL_PR = [((obj.U_PR_FL(3) * obj.R_FL_PR(2)) - (obj.U_PR_FL(2) * obj.R_FL_PR(3))) ((obj.U_PR_FL(1) * obj.R_FL_PR(3)) - (obj.U_PR_FL(3) * obj.R_FL_PR(1))) ((obj.U_PR_FL(2) * obj.R_FL_PR(1)) - (obj.U_PR_FL(1) * obj.R_FL_PR(2)))];
             
             % RR
-            obj.M1_RR_TR = [((obj.U_TR_RR(3) * obj.R_RR_TR(2)) - (obj.U_TR_RR(2) * obj.R_RR_TR(3))) ((obj.U_TR_RR(3) * obj.R_RR_TR(1)) - (obj.U_TR_RR(1) * obj.R_RR_TR(3))) ((obj.U_TR_RR(2) * obj.R_RR_TR(1)) - (obj.U_TR_RR(1) * obj.R_RR_TR(2)))];
-            obj.M1_RR_LAAF = [((obj.U_LAA_F_RR(3) * obj.R_RR_LAAF(2)) - (obj.U_LAA_F_RR(2) * obj.R_RR_LAAF(3))) ((obj.U_LAA_F_RR(3) * obj.R_RR_LAAF(1)) - (obj.U_LAA_F_RR(1) * obj.R_RR_LAAF(3))) ((obj.U_LAA_F_RR(2) * obj.R_RR_LAAF(1)) - (obj.U_LAA_F_RR(1) * obj.R_RR_LAAF(2)))];
-            obj.M1_RR_LAAA = [((obj.U_LAA_A_RR(3) * obj.R_RR_LAAA(2)) - (obj.U_LAA_A_RR(2) * obj.R_RR_LAAA(3))) ((obj.U_LAA_A_RR(3) * obj.R_RR_LAAA(1)) - (obj.U_LAA_A_RR(1) * obj.R_RR_LAAA(3))) ((obj.U_LAA_A_RR(2) * obj.R_RR_LAAA(1)) - (obj.U_LAA_A_RR(1) * obj.R_RR_LAAA(2)))];
-            obj.M1_RR_UAAF = [((obj.U_UAA_F_RR(3) * obj.R_RR_UAAF(2)) - (obj.U_UAA_F_RR(2) * obj.R_RR_UAAF(3))) ((obj.U_UAA_F_RR(3) * obj.R_RR_UAAF(1)) - (obj.U_UAA_F_RR(1) * obj.R_RR_UAAF(3))) ((obj.U_UAA_F_RR(2) * obj.R_RR_UAAF(1)) - (obj.U_UAA_F_RR(1) * obj.R_RR_UAAF(2)))];
-            obj.M1_RR_UAAA = [((obj.U_UAA_A_RR(3) * obj.R_RR_UAAA(2)) - (obj.U_UAA_A_RR(2) * obj.R_RR_UAAA(3))) ((obj.U_UAA_A_RR(3) * obj.R_RR_UAAA(1)) - (obj.U_UAA_A_RR(1) * obj.R_RR_UAAA(3))) ((obj.U_UAA_A_RR(2) * obj.R_RR_UAAA(1)) - (obj.U_UAA_A_RR(1) * obj.R_RR_UAAA(2)))];
-            obj.M1_RR_PR = [((obj.U_PR_RR(3) * obj.R_RR_PR(2)) - (obj.U_PR_RR(2) * obj.R_RR_PR(3))) ((obj.U_PR_RR(3) * obj.R_RR_PR(1)) - (obj.U_PR_RR(1) * obj.R_RR_PR(3))) ((obj.U_PR_RR(2) * obj.R_RR_PR(1)) - (obj.U_PR_RR(1) * obj.R_RR_PR(2)))];
+            obj.M1_RR_TR = [((obj.U_TR_RR(3) * obj.R_RR_TR(2)) - (obj.U_TR_RR(2) * obj.R_RR_TR(3))) ((obj.U_TR_RR(1) * obj.R_RR_TR(3)) - (obj.U_TR_RR(3) * obj.R_RR_TR(1))) ((obj.U_TR_RR(2) * obj.R_RR_TR(1)) - (obj.U_TR_RR(1) * obj.R_RR_TR(2)))];
+            obj.M1_RR_LAAF = [((obj.U_LAA_F_RR(3) * obj.R_RR_LAAF(2)) - (obj.U_LAA_F_RR(2) * obj.R_RR_LAAF(3))) ((obj.U_LAA_F_RR(1) * obj.R_RR_LAAF(3)) - (obj.U_LAA_F_RR(3) * obj.R_RR_LAAF(1))) ((obj.U_LAA_F_RR(2) * obj.R_RR_LAAF(1)) - (obj.U_LAA_F_RR(1) * obj.R_RR_LAAF(2)))];
+            obj.M1_RR_LAAA = [((obj.U_LAA_A_RR(3) * obj.R_RR_LAAA(2)) - (obj.U_LAA_A_RR(2) * obj.R_RR_LAAA(3))) ((obj.U_LAA_A_RR(1) * obj.R_RR_LAAA(3)) - (obj.U_LAA_A_RR(3) * obj.R_RR_LAAA(1))) ((obj.U_LAA_A_RR(2) * obj.R_RR_LAAA(1)) - (obj.U_LAA_A_RR(1) * obj.R_RR_LAAA(2)))];
+            obj.M1_RR_UAAF = [((obj.U_UAA_F_RR(3) * obj.R_RR_UAAF(2)) - (obj.U_UAA_F_RR(2) * obj.R_RR_UAAF(3))) ((obj.U_UAA_F_RR(1) * obj.R_RR_UAAF(3)) - (obj.U_UAA_F_RR(3) * obj.R_RR_UAAF(1))) ((obj.U_UAA_F_RR(2) * obj.R_RR_UAAF(1)) - (obj.U_UAA_F_RR(1) * obj.R_RR_UAAF(2)))];
+            obj.M1_RR_UAAA = [((obj.U_UAA_A_RR(3) * obj.R_RR_UAAA(2)) - (obj.U_UAA_A_RR(2) * obj.R_RR_UAAA(3))) ((obj.U_UAA_A_RR(1) * obj.R_RR_UAAA(3)) - (obj.U_UAA_A_RR(3) * obj.R_RR_UAAA(1))) ((obj.U_UAA_A_RR(2) * obj.R_RR_UAAA(1)) - (obj.U_UAA_A_RR(1) * obj.R_RR_UAAA(2)))];
+            obj.M1_RR_PR = [((obj.U_PR_RR(3) * obj.R_RR_PR(2)) - (obj.U_PR_RR(2) * obj.R_RR_PR(3))) ((obj.U_PR_RR(1) * obj.R_RR_PR(3)) - (obj.U_PR_RR(3) * obj.R_RR_PR(1))) ((obj.U_PR_RR(2) * obj.R_RR_PR(1)) - (obj.U_PR_RR(1) * obj.R_RR_PR(2)))];
 
             % RL
-            obj.M1_RL_TR = [((obj.U_TR_RL(3) * obj.R_RL_TR(2)) - (obj.U_TR_RL(2) * obj.R_RL_TR(3))) ((obj.U_TR_RL(3) * obj.R_RL_TR(1)) - (obj.U_TR_RL(1) * obj.R_RL_TR(3))) ((obj.U_TR_RL(2) * obj.R_RL_TR(1)) - (obj.U_TR_RL(1) * obj.R_RL_TR(2)))];
+            obj.M1_RL_TR = [((obj.U_TR_RL(3) * obj.R_RL_TR(2)) - (obj.U_TR_RL(2) * obj.R_RL_TR(3))) ((obj.U_TR_RL(1) * obj.R_RL_TR(3)) - (obj.U_TR_RL(3) * obj.R_RL_TR(1))) ((obj.U_TR_RL(2) * obj.R_RL_TR(1)) - (obj.U_TR_RL(1) * obj.R_RL_TR(2)))];
             obj.M1_RL_LAAF = [((obj.U_LAA_F_RL(3) * obj.R_RL_LAAF(2)) - (obj.U_LAA_F_RL(2) * obj.R_RL_LAAF(3))) ((obj.U_LAA_F_RL(3) * obj.R_RL_LAAF(1)) - (obj.U_LAA_F_RL(1) * obj.R_RL_LAAF(3))) ((obj.U_LAA_F_RL(2) * obj.R_RL_LAAF(1)) - (obj.U_LAA_F_RL(1) * obj.R_RL_LAAF(2)))];
             obj.M1_RL_LAAA = [((obj.U_LAA_A_RL(3) * obj.R_RL_LAAA(2)) - (obj.U_LAA_A_RL(2) * obj.R_RL_LAAA(3))) ((obj.U_LAA_A_RL(3) * obj.R_RL_LAAA(1)) - (obj.U_LAA_A_RL(1) * obj.R_RL_LAAA(3))) ((obj.U_LAA_A_RL(2) * obj.R_RL_LAAA(1)) - (obj.U_LAA_A_RL(1) * obj.R_RL_LAAA(2)))];
             obj.M1_RL_UAAF = [((obj.U_UAA_F_RL(3) * obj.R_RL_UAAF(2)) - (obj.U_UAA_F_RL(2) * obj.R_RL_UAAF(3))) ((obj.U_UAA_F_RL(3) * obj.R_RL_UAAF(1)) - (obj.U_UAA_F_RL(1) * obj.R_RL_UAAF(3))) ((obj.U_UAA_F_RL(2) * obj.R_RL_UAAF(1)) - (obj.U_UAA_F_RL(1) * obj.R_RL_UAAF(2)))];

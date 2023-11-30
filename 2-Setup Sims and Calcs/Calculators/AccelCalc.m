@@ -1,4 +1,4 @@
-%% Acceleration Forces Sim
+%% Acceleration Forces Calculator
 
 function [Fx,Ax] = AccelCalc(ThrottleInput,Velocity,GR,vehicle)
     rr = 0.015;

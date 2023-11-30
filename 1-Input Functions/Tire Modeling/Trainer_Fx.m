@@ -41,7 +41,7 @@ function [trainedModel, validationRMSE] = Trainer_Fx(trainingData)
 % This code processes the data into the right shape for training the
 % model.
 % Convert input to table
-inputTable = array2table(trainingData, 'VariableNames', {'column_1', 'column_2', 'column_3', 'column_4', 'column_5', 'column_6', 'column_7'});
+inputTable = array2table(trainingData, 'VariableNames', {'column_1', 'column_2', 'column_3', 'column_4', 'column_5', 'column_6', 'column_7', 'column_8'});
 
 predictorNames = {'column_1', 'column_2', 'column_3', 'column_4'};
 predictors = inputTable(:, predictorNames);
@@ -73,7 +73,7 @@ trainedModel.HowToPredict = sprintf('To make predictions on a new predictor colu
 % This code processes the data into the right shape for training the
 % model.
 % Convert input to table
-inputTable = array2table(trainingData, 'VariableNames', {'column_1', 'column_2', 'column_3', 'column_4', 'column_5', 'column_6', 'column_7'});
+inputTable = array2table(trainingData, 'VariableNames', {'column_1', 'column_2', 'column_3', 'column_4', 'column_5', 'column_6', 'column_7', 'column_8'});
 
 predictorNames = {'column_1', 'column_2', 'column_3', 'column_4'};
 predictors = inputTable(:, predictorNames);

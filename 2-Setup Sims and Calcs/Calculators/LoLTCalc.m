@@ -1,6 +1,10 @@
 %% Longitudinal Load Transfer Simulator
 
+<<<<<<< HEAD
 function [Fz,LoLT,Accelmax,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r,vehicle)
+=======
+function [Fz,LoLT,Accelmax,Pitch_Angle,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r,vehicle)
+>>>>>>> main
     % LoLT
     LoLT = LongAccel*((vehicle.TotalWeight*vehicle.CoGHeight)/vehicle.Wheelbase);
     
@@ -15,8 +19,11 @@ function [Fz,LoLT,Accelmax,Z] = LoLTCalc(mu_x,Velocity,LongAccel,K_r,vehicle)
     Accelmax = mu_x*(vehicle.FrontAxleToCoG/(vehicle.Wheelbase-(vehicle.CoGHeight*mu_x)));
     
     % Wheel Displacement (in) (pos -> loaded (bump), neg -> unloaded (droop))
-    Z = [-(LoLT/2)/K_r(1,1), -(LoLT/2)/K_r(1,2);
-        (LoLT/2)/K_r(2,1), (LoLT/2)/K_r(2,2)];
+    Z = [-(Fz(1,1)+vehicle.FrontStatic)/K_r(1,1), -(Fz(1,2)+vehicle.FrontStatic)/K_r(1,2);
+        -(Fz(2,1)+vehicle.RearStatic)/K_r(2,1), -(Fz(2,2)+vehicle.RearStatic)/K_r(2,2)];
+
+    % Pitch Angle (deg) % Accel = + pitch, Decel = - pitch
+    Pitch_Angle = atan( (mean((Z(2,:))) - (mean(Z(1,:))) )/vehicle.Wheelbase)*(180/pi());
 
     for i = 1:2
         for j = 1:2
