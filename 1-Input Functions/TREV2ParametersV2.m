@@ -62,6 +62,7 @@ classdef TREV2ParametersV2
         RRotorDia %(in)
         BrakePedalRatio
         BrakeBias
+        CaliperThrow %(mm)
         FPistonArea %(in^2)
         FMasterCylArea %(in^2)
         RPistonArea %(in^2)
@@ -90,8 +91,21 @@ classdef TREV2ParametersV2
         FinalDrive
     end
 
+    %% Ride Modeling Parameters
+    % Given
+    properties 
+        FrontUnsprungCWeight
+        RearUnsprungCWeight
+    end
+
+     % Calculated
+    properties (Dependent)
+        FrontSprungWeight
+        RearSprungWeight
+    end
+
     %% FR Suspension Points
- properties (SetAccess = private)  
+    properties (SetAccess = private)  
         % Point 1: Lower wishbone front pivot
         p1F
         % Point 2: Lower wishbone rear pivot
@@ -126,7 +140,7 @@ classdef TREV2ParametersV2
         p21F
         % Point 99: Tyre Contact Patch, x,y,z
         p99F
- end
+    end
 
     %% RR Suspension Points
     properties (SetAccess = private)
@@ -164,9 +178,9 @@ classdef TREV2ParametersV2
         p21R
         % Point 99: Tyre Contact Patch, x,y,z
         p99R
-end
-
-   %% BRS Gain
+    end
+    
+    %% BRS Gain
     properties (SetAccess = private)
         % Bump
         % Front Camber Gain
@@ -230,6 +244,12 @@ end
         function value = get.CoGhRA(obj)
             value = obj.CoGhZrF+(((obj.CoGhZrR - obj.CoGhZrF)/obj.Wheelbase)*obj.FrontAxleToCoG);
         end
+        function value = get.FrontSprungWeight(obj)
+            value = (obj.FrontStatic - obj.FrontUnsprungCWeight);
+        end
+        function value = get.RearSprungWeight(obj)
+            value = (obj.RearStatic - obj.RearUnsprungCWeight);
+        end
 
         % Function Methods:
         function output = staticWeights(obj)
@@ -250,7 +270,7 @@ end
         end
 
         % Setting all points, look here for values
-        function obj = TREV2ParametersV2()
+        function obj = TREV2Parameters()
             
             [~, name, ext] = fileparts('TREV2 Cookbook V2.xlsx');
             tempTREV2Cookbook = fullfile('Reference Files/',['TREV2 Cookbook V2-MATLAB', ext]);
@@ -283,6 +303,9 @@ end
        
             obj.FinalDrive = parameters{30,2};
 
+            obj.UnsprungCWeightF = parameters{33,2};
+            obj.UnsprungCWeightR = parameters{34,2};
+
             obj.K_s = [parameters{1,6} parameters{1,6}; parameters{2,6} parameters{2,6}]; %lb/in
             obj.K_ARB = [parameters{3,6} ; parameters{4,6}]; %lb/in 
             obj.MR_s = [parameters{5,6} parameters{5,6}; parameters{6,6} parameters{6,6}];
@@ -308,11 +331,12 @@ end
             obj.RMasterCylBore = parameters{32,6}; %(in)
             obj.RRotorDia = parameters{33,6}; %(in)
             obj.BrakePedalRatio = parameters{34,6};
+            obj.CaliperThrow = parameters{35,6};
             obj.BrakeBias = parameters{35,6};
-            obj.FPistonArea = parameters{36,6}; %(in^2)
-            obj.FMasterCylArea = parameters{37,6}; %(in^2)
-            obj.RPistonArea = parameters{38,6}; %(in^2)
-            obj.RMasterCylArea = parameters{39,6}; %(in^2)
+            obj.FPistonArea = parameters{37,6}; %(in^2)
+            obj.FMasterCylArea = parameters{38,6}; %(in^2)
+            obj.RPistonArea = parameters{39,6}; %(in^2)
+            obj.RMasterCylArea = parameters{40,6}; %(in^2)
 
 
             % Columns X, Y, and Z in inches
@@ -415,7 +439,7 @@ end
 
         % Roll Camber Gains
         function output = RollC(obj,x)
-            
+
             x = -x;
             
             % RHS
