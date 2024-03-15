@@ -25,13 +25,19 @@ Radius = 348;
 % Adding Vehicle Parameters
 currentFolder = pwd;
 addpath([currentFolder, filesep, '1-Input Functions']);
-vehicleObj = TREV2Parameters();
 
 % Adding Tire Models
 addpath([currentFolder, filesep, '1-Input Functions', filesep, 'Tire Modeling']);
 
-% Adding Additional Sims
+% Adding Additional Calculators
+addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators']);
+
+% Adding Additional Similators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
+
+% Adding Reference Files
+addpath([currentFolder, filesep, 'Reference Files\']);
+vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
@@ -54,7 +60,7 @@ R_g = (vehicleObj.TotalWeight*vehicleObj.CoGhRA)./(K_roll(1,:)+K_roll(2,:));
 
 %% muy Calculation Setup
 
-[polyfits] = LateralCoFCalc(latTrainingData_P1,latTrainingData_P2);
+[polyfits] = CoFCalc(latTrainingData_P1,latTrainingData_P2);
 
 if (Tire_psi == 8)
     polyCalc = polyfits(1,:);
