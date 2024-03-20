@@ -86,12 +86,12 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
-n = 101;
+n = 20;
 
-ConstantVelocity = 23.86; % mph
+ConstantVelocity = 20; % mph
 VelocityInput = 0.1; % mph
 
-SWAngle = linspace(-90,90,n); % deg (pos->Right, neg->Left)
+SWAngle = linspace(-24,24,n); % deg (pos->Right, neg->Left)
 
 BetaInput = 0; % deg (pos->Right, neg->Left)
 
@@ -210,8 +210,8 @@ for i = 1:numel(SWAngle)
 
         Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
 
-        %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
-        if (abs(Vcalc - VelocityInput) < 0.1)
+        %replaced Accel prev > Accel or whatever w/ velocities
+        if (abs(Vcalc - VelocityInput) <0.1)
             RadiusInput = ConstantVelocity^2/Accel(1,2)
         else
             converge = true;
