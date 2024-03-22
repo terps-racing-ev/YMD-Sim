@@ -86,18 +86,20 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
-n = 101;
+nSteer = 13;
+nBeta = 7;
 
 ConstantVelocity = 23.86; % mph
 VelocityInput = 0.1; % mph
 
-SWAngle = linspace(-90,90,n); % deg (pos->Right, neg->Left)
+SWAngle = linspace(-24,24,nSteer); % deg (pos->Right, neg->Left)
 
-BetaInput = 0; % deg (pos->Right, neg->Left)
+BetaInput = linspace(-12,12,nBeta); % deg (pos->Right, neg->Left)
 
 Radius = 329; % in (pos->Right, neg->Left)
 
 converge = false;
+YMD = zeros(nSteer,nBeta,2);
 
 %% Calculations
 
@@ -162,75 +164,129 @@ end
 
  %Constant Velocity
 
-YMGradient = zeros(1,numel(SWAngle));
-AccelGradient = zeros(1,numel(SWAngle));
-VeloGradient = zeros(1,numel(SWAngle));
-RadiusInput = Radius;
+YMGradient = zeros(numel(BetaInput),numel(SWAngle));
+AccelGradient = zeros(numel(BetaInput),numel(SWAngle));
+VeloGradient = zeros(numel(BetaInput),numel(SWAngle));
+RadiusInput = 500;
 Vcalc = 5;
+yawrate = 0;
+for j = 1:numel(BetaInput)
+    for i = 1:numel(SWAngle)
+        while(converge == false)
 
-for i = 1:numel(SWAngle)
-    while(converge == false)
-
-        if SWAngle(i) < 0
-            RadiusInput = -RadiusInput;
-        else
-            %RadiusInput = RadiusInput;
-        end
-
-        [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle(i),vehicleObj);
-
-        [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput,ConstantVelocity,RadiusInput,vehicleObj);
-
-        if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
-            Accel = 0;
-            if Accel == 0
-                Accel(1,2) = 0;
+            if SWAngle(i) < 0
+                RadiusInput = -RadiusInput;
+            else
+                %RadiusInput = RadiusInput;
             end
-            YM = 0;
-            break %no calculations for conditions outside of testing limits
+
+            [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle(i),vehicleObj);
+
+            [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput(j),ConstantVelocity,RadiusInput,vehicleObj);
+
+            if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
+                Accel = 0;
+                if Accel == 0
+                    Accel(1,2) = 0;
+                end
+                YM = 0;
+                break %no calculations for conditions outside of testing limits
+            end
+
+            Accelcalc = -((ConstantVelocity*17.6)^2/RadiusInput)/386.4; % g's
+
+            [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,ConstantVelocity,Accelcalc,vehicleObj);
+
+            [IA] = CamberCalc(Z,Roll_Angle,SWAngle(i),vehicleObj);
+
+            [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
+
+            [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+
+            % [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
+            %
+            % MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
+            %
+            % if SWAngle < 0
+            %         MaxBeta = -MaxBeta;
+            % else
+            %         MaxBeta = MaxBeta;
+            % end
+
+            Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
+
+            %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
+            if (abs(Vcalc - VelocityInput) < 0.1)
+                RadiusInput = ConstantVelocity^2/Accel(1,2)
+            else
+                converge = true;
+            end
+
         end
-
-        Accelcalc = -((ConstantVelocity*17.6)^2/RadiusInput)/386.4; % g's
-
-        [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,ConstantVelocity,Accelcalc,vehicleObj);
-
-        [IA] = CamberCalc(Z,Roll_Angle,SWAngle(i),vehicleObj);
-
-        [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
-
-        [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
-
-        % [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
-        %
-        % MaxBeta = atand(vehicleObj.CoGToRearAxle/Radius) - (((-2*vehicleObj.RearStatic)/sum(Calpha(2,:))*(((VelocityInput*17.6)^2)/(Radius*386.4))));
-        %
-        % if SWAngle < 0
-        %         MaxBeta = -MaxBeta;
-        % else
-        %         MaxBeta = MaxBeta;
-        % end
-
-        Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
-
-        %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
-        if (abs(Vcalc - VelocityInput) < 0.1)
-            RadiusInput = ConstantVelocity^2/Accel(1,2)
-        else
-            converge = true;
-        end
-
+        yawrate = yawrate-0.001*(yawrate-sign(Accel(1,2))*sqrt(Accel(1,2).^2 + Accel(1,2).^2)/VelocityInput);;
+        YMGradient(j,i) = YM;
+        AccelGradient(j,i) = Accel(1,2);
+        VeloGradient(j,i) = Vcalc;
+        YMD(i,j,1) =  Accel(1,2);
+        YMD(i,j,2) = YM;
+        converge = false;
     end
-
-    YMGradient(1,i) = YM;
-    AccelGradient(1,i) = Accel(1,2);
-    VeloGradient(1,i) = Vcalc;
-
-    converge = false;
 end
 
 
 %% Plot - YMD
+%hamilton's way of plotting
+patience = 1;
+%z = 1;
+%fig(z) = uifigure('Name',['velocity = ',num2str(VelocityInput), ' ft/s,', ' Ackerman = ', num2str(vehicleObj.Ackermann), ', CG = ' num2str(vehicleObj.TotalWeight*(1-vehicleObj.FrontPercent)) ' % aft']);
 
+%t = uitable(fig(z),'Position', [25 20 500 420],'ColumnWidth',{128 166 166},'Data',results,'ColumnEditable',false);
+%figure(z)
+%subplot(2,2,z)
+if patience == 0
+    plot(YMD(:,:,1),(YMD(:,:,2)),'r.')
+else
+q = 1;
+h = waitbar(q/((nSteer)*(nBeta)), 'Plotting...');
+for m = 1:1:nBeta %Iso-slip
+    for n = 1:nSteer-1
+        q = q +1;
+        waitbar(q/((nBeta)*(nSteer)), h, 'Plotting Iso-slip...');
+        mask = logical(YMD(n,:,1));
+        starts = strfind([false,mask],[0 1]);
+        stops = strfind([mask,false],[1 0]);
+        
+            for j = starts:stops-1
+                plot([YMD(n, j, 1) YMD(n, j+1, 1)], [YMD(n, j, 2) YMD(n, j+1, 2)], 'k')
+            end
+       
+        hold on
+    end 
+end
+close(h);
+
+q = 1;
+h = waitbar(q/((nBeta)*(nSteer)), 'Plotting...');
+for n = 1:1:nSteer %Iso- Steer n = 1:10:nsteer if generating detailed graph
+     for m = 1:nBeta-1
+         q = q + 1;
+        waitbar(q/((nBeta)*(nSteer)), h, 'Plotting Iso-steer...');
+        mask = logical(YMD(:,m,1))'; %converts non-zero elements to "1"
+        starts = strfind([false,mask],[0 1]); %finds index for 1st "1"
+        stops = strfind([mask,false],[1 0]); %finds index for last "1"
+        
+            for j = starts:stops-1
+            plot([YMD(j, m, 1) YMD(j+1, m, 1)], [YMD(j, m, 2) YMD(j+1, m, 2)], 'r') %k
+            end
+        
+     end
+end
+
+close(h);
+text(0.75*max(xlim),0.75*max(ylim), 'Iso-Slip', 'Color', 'r')
+text(0.75*max(xlim),0.65*max(ylim), 'Iso-Steer', 'Color', 'k')
+end
+grid on
 % Constant Radius
 % PlotData = [SWAngle; AccelGradient; YMGradient];
 % 
@@ -246,8 +302,15 @@ end
 % plot(AccelGradient,YMGradient,'r*');
 % hold on
 
+
 % Constant Velocity
-PlotData = [SWAngle; AccelGradient; YMGradient; VeloGradient];
+%{
+hold on
+for j = 1:numel(BetaInput)
+    plot(AccelGradient(j,:),YMGradient(j,:));
+    hold on
+    %PlotData = [SWAngle; AccelGradient(j,:); YMGradient(j,:); VeloGradient(j,:)];
+end
 
 figure('Name','Plot - YMD');
 title('Yaw Moment Diagram');
@@ -257,10 +320,9 @@ hold on
 ylabel('Yaw Moment (lb-in)');
 hold on
 grid on
-
-plot(AccelGradient,YMGradient,'r*');
+plot(AccelGradient,YMGradient);
 hold on
-
+%}
 % disp('Velocity: ');
 % disp(Vcalc);
 % disp('Radius: ');
