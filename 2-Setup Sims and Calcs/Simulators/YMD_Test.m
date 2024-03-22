@@ -87,7 +87,7 @@ Max_Velocity = 86; % mph
 %% Inputs
 
 nSteer = 13;
-nBeta = 7;
+nBeta = 9;
 
 ConstantVelocity = 23.86; % mph
 VelocityInput = 0.1; % mph
@@ -167,7 +167,7 @@ end
 YMGradient = zeros(numel(BetaInput),numel(SWAngle));
 AccelGradient = zeros(numel(BetaInput),numel(SWAngle));
 VeloGradient = zeros(numel(BetaInput),numel(SWAngle));
-RadiusInput = 500;
+RadiusInput = -500;
 Vcalc = 5;
 yawrate = 0;
 for j = 1:numel(BetaInput)
@@ -216,14 +216,13 @@ for j = 1:numel(BetaInput)
             Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
 
             %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
-            if (abs(Vcalc - VelocityInput) < 0.1)
-                RadiusInput = ConstantVelocity^2/Accel(1,2)
+            if (abs(Vcalc - ConstantVelocity) < 0.1)
+                RadiusInput = ConstantVelocity^2/Accel(1,2);
             else
                 converge = true;
             end
 
         end
-        yawrate = yawrate-0.001*(yawrate-sign(Accel(1,2))*sqrt(Accel(1,2).^2 + Accel(1,2).^2)/VelocityInput);;
         YMGradient(j,i) = YM;
         AccelGradient(j,i) = Accel(1,2);
         VeloGradient(j,i) = Vcalc;
@@ -243,6 +242,7 @@ patience = 1;
 %t = uitable(fig(z),'Position', [25 20 500 420],'ColumnWidth',{128 166 166},'Data',results,'ColumnEditable',false);
 %figure(z)
 %subplot(2,2,z)
+
 if patience == 0
     plot(YMD(:,:,1),(YMD(:,:,2)),'r.')
 else
@@ -287,6 +287,7 @@ text(0.75*max(xlim),0.75*max(ylim), 'Iso-Slip', 'Color', 'r')
 text(0.75*max(xlim),0.65*max(ylim), 'Iso-Steer', 'Color', 'k')
 end
 grid on
+
 % Constant Radius
 % PlotData = [SWAngle; AccelGradient; YMGradient];
 % 
@@ -307,9 +308,12 @@ grid on
 %{
 hold on
 for j = 1:numel(BetaInput)
-    plot(AccelGradient(j,:),YMGradient(j,:));
+    plot(AccelGradient(j,:),YMGradient(j,:), 'k');
     hold on
     %PlotData = [SWAngle; AccelGradient(j,:); YMGradient(j,:); VeloGradient(j,:)];
+end
+for j = 1:numel(SWAngle)
+    plot(AccelGradient(:,j),YMGradient(:,j),'r');
 end
 
 figure('Name','Plot - YMD');

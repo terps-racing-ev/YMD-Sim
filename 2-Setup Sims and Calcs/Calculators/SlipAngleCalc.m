@@ -4,7 +4,8 @@ function [SlipAngles] = SlipAngleCalc(SteerAngles,Beta,Velocity,Radius,vehicle)
     
     % Velocity Calculations
     Velocityin_s = Velocity * 17.6; % in/s
-    YawVelo = (Velocityin_s/Radius); % rad/s
+    %YawVelo = (Velocityin_s/Radius); % rad/s
+    YawVelo = 0.5;
     % Slip Angle Calculations
     % Components
     Vy = Velocityin_s*sind(Beta); % in/s
