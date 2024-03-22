@@ -95,7 +95,7 @@ SWAngle = linspace(-90,90,n); % deg (pos->Right, neg->Left)
 
 BetaInput = 0; % deg (pos->Right, neg->Left)
 
-Radius = -329; % in (pos->Right, neg->Left)
+Radius = 329; % in (pos->Right, neg->Left)
 
 converge = false;
 
@@ -165,6 +165,8 @@ end
 YMGradient = zeros(1,numel(SWAngle));
 AccelGradient = zeros(1,numel(SWAngle));
 VeloGradient = zeros(1,numel(SWAngle));
+RadiusInput = Radius;
+Vcalc = 5;
 
 for i = 1:numel(SWAngle)
     while(converge == false)

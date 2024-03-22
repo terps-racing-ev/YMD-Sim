@@ -86,16 +86,16 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
-n = 20;
+n = 101;
 
-ConstantVelocity = 20; % mph
+ConstantVelocity = 23.86; % mph
 VelocityInput = 0.1; % mph
 
 SWAngle = linspace(-24,24,n); % deg (pos->Right, neg->Left)
 
 BetaInput = 0; % deg (pos->Right, neg->Left)
 
-Radius = -329; % in (pos->Right, neg->Left)
+Radius = 329; % in (pos->Right, neg->Left)
 
 converge = false;
 
@@ -165,6 +165,7 @@ end
 YMGradient = zeros(1,numel(SWAngle));
 AccelGradient = zeros(1,numel(SWAngle));
 VeloGradient = zeros(1,numel(SWAngle));
+RadiusInput = Radius;
 
 for i = 1:numel(SWAngle)
     while(converge == false)
@@ -182,7 +183,7 @@ for i = 1:numel(SWAngle)
         if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
             Accel = 0;
             if Accel == 0
-                Accel(1,2) = 0;
+                Accel(1,2) = 0;;
             end
             YM = 0;
             break %no calculations for conditions outside of testing limits
@@ -210,8 +211,8 @@ for i = 1:numel(SWAngle)
 
         Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
 
-        %replaced Accel prev > Accel or whatever w/ velocities
-        if (abs(Vcalc - VelocityInput) <0.1)
+        %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
+        if (abs(Vcalc - VelocityInput) < 0.1)
             RadiusInput = ConstantVelocity^2/Accel(1,2)
         else
             converge = true;
