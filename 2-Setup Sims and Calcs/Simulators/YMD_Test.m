@@ -86,13 +86,13 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
-nSteer = 13;
+nSteer = 40;
 nBeta = 9;
 
 ConstantVelocity = 23.86; % mph
 VelocityInput = 0.1; % mph
 
-SWAngle = linspace(-24,24,nSteer); % deg (pos->Right, neg->Left)
+SWAngle = linspace(-90,90,nSteer); % deg (pos->Right, neg->Left)
 
 BetaInput = linspace(-12,12,nBeta); % deg (pos->Right, neg->Left)
 
@@ -170,8 +170,9 @@ VeloGradient = zeros(numel(BetaInput),numel(SWAngle));
 RadiusInput = -500;
 Vcalc = 5;
 yawrate = 0;
-for j = 1:numel(BetaInput)
-    for i = 1:numel(SWAngle)
+
+for i = 1:numel(SWAngle)
+    for j = 1:numel(BetaInput)
         while(converge == false)
 
             if SWAngle(i) < 0
@@ -216,7 +217,7 @@ for j = 1:numel(BetaInput)
             Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
 
             %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
-            if (abs(Vcalc - ConstantVelocity) < 0.1)
+            if (abs(Vcalc - ConstantVelocity) < 0.001)
                 RadiusInput = ConstantVelocity^2/Accel(1,2);
             else
                 converge = true;
