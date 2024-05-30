@@ -86,13 +86,13 @@ Max_Velocity = 86; % mph
 
 %% Inputs
 
-nSteer = 40;
+nSteer = 12;
 nBeta = 9;
 
 ConstantVelocity = 23.86; % mph
 VelocityInput = 0.1; % mph
 
-SWAngle = linspace(-90,90,nSteer); % deg (pos->Right, neg->Left)
+SWAngle = linspace(-24,24,nSteer); % deg (pos->Right, neg->Left)
 
 BetaInput = linspace(-12,12,nBeta); % deg (pos->Right, neg->Left)
 
@@ -249,7 +249,7 @@ if patience == 0
 else
 q = 1;
 h = waitbar(q/((nSteer)*(nBeta)), 'Plotting...');
-for m = 1:1:nBeta %Iso-slip
+for m = 1:nBeta %Iso-slip
     for n = 1:nSteer-1
         q = q +1;
         waitbar(q/((nBeta)*(nSteer)), h, 'Plotting Iso-slip...');
@@ -257,7 +257,7 @@ for m = 1:1:nBeta %Iso-slip
         starts = strfind([false,mask],[0 1]);
         stops = strfind([mask,false],[1 0]);
         
-            for j = starts:stops-1
+            for j = starts:2
                 plot([YMD(n, j, 1) YMD(n, j+1, 1)], [YMD(n, j, 2) YMD(n, j+1, 2)], 'k')
             end
        
