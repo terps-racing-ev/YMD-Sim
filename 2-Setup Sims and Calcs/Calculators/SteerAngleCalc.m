@@ -10,18 +10,19 @@ function [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle,vehicle)
     TurnRadius = Wheelbaseft./tand(SWAngle);
     
     % R&L Steering Angle for 100% Ackermann 
-    AckSteerAngleR = atand(Wheelbaseft./(TurnRadius - FTrackWidthft/2/12));
-    AckSteerAngleL = atand(Wheelbaseft./(TurnRadius + FTrackWidthft/2/12));
+    AckSteerAngleR = atand(Wheelbaseft./(TurnRadius - FTrackWidthft/2));
+    AckSteerAngleL = atand(Wheelbaseft./(TurnRadius + FTrackWidthft/2));
     
+    %IDK WHAT THE ISSUE WAS HERE BUT NOW IT MATCHES HAMILTON
     % Differences
-    DiffR = AckSteerAngleR - SWAngle;
-    DiffL = SWAngle - AckSteerAngleL;
+    DiffL = AckSteerAngleR - SWAngle; 
+    DiffR = SWAngle - AckSteerAngleL;
     
     % Final Steering Angles
-    SteerAngleR = SWAngle + vehicle.Ackermann*DiffR - vehicle.Toe(1,2);
-    SteerAngleL = SWAngle - vehicle.Ackermann*DiffL + vehicle.Toe(1,1);
+    SteerAngleR = SWAngle - vehicle.Ackermann*DiffR - vehicle.Toe(1,2);
+    SteerAngleL = SWAngle + vehicle.Ackermann*DiffL + vehicle.Toe(1,1);
     
-    SteerAnglesF = [SteerAngleL, SteerAngleR];
+    SteerAnglesF = [SteerAngleR, SteerAngleL];
     SteerAnglesR = [vehicle.Toe(2,1), -vehicle.Toe(2,2)];
     
     SteerAngles = [SteerAnglesF; SteerAnglesR];

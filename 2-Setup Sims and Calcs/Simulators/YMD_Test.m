@@ -1,5 +1,5 @@
 %% YMD Test
-% Credit - LJ Hamilton
+% Credit - LJ Hamilton, Yash Goswami
 
 close all
 clearvars
@@ -82,20 +82,22 @@ disp('Training completed')
 
 %% Motor Parameters
 
-Max_Velocity = 86; % mph
+Max_Velocity = 70; % mph
 
 %% Inputs
 
-nSteer = 12;
-nBeta = 9;
+%number of iso lines
+nSteer = 13;
+nBeta = 7;
 
+%cons vel chosen
 ConstantVelocity = 23.86; % mph
 VelocityInput = 0.1; % mph
 
+%steering wheel angle array
 SWAngle = linspace(-24,24,nSteer); % deg (pos->Right, neg->Left)
-
+%slip angle array
 BetaInput = linspace(-12,12,nBeta); % deg (pos->Right, neg->Left)
-
 Radius = 329; % in (pos->Right, neg->Left)
 
 converge = false;
@@ -164,37 +166,37 @@ end
 
  %Constant Velocity
 
+%define a couple of parameters
 YMGradient = zeros(numel(BetaInput),numel(SWAngle));
 AccelGradient = zeros(numel(BetaInput),numel(SWAngle));
 VeloGradient = zeros(numel(BetaInput),numel(SWAngle));
-RadiusInput = -500;
+RadiusInput = 329;
 Vcalc = 5;
 yawrate = 0;
-
+Accelprev = 0;
 for i = 1:numel(SWAngle)
     for j = 1:numel(BetaInput)
+        RadiusInput = 329;
+        yawrate = 0;
         while(converge == false)
 
             if SWAngle(i) < 0
-                RadiusInput = -RadiusInput;
+                %RadiusInput = -RadiusInput;
             else
                 %RadiusInput = RadiusInput;
             end
 
             [SteerAngles,TurnRadius] = SteerAngleCalc(SWAngle(i),vehicleObj);
 
-            [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput(j),ConstantVelocity,RadiusInput,vehicleObj);
+            [SlipAngles] = SlipAngleCalc(SteerAngles,BetaInput(j),ConstantVelocity,RadiusInput,vehicleObj, yawrate);
 
             if max(max(abs(SlipAngles))) > 13 %max slip angle tested by TTC
-                Accel = 0;
-                if Accel == 0
-                    Accel(1,2) = 0;
-                end
+                Accel(1) = 0; Accel(2) = 0;
                 YM = 0;
                 break %no calculations for conditions outside of testing limits
             end
 
-            Accelcalc = -((ConstantVelocity*17.6)^2/RadiusInput)/386.4; % g's
+            Accelcalc = -(ConstantVelocity^2/RadiusInput)/386.4; % g's
 
             [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_r,K_roll,ConstantVelocity,Accelcalc,vehicleObj);
 
@@ -203,6 +205,8 @@ for i = 1:numel(SWAngle)
             [Fx,Fy,Mz] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
 
             [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
+            %SteerAngles
+            %Accel
 
             % [Calpha] = CstiffCalc(Fz,model.FyFront,model.FyRear,vehicleObj);
             %
@@ -214,20 +218,22 @@ for i = 1:numel(SWAngle)
             %         MaxBeta = MaxBeta;
             % end
 
-            Vcalc = sqrt(abs((Accel(1,2)*386.4))*RadiusInput)./17.6;
+            Vcalc = sqrt(abs(Accel(2)*386.4*Radius))./17.6; %mph
 
             %replaced Accel prev > Accel or whatever w/ velocities, RPM 3/20/24
-            if (abs(Vcalc - ConstantVelocity) < 0.001)
-                RadiusInput = ConstantVelocity^2/Accel(1,2);
+            if (abs(Accel(2) - Accelprev) > .005)
+                RadiusInput = 17.6*ConstantVelocity^2/(386.4*Accel(2));
+                yawrate = yawrate-0.001*(yawrate-sign(Accel(2))*sqrt(Accel(1).^2 + Accel(2).^2)/(ConstantVelocity*17.6));
+                Accelprev = Accel(2);
             else
                 converge = true;
             end
 
         end
         YMGradient(j,i) = YM;
-        AccelGradient(j,i) = Accel(1,2);
+        AccelGradient(j,i) = Accel(2);
         VeloGradient(j,i) = Vcalc;
-        YMD(i,j,1) =  Accel(1,2);
+        YMD(i,j,1) =  Accel(2); %there is an error here
         YMD(i,j,2) = YM;
         converge = false;
     end
