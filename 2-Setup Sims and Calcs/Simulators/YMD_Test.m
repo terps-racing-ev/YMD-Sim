@@ -393,8 +393,8 @@ end
 txt2 = ['max turn-in yaw moment(L/R) = ' sprintf('%0.0f',data.maxYMLeft) '/ ' sprintf('%0.0f',data.maxYMRight) ' ft-lbf'];
 txt3 = ['control = ' sprintf('%0.0f',data.control) ' ft-lbf/deg steer angle, ' 'stability = ' sprintf('%0.0f',data.stability) ' ft-lbf/deg beta'];
 txt4 = ['balance (L/R) = ' sprintf('%0.3f',data.balanceL) '/' sprintf('%0.3f',data.balanceR)];
-txt5 = ['front: ' tire.IDfront];
-txt6 = ['rear: ' tire.IDrear];
+txt5 = ['front: ' tire.IDF];
+txt6 = ['rear: ' tire.IDR];
 txt = {txt1,txt2,txt3,txt4,txt5,txt6};
 subtitle(txt)
 %old code, yash's way of plotting. was giving me trouble so i used
