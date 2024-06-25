@@ -27,7 +27,7 @@ vehicleObj = TREV2Parameters();
 
 %% Tire Modeling
 
-% Hoosier 16x7.5-10 R20 (8 in Rim)
+% Hoosier 18x7.5-10 R25B (8 in Rim)
 
 % Input Front and Rear Tire Data
 % Front
@@ -41,6 +41,7 @@ totDataF = cat(1,latTrainingData_P1F,latTrainingData_P2F);
 trainDataF = totDataF;
 
 % Rear
+
 filename_P1R = 'A1654run24.mat';
 [latTrainingData_P1R,tire.IDR,test.IDR] = createLatTrngDataCalc(filename_P1R);
 
@@ -56,7 +57,7 @@ t1 = tic;
 [model.FxFront, validationRMSE.FxFront] = Trainer_Fx(trainDataF);
 [model.FyFront, validationRMSE.FyFront] = Trainer_Fy(trainDataF);
 [model.MzFront, validationRMSE.MzFront] = Trainer_Mz(trainDataF);
-[model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
+%[model.muyFront, validation.RMSE_muyFront] = Trainer_muy(trainDataF);
 toc(t1)
 
 disp('Training completed')
@@ -67,7 +68,7 @@ t1 = tic;
 [model.FxRear, validationRMSE.FxRear] = Trainer_Fx(trainDataR);
 [model.FyRear, validationRMSE.FyRear] = Trainer_Fy(trainDataR);
 [model.MzRear, validationRMSE.MzRear] = Trainer_Mz(trainDataR);
-[model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
+%[model.muyRear, validation.RMSE_muyRear] = Trainer_muy(trainDataR);
 toc(t1)
 
 disp('Training completed')
@@ -263,7 +264,7 @@ for m = 1:nBeta %Iso-slip
         starts = strfind([false,mask],[0 1]);
         stops = strfind([mask,false],[1 0]);
         
-            for j = starts:2
+            for j = starts:stops-1
                 plot([YMD(n, j, 1) YMD(n, j+1, 1)], [YMD(n, j, 2) YMD(n, j+1, 2)], 'k')
             end
        

@@ -88,8 +88,8 @@ Max_Velocity = 70; % mph
 %% Inputs
 
 %number of iso lines
-nSteer = 13;
-nBeta = 7;
+nSteer = 27;
+nBeta = 15;
 
 %cons vel chosen
 ConstantVelocity = 23.86; % mph
@@ -295,7 +295,11 @@ text(0.75*max(xlim),0.75*max(ylim), 'Iso-Slip', 'Color', 'r')
 text(0.75*max(xlim),0.65*max(ylim), 'Iso-Steer', 'Color', 'k')
 end
 grid on
-
+xlabel('Lateral Accel [g]')
+ylabel('Yaw Moment [lbf-in]')
+title(['TREV2: ' 'V = ' num2str(ConstantVelocity) ' mph, ' 'Ack = ' num2str(vehicleObj.Ackermann), ', CG = ' num2str(100*(1 - vehicleObj.FrontPercent)) ' % aft'])
+%old code, yash's way of plotting. was giving me trouble so i used
+%hamiltons way of plotting instead -- rpm
 % Constant Radius
 % PlotData = [SWAngle; AccelGradient; YMGradient];
 % 
