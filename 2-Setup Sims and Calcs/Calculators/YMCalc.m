@@ -5,7 +5,7 @@ function [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicle)
     SteerAnglesrad = SteerAngles*(pi/180);
     car_Fx = Fx.*cos(SteerAnglesrad) - Fy.*sin(SteerAnglesrad); %tire forces in car coordinate system
     car_Fy = Fx.*sin(SteerAnglesrad) + Fy.*cos(SteerAnglesrad); %tire forces in car coordinate system
-    car_totalFx = sum(sum(car_Fx;
+    car_totalFx = sum(sum(car_Fx));
     car_totalFy = sum(sum(car_Fy));
     
     % Yaw Moment (lb*in)
