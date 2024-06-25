@@ -89,7 +89,7 @@ Max_Velocity = 70; % mph
 
 %number of iso lines
 nSteer = 27;
-nBeta = 15;
+nBeta = 13;
 
 %cons vel chosen
 ConstantVelocity = 23.86; % mph
@@ -240,17 +240,104 @@ for i = 1:numel(SWAngle)
     end
 end
 
+%get a little bit of results yeah? RPM 6/25/24
+%most of the following code will be taken from hamilton
+clear YM
+data.maxGRightUntrimmed = max(max(YMD(:,:,1)));
+data.maxGLeftUntrimmed = min(min(YMD(:,:,1)));
 
+%find rear lat g limits
+    %find all the lowest magnitude yaw moments at each beta
+for m = 1:nBeta
+    mask = abs(YMD(:,m,2))'; %creates vector of absolute values at each beta
+    val = min(mask(mask>0)); %find smallest nonzero yaw moment
+    if val > 0
+        index = find(abs(mask - val) < 0.001); %index of smallest nonzero yawrate
+        data.maxGbyBeta(m) = YMD(index,m,1); %finds lat G at smallest nonzero yawrate
+    else
+    end    
+end
+data.maxGRightRear = max(data.maxGbyBeta); %max positive (to the right) lat G from rear
+data.maxGLeftRear = min(data.maxGbyBeta); %max negative (to the left) lat G from rear
+%check for oversteer
+if abs(data.maxGRightRear - data.maxGRightUntrimmed) == 0 || abs(data.maxGLeftRear - data.maxGLeftUntrimmed) == 0
+    disp('understeer') %because rear g = max g
+    data.understeer = 1;
+    %find all the lowest magnitude yaw moments at each steer angle
+    for n = 1:(nSteer-1/2) %just gets YMD table above zero steer
+        mask = abs(YMD(n,:,2))'; %creates vector of absolute values at each steer angle
+        val = min(mask(mask>0)); %find smallest nonzero yaw moment
+        if val > 0
+            index = find(abs(mask - val) < 0.001); %index of smallest nonzero yaw moment
+            data.maxGbySteer(n) = YMD(n,index,1); %finds lat G at smallest nonzero yaw moment
+        else
+        end
+    end
+    data.maxGRightFront = max(data.maxGbySteer); %max positive (to the right) lat G from rear
+    data.maxGLeftFront = min(data.maxGbySteer); %max negative (to the left) lat G from rear
+    data.balanceR = data.maxGRightRear/data.maxGRightFront; %US/OS factor (US if >1,OS if <1)
+    data.balanceL = data.maxGLeftRear/data.maxGLeftFront; %US/OS factor (US if >1,OS if <1)
+else
+    disp('oversteer') %because front g = max g
+    data.understeer = 0;
+    data.maxGRightFront = data.maxGRightUntrimmed; %max positive (to the right) lat G from front
+    data.maxGLeftFront = data.maxGLeftUntrimmed; %max negative (to the left) lat G from front
+    data.balanceR = data.maxGRightRear/data.maxGRightFront; %US/OS factor (US if >1,OS if <1)
+    data.balanceL = data.maxGLeftRear/data.maxGLeftFront;%US/OS factor (US if >1,OS if <1)
+end
+
+%calculate control at steer = 0, beta = 0
+nMidRow = (nSteer+1)/2;
+mMidCol = (nBeta+1)/2;
+YM.zero = YMD(nMidRow,mMidCol,2); %yaw moment at steer = 0, beta = 0
+YM.steerStep = YMD(nMidRow+1,mMidCol,2); %increase steer angle by one increment
+data.control = (YM.steerStep - YM.zero)/(0.5*max(SWAngle)/(nSteer-1)); %yaw moment change (ft-lbf/deg steer angle)
+
+%calculate stability at steer = 0, beta = 0
+YM.betaStep = YMD(nMidRow,mMidCol+1,2); %increase beta by one increment
+data.stability = (YM.betaStep - YM.zero)/(0.5*max(BetaInput)/(nBeta-1)); %yaw moment change (ft-lbf/deg Beta) neg = more stable
+
+%calculate max yaw moment at turn-in
+%find all the lowest magnitude yaw rates at each steer angle
+for n = 1:nSteer
+    mask = abs(YMD(n,:,1))'; %creates vector of absolute values at each steer angle
+    val = min(mask(mask>0)); %find smallest nonzero lat g
+    if val > 0
+        index = find(abs(mask - val) < 0.0000001); %index of smallest nonzero lat g
+        data.maxYMbySteer(n) = YMD(n,index,2); %finds yaw moment at smallest nonzero lat g
+    else
+    end
+end
+
+data.maxYMRight = max(data.maxYMbySteer); %max positive (to the right) Yaw moment (ft-lbf)
+data.maxYMLeft = min(data.maxYMbySteer); %max negative (to the left) Yaw moment (ft-lbf)
 %% Plot - YMD
 %hamilton's way of plotting
-patience = 1;
-%z = 1;
-%fig(z) = uifigure('Name',['velocity = ',num2str(VelocityInput), ' ft/s,', ' Ackerman = ', num2str(vehicleObj.Ackermann), ', CG = ' num2str(vehicleObj.TotalWeight*(1-vehicleObj.FrontPercent)) ' % aft']);
 
-%t = uitable(fig(z),'Position', [25 20 500 420],'ColumnWidth',{128 166 166},'Data',results,'ColumnEditable',false);
+patience = 1;
+z = 1;
+results = {'Variable','Front','Rear';
+    'Mass(lbm)', vehicleObj.FrontStatic,vehicleObj.RearStatic;
+    %'Downforce (lbf), ', Vout.downF(1), Vout.downF(2); don't have this yet
+    'LLTD',LLT_D(1),LLT_D(2);
+    'Kspring (lbf/in)',vehicleObj.K_s(1),vehicleObj.K_s(4);
+    'Karb (lbf/in)',vehicleObj.K_ARB(1),vehicleObj.K_ARB(2);
+    %'Frequency (Hz)',Vout.FreqF, Vout.FreqR; don't have this yet
+    'Tire', tire.IDF(1:28),tire.IDR(1:28);
+    'Static Toe (deg)',vehicleObj.Toe(1), vehicleObj.Toe(4);
+    'Static Camber (deg)',vehicleObj.Camber(1),vehicleObj.Camber(4)
+    'Tire Pressure (psi)',vehicleObj.TirePressure(1),vehicleObj.TirePressure(4)
+    'RESULTS','Left','Right';
+    'Max lateral G', data.maxGLeftFront,data.maxGRightFront;
+    'Max turn-in (ft-lbf)',data.maxYMLeft,data.maxYMRight;
+    'balance (OS<1<US)', data.balanceL, data.balanceR;
+    'control/stability',data.control,data.stability};
+fig(z) = uifigure('Name',['velocity = ',num2str(ConstantVelocity), ' mph,', ' Ackerman = ', num2str(vehicleObj.Ackermann), ', CG = ' num2str(100*(1-vehicleObj.FrontPercent)) ' % aft']);
+
+t = uitable(fig(z),'Position', [25 20 500 420],'ColumnWidth',{128 166 166},'Data',results,'ColumnEditable',false);
 %figure(z)
 %subplot(2,2,z)
-
+figure();
 if patience == 0
     plot(YMD(:,:,1),(YMD(:,:,2)),'r.')
 else
@@ -298,6 +385,18 @@ grid on
 xlabel('Lateral Accel [g]')
 ylabel('Yaw Moment [lbf-in]')
 title(['TREV2: ' 'V = ' num2str(ConstantVelocity) ' mph, ' 'Ack = ' num2str(vehicleObj.Ackermann), ', CG = ' num2str(100*(1 - vehicleObj.FrontPercent)) ' % aft'])
+if data.understeer == 1
+txt1 = ['max lat g (L/R) = ' sprintf('%0.2f',data.maxGLeftFront) '/' sprintf('%0.2f',data.maxGRightFront) ' g' ' understeer limited'];
+else
+txt1 = ['max lat g (L/R) = ' sprintf('%0.2f',data.maxGLeftRear) '/' sprintf('%0.2f',data.maxGRightRear) ' g' ' oversteer limited'];
+end
+txt2 = ['max turn-in yaw moment(L/R) = ' sprintf('%0.0f',data.maxYMLeft) '/ ' sprintf('%0.0f',data.maxYMRight) ' ft-lbf'];
+txt3 = ['control = ' sprintf('%0.0f',data.control) ' ft-lbf/deg steer angle, ' 'stability = ' sprintf('%0.0f',data.stability) ' ft-lbf/deg beta'];
+txt4 = ['balance (L/R) = ' sprintf('%0.3f',data.balanceL) '/' sprintf('%0.3f',data.balanceR)];
+txt5 = ['front: ' tire.IDfront];
+txt6 = ['rear: ' tire.IDrear];
+txt = {txt1,txt2,txt3,txt4,txt5,txt6};
+subtitle(txt)
 %old code, yash's way of plotting. was giving me trouble so i used
 %hamiltons way of plotting instead -- rpm
 % Constant Radius
