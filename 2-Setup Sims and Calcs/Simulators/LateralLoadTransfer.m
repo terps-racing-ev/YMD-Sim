@@ -85,7 +85,7 @@ disp('Training completed')
 RightTurn = false;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-Velocity = 33;
+Velocity = 86;
 
 Radius = 329; %in
 
