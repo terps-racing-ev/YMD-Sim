@@ -22,7 +22,7 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV3Parameters();
 
 %% Tire Modeling
 
@@ -85,7 +85,7 @@ disp('Training completed')
 RightTurn = false;
 
 % Test Velocity (0 mph & Right Turn = Tilt Test)
-Velocity = 86;
+Velocity = 33;
 
 Radius = 329; %in
 

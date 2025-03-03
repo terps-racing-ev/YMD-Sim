@@ -5,7 +5,7 @@ classdef VehicleParameters
     %% Car Parameters
     % Given
     properties (Constant)
-        TotalWeight = 650;
+        TotalWeight = 800;
         FrontPercent = 0.45;
         Wheelbase = 61;
         FrontTrackWidth = 48;
