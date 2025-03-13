@@ -125,7 +125,7 @@ classdef ForceCalc
     methods
         % Setting all points, look here for values
         function obj = ForceCalc(~)
-        point= TREV2Parameters();
+        point= TREV3Parameters();
 
             % Unit Vectors
 
