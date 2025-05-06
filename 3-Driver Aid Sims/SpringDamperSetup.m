@@ -23,9 +23,9 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Calculators
 addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators']);
 
 % Adding Reference Files
-addpath([currentFolder, filesep, 'Reference Files\']);
+addpath([currentFolder, filesep, 'Reference Files']);
 
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV3Parameters();
 
 %% Tire Modeling
 

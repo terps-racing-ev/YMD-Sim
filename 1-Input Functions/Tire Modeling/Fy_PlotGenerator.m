@@ -10,10 +10,10 @@ close all
 clear all
 clc
 
-filename_P1 = 'A2356run8.mat';
+filename_P1 = 'A1654run24.mat';
 [latTrainingData_P1,tireID,testID] = createLatTrngData(filename_P1);
 
-filename_P2 = 'A2356run9.mat';
+filename_P2 = 'A1654run25.mat';
 [latTrainingData_P2,tireID,testID] = createLatTrngData(filename_P2);
 
 totData = cat(1,latTrainingData_P1,latTrainingData_P2);
@@ -21,12 +21,12 @@ trainData = latTrainingData_P1;
 
 %% Inputs
 
-testF = -350; %Front Tire Fz (lb)
+testF = -500; %Front Tire Fz (lb)
 IA_F = 0; %Front Camber (deg)
-P_F = 8; %Front Tire Pressure (psi)
-testR = -400; %Rear Tire Fz (lb)
+P_F = 14; %Front Tire Pressure (psi)
+testR = -650; %Rear Tire Fz (lb)
 IA_R = 0; %Rear Camber (deg)
-P_R = 8; %Front Tire Pressure (psi)
+P_R = 14; %Front Tire Pressure (psi)
 
 %% Plots to Understand Test - Input Plot
 
