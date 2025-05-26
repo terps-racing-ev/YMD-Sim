@@ -72,27 +72,27 @@ SWAngle = -8; %linspace(-90,90,5); %deg (L = neg, R = pos)
 BetaEntry = 0; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
 % Steering Angles (deg), Slip Angles (deg), Load Transfer (lb), Wheel Displacement (in) (neg -> loaded (bump), pos -> unloaded (droop))
 
-SteerAngles = SteerAngleSim(SWAngle,vehicleObj);
+[SteerAngles, Turn_Rad] = SteerAngleCalc(SWAngle,vehicleObj);
             
-[SlipAngles,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaEntry,Velocity,Radius,vehicleObj);
+[SlipAngles,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleCalc(SteerAngles,BetaEntry,Velocity,Radius,vehicleObj);
              
 LatAccelG = 0;
 
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,LatAccelG,vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,LatAccelG,vehicleObj);
 
-[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
+[IA] = CamberCalc(Roll_Angle,SWAngle,vehicleObj);
 
 [Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
 
-[YM,AccelEntry] = YMSim(SteerAngles,Fx,Fy,Mz,vehicleObj);
+[YM,AccelEntry] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
 
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,AccelEntry(1,2),vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,AccelEntry(1,2),vehicleObj);
 
-[IA] = CamberSim(Roll_Angle,SWAngle,vehicleObj);
+[IA] = CamberCalc(Roll_Angle,SWAngle,vehicleObj);
 
 mu = [sqrt(((Fx(1,1)/Fz(1,1))^2+((Fy(1,1)/Fz(1,1))^2))), sqrt(((Fx(1,2)/Fz(1,2))^2+((Fy(1,2)/Fz(1,2))^2))); sqrt(((Fx(2,1)/Fz(2,1))^2+((Fy(2,1)/Fz(2,1))^2))), sqrt(((Fx(2,2)/Fz(2,2))^2+((Fy(2,2)/Fz(2,2))^2)))];
 
@@ -143,7 +143,7 @@ SWAngleApex = [-10, -30, -60, -55, -25]; %deg (L = neg, R = pos)
 BetaApex = [0,Betamax/2,Betamax,Betamax/2,0]; %CoG slip angle (deg) (neg -> Right, pos -> Left)
 
 % Stiffnesses (lbf/in)
-[K_w,K_r,K_roll] = StiffnessSim(K_t,vehicleObj);
+[K_w,K_r,K_roll] = StiffnessCalc(K_t,vehicleObj);
 
 % How to Interpret:
 % For a successful left hand corner (Radius < 0):
@@ -151,21 +151,21 @@ BetaApex = [0,Betamax/2,Betamax,Betamax/2,0]; %CoG slip angle (deg) (neg -> Righ
 % Corner Apex: Betamax -> ---, YM: ~0
 % Corner Exit: Beta = 0, YM: ---
 
-SteerAngles = SteerAngleSim(SWAngleApex(:,1),vehicleObj);
+[SteerAngles, Turn_Rad] = SteerAngleCalc(SWAngleApex(:,1),vehicleObj);
 
 LatAccelG = 0;
           
-[SlipAnglesCurrent,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex(:,1),Velocity,Radius,vehicleObj);
+[SlipAnglesCurrent,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleCalc(SteerAngles,BetaApex(:,1),Velocity,Radius,vehicleObj);
 
 LatAccelG = 0;
 
-[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,LatAccelG,vehicleObj);
+[Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,LatAccelG,vehicleObj);
 
-[IA] = CamberSim(Roll_Angle,SWAngleApex(:,1),vehicleObj);
+[IA] = CamberCalc(Roll_Angle,SWAngleApex(:,1),vehicleObj);
 
 [Fx,Fy,Mz,muy] = findTireFM(model,SlipAnglesCurrent,IA,Fz,vehicleObj.TirePressure);
 
-[YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicleObj);
+[YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
 
 mu = [sqrt(((Fx(1,1)/Fz(1,1))^2+((Fy(1,1)/Fz(1,1))^2))), sqrt(((Fx(1,2)/Fz(1,2))^2+((Fy(1,2)/Fz(1,2))^2))); sqrt(((Fx(2,1)/Fz(2,1))^2+((Fy(2,1)/Fz(2,1))^2))), sqrt(((Fx(2,2)/Fz(2,2))^2+((Fy(2,2)/Fz(2,2))^2)))];
 
@@ -217,21 +217,21 @@ disp('----------------------');
 
 for k = 2:length(BetaApex)
 
-    SteerAngles = SteerAngleSim(SWAngleApex(:,k),vehicleObj);
+    [SteerAngles, Turn_Rad] = SteerAngleCalc(SWAngleApex(:,k),vehicleObj);
     
-    [SlipAnglesNew,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleSim(SteerAngles,BetaApex(:,k),Velocity,Radius,vehicleObj);
+    [SlipAnglesNew,LatAccelG,Betamax,YawVelo,LongVelo,LateralVelo] = SlipAngleCalc(SteerAngles,BetaApex(:,k),Velocity,Radius,vehicleObj);
     
     SlipAngles = SlipAnglesNew - SlipAnglesCurrent;
     
     SlipAnglesCurrent = SlipAngles;
     
-    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTSim(K_roll,Velocity,Accel(1,2),vehicleObj);
+    [Fz,LLT,LLT_D,R_g,Roll_Angle,Z] = LLTCalc(K_roll,Velocity,Accel(1,2),vehicleObj);
     
-    [IA] = CamberSim(Roll_Angle,SWAngleApex(:,k),vehicleObj);
+    [IA] = CamberCalc(Roll_Angle,SWAngleApex(:,k),vehicleObj);
     
     [Fx,Fy,Mz,muy] = findTireFM(model,SlipAngles,IA,Fz,vehicleObj.TirePressure);
     
-    [YM,Accel] = YMSim(SteerAngles,Fx,Fy,Mz,vehicleObj);
+    [YM,Accel] = YMCalc(SteerAngles,Fx,Fy,Mz,vehicleObj);
     
     mu = [sqrt(((Fx(1,1)/Fz(1,1))^2+((Fy(1,1)/Fz(1,1))^2))), sqrt(((Fx(1,2)/Fz(1,2))^2+((Fy(1,2)/Fz(1,2))^2))); sqrt(((Fx(2,1)/Fz(2,1))^2+((Fy(2,1)/Fz(2,1))^2))), sqrt(((Fx(2,2)/Fz(2,2))^2+((Fy(2,2)/Fz(2,2))^2)))];
     
