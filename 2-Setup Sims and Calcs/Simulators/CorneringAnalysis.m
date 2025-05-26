@@ -20,15 +20,15 @@ addpath([currentFolder, filesep, '2-Setup Sims and Calcs', filesep, 'Simulators'
 % Adding Reference Files
 addpath([currentFolder, filesep, 'Reference Files\']);
 
-vehicleObj = TREV2Parameters();
+vehicleObj = TREV3Parameters();
 
 %% Tire Modeling
 
 %Input tire filenames
-filename.FrontTire = 'A1965run18.mat';
-filename.RearTire = 'A1965run18.mat';
-[trainingDataFront,tire.IDfront] = createLatTrngData2(filename.FrontTire);
-[trainingDataRear,tire.IDrear] = createLatTrngData2(filename.RearTire);
+filename.FrontTire = 'A1654run24.mat';
+filename.RearTire = 'A1654run24.mat';
+[trainingDataFront,tire.IDfront,test.IDF] = createLatTrngDataCalc(filename.FrontTire);
+[trainingDataRear,tire.IDrear,test.IDF] = createLatTrngDataCalc(filename.RearTire);
 
 % Front tires
 disp([tire.IDfront, ', Front Tire Model is being trained.  Standby...'])
